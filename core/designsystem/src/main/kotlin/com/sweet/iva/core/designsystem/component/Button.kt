@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
@@ -38,7 +39,7 @@ import com.sweet.iva.core.designsystem.theme.AppTheme
 @Composable
 fun AppButton(
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     enabled: Boolean = true,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     colors: ButtonColors = ButtonDefaults.buttonColors(
@@ -52,6 +53,7 @@ fun AppButton(
         enabled = enabled,
         colors = colors,
         contentPadding = contentPadding,
+        shape = RoundedCornerShape(8.dp),
         content = content
     )
 }
@@ -63,7 +65,7 @@ fun AppPrimaryButton(
     enabled: Boolean = true,
     text: String
 ) {
-    Button(
+    AppButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled
