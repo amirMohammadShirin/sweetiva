@@ -8,11 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sweet.iva.core.designsystem.component.AppBackground
 import com.sweet.iva.core.designsystem.component.AppTextField
-import com.sweet.iva.core.designsystem.component.AppTextFieldLabel
 import com.sweet.iva.core.designsystem.component.AppToolbar
 import com.sweet.iva.core.designsystem.component.ThemePreviews
 import com.sweet.iva.core.designsystem.theme.AppTheme
@@ -77,8 +75,12 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
                         end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
                     }
                     .fillMaxWidth(),
-                value = "",
-                onValueChange = {},
+                value = state.phoneNumberModel.value,
+                onValueChange = {
+                    viewModel.process(PhoneEntryAction.OnPhoneNumberChanged(it))
+                },
+                isError = !state.phoneNumberModel.errorMessage.isNullOrEmpty(),
+                supportingText = state.phoneNumberModel.errorMessage,
                 label = "شماره تلفن همراه"
             )
 

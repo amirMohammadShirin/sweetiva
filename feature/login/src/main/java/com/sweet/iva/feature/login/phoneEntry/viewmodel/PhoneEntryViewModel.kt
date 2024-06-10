@@ -1,6 +1,8 @@
 package com.sweet.iva.feature.login.phoneEntry.viewmodel
 
 import com.sweet.iva.core.common.dispatcher.DispatcherProvider
+import com.sweet.iva.core.common.util.ValidationState
+import com.sweet.iva.core.common.util.ValidationUtil
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryAction
 import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryEvent
@@ -23,7 +25,26 @@ class PhoneEntryViewModel @Inject constructor(
     mainDispatcher = dispatcherProvider.ui
 ) {
     override fun handleAction(action: PhoneEntryAction) {
+        when (action) {
+            is PhoneEntryAction.OnPhoneNumberChanged -> {
+                changePhoneNumber(action.phoneNumber)
+            }
+        }
+    }
 
+    private fun changePhoneNumber(phoneNumber: String) {
+
+        val errorMessage =
+            if (ValidationUtil.phoneNumber(phoneNumber) == ValidationState.INVALID) "شماره تلفن همراه معتبر نمی‌باشد" else null
+
+        updateState {
+            it.copy(
+                phoneNumberModel = it.phoneNumberModel.copy(
+                    value = phoneNumber,
+                    errorMessage = errorMessage
+                )
+            )
+        }
     }
 
 }
