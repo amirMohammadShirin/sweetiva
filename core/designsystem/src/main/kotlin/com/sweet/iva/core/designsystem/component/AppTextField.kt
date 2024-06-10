@@ -153,15 +153,16 @@ fun AppTextField(
             )
 
             placeHolder?.let {
-                AppTextFieldPlaceHolder(
-                    value = placeHolder,
-                    modifier
-                        .offset(x = (-50).dp,y = (20).dp)
-                        .matchParentSize()
-                        .padding(horizontal = MaterialTheme.dimens.smallPadding)
-                )
+                if (value.isEmpty() || value.isBlank()) {
+                    AppTextFieldPlaceHolder(
+                        value = placeHolder,
+                        modifier
+                            .offset(x = (-50).dp, y = (20).dp)
+                            .matchParentSize()
+                            .padding(horizontal = MaterialTheme.dimens.smallPadding)
+                    )
+                }
             }
-
 
         }
 
@@ -169,7 +170,8 @@ fun AppTextField(
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.smallGap))
             AppTextFieldSupportingText(
                 value = supportingText,
-                modifier = Modifier.padding(horizontal = MaterialTheme.dimens.smallPadding)
+                modifier = Modifier.padding(horizontal = MaterialTheme.dimens.smallPadding),
+                color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
             )
         }
 
@@ -209,14 +211,18 @@ fun AppTextFieldPlaceHolder(value: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun AppTextFieldSupportingText(value: String, modifier: Modifier = Modifier) {
+fun AppTextFieldSupportingText(
+    value: String,
+    modifier: Modifier = Modifier,
+    color: Color = MaterialTheme.colorScheme.onSurface
+) {
     ProvideTextStyle(
         value = MaterialTheme.typography.labelSmall.copy(
             textDirection = TextDirection.Rtl
         )
     ) {
         Text(
-            color = MaterialTheme.colorScheme.onSurface,
+            color = color,
             modifier = modifier,
             textAlign = TextAlign.Center,
             text = value
