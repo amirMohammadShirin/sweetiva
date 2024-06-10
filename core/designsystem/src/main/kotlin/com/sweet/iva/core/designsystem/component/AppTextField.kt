@@ -157,7 +157,7 @@ fun AppTextField(
                     AppTextFieldPlaceHolder(
                         value = placeHolder,
                         modifier
-                            .offset(x = (-50).dp, y = (20).dp)
+                            .offset(x = if (trailingIcon != null) (-50).dp else (-10).dp, y = (20).dp)
                             .matchParentSize()
                             .padding(horizontal = MaterialTheme.dimens.smallPadding)
                     )
@@ -197,7 +197,7 @@ fun AppTextFieldLabel(value: String, modifier: Modifier = Modifier) {
 @Composable
 fun AppTextFieldPlaceHolder(value: String, modifier: Modifier = Modifier) {
     ProvideTextStyle(
-        value = MaterialTheme.typography.labelSmall.copy(
+        value = MaterialTheme.typography.labelMedium.copy(
             textDirection = TextDirection.Rtl
         )
     ) {
@@ -269,12 +269,6 @@ fun PreviewAppTextField() {
                 placeHolder = "نمونه",
                 leadingIcon = {
                     Icon(imageVector = AppIcons.Add, contentDescription = "leading icon")
-                },
-                trailingIcon = {
-                    Icon(
-                        imageVector = AppIcons.BookmarkBorder,
-                        contentDescription = "trailing icon"
-                    )
                 },
                 supportingText = "توضیحات بیشتر"
             )

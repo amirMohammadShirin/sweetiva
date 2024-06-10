@@ -48,6 +48,7 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
         val viewModel = viewModel()
 
         PhoneNumberEntryContent(
+            isLoginEnable = state.isLoginEnable(),
             onToolbarIconClicked = { viewModel.navigateBack() },
             phoneNumber = state.phoneNumberModel,
             onPhoneNumberChanged = { viewModel.process(PhoneEntryAction.OnPhoneNumberChanged(it)) }
@@ -57,6 +58,7 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
 
     @Composable
     private fun PhoneNumberEntryContent(
+        isLoginEnable: Boolean,
         phoneNumber: PhoneNumberModel,
         onToolbarIconClicked: () -> Unit,
         onPhoneNumberChanged: (value: String) -> Unit
@@ -102,19 +104,20 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
                     .fillMaxWidth(),
                 value = phoneNumber.value,
                 onValueChange = onPhoneNumberChanged,
+                placeHolder = "09*********",
                 isError = !phoneNumber.errorMessage.isNullOrEmpty(),
                 supportingText = phoneNumber.errorMessage,
                 label = "شماره تلفن همراه"
             )
-            
+
 
             ProvideTextStyle(value = MaterialTheme.typography.labelSmall) {
                 Text(
                     modifier = Modifier
                         .constrainAs(termsRef) {
                             top.linkTo(phoneNumberRef.bottom)
-                            start.linkTo(phoneNumberRef.start,MaterialTheme.dimens.defaultGap)
-                            end.linkTo(phoneNumberRef.end,MaterialTheme.dimens.defaultGap)
+                            start.linkTo(phoneNumberRef.start, MaterialTheme.dimens.defaultGap)
+                            end.linkTo(phoneNumberRef.end, MaterialTheme.dimens.defaultGap)
                             width = Dimension.fillToConstraints
                         },
 
@@ -125,11 +128,12 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
             }
 
             AppPrimaryButton(
+                enabled = isLoginEnable,
                 modifier = Modifier
                     .constrainAs(btnEnterRef) {
                         top.linkTo(termsRef.bottom, MaterialTheme.dimens.largeGap)
-                        start.linkTo(phoneNumberRef.start,MaterialTheme.dimens.defaultGap)
-                        end.linkTo(phoneNumberRef.end,MaterialTheme.dimens.defaultGap)
+                        start.linkTo(phoneNumberRef.start, MaterialTheme.dimens.defaultGap)
+                        end.linkTo(phoneNumberRef.end, MaterialTheme.dimens.defaultGap)
                         width = Dimension.fillToConstraints
                     },
                 onClick = { },
@@ -147,6 +151,7 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
 
             }
             PhoneNumberEntryContent(
+                isLoginEnable = false,
                 phoneNumber = PhoneNumberModel(),
                 onToolbarIconClicked = { },
                 onPhoneNumberChanged = {}
