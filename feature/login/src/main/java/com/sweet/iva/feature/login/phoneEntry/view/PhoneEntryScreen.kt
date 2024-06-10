@@ -75,14 +75,11 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
                         top.linkTo(topSpacerRef.bottom, MaterialTheme.dimens.defaultGap)
                         start.linkTo(parent.start, MaterialTheme.dimens.defaultGap)
                         end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
-                        width = Dimension.fillToConstraints
-                    },
+                    }
+                    .fillMaxWidth(),
                 value = "",
                 onValueChange = {},
-                label = {
-                    AppTextFieldLabel(value = "شماره تلفن همراه")
-                }
-
+                label = "شماره تلفن همراه"
             )
 
         }
