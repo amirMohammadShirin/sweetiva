@@ -9,7 +9,7 @@ import org.junit.runners.JUnit4
 class AuthenticationTest {
 
     @Test(expected = BusinessException::class)
-    fun `test empty access token`() {
+    fun `empty access token test`() {
 
         val token = ""
 
@@ -23,7 +23,7 @@ class AuthenticationTest {
     }
 
     @Test(expected = BusinessException::class)
-    fun `test empty refresh token`() {
+    fun `empty refresh token test`() {
 
         val token = ""
 
