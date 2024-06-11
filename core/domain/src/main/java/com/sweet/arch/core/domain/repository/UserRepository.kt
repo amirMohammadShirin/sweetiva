@@ -5,6 +5,6 @@ package com.sweet.arch.core.domain.repository
  */
 interface UserRepository {
 
-    fun test(): String
+    suspend fun test(): String
 
 }
