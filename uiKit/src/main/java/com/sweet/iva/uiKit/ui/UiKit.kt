@@ -325,10 +325,10 @@ fun AppUiKit() {
                         }
                     }
                 }
-                item{
+                item {
                     Text(text = "متن نمونه")
                 }
-                item{
+                item {
                     ProvideTextStyle(value = MaterialTheme.typography.displayLarge) {
                         Text(text = "متن نمونه")
                     }
