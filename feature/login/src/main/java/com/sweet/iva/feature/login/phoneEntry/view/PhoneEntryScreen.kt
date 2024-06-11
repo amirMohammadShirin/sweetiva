@@ -49,9 +49,11 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
 
         PhoneNumberEntryContent(
             isLoginEnable = state.isLoginEnable(),
+            loading = state.loading,
             onToolbarIconClicked = { viewModel.navigateBack() },
             phoneNumber = state.phoneNumberModel,
-            onPhoneNumberChanged = { viewModel.process(PhoneEntryAction.OnPhoneNumberChanged(it)) }
+            onPhoneNumberChanged = { viewModel.process(PhoneEntryAction.OnPhoneNumberChanged(it)) },
+            onConfirmClicked = { viewModel.process(PhoneEntryAction.OnConfirmClicked) }
         )
 
     }
@@ -60,8 +62,10 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
     private fun PhoneNumberEntryContent(
         isLoginEnable: Boolean,
         phoneNumber: PhoneNumberModel,
+        loading: Boolean,
         onToolbarIconClicked: () -> Unit,
-        onPhoneNumberChanged: (value: String) -> Unit
+        onPhoneNumberChanged: (value: String) -> Unit,
+        onConfirmClicked: () -> Unit
     ) {
         ConstraintLayout(
             modifier = Modifier
@@ -136,7 +140,8 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
                         end.linkTo(phoneNumberRef.end, MaterialTheme.dimens.defaultGap)
                         width = Dimension.fillToConstraints
                     },
-                onClick = { },
+                isLoading = loading,
+                onClick = onConfirmClicked,
                 text = "قبول شرایط و ادامه"
             )
 
@@ -153,8 +158,10 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
             PhoneNumberEntryContent(
                 isLoginEnable = false,
                 phoneNumber = PhoneNumberModel(),
+                loading = false,
                 onToolbarIconClicked = { },
-                onPhoneNumberChanged = {}
+                onPhoneNumberChanged = {},
+                onConfirmClicked = {}
             )
         }
     }
