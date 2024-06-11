@@ -3,10 +3,12 @@ package com.sweet.iva.core.designsystem.component
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
@@ -20,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sweet.iva.core.designsystem.icon.AppIcons
 import com.sweet.iva.core.designsystem.theme.AppTheme
@@ -38,22 +41,33 @@ import com.sweet.iva.core.designsystem.theme.AppTheme
 @Composable
 fun AppButton(
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     enabled: Boolean = true,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     colors: ButtonColors = ButtonDefaults.buttonColors(
         containerColor = MaterialTheme.colorScheme.primary
     ),
+    isLoading: Boolean = false,
     content: @Composable RowScope.() -> Unit
 ) {
     Button(
         onClick = onClick,
         modifier = modifier,
-        enabled = enabled,
+        enabled = (!isLoading && enabled),
         colors = colors,
         contentPadding = contentPadding,
-        content = content
+        shape = RoundedCornerShape(8.dp),
+        content = {
+            if (isLoading)
+                ButtonLoading()
+            else this.content()
+        }
     )
+}
+
+@Composable
+fun ButtonLoading() {
+    AppLoadingWheel("app loading")
 }
 
 @Composable
@@ -61,12 +75,14 @@ fun AppPrimaryButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    isLoading: Boolean = false,
     text: String
 ) {
-    Button(
+    AppButton(
         onClick = onClick,
         modifier = modifier,
-        enabled = enabled
+        enabled = enabled,
+        isLoading = isLoading
     ) {
         ProvideTextStyle(value = MaterialTheme.typography.bodyMedium) {
             Text(text)
@@ -382,6 +398,17 @@ fun AppPrimaryButtonPreview() {
     }
 }
 
+@Preview
+@Composable
+fun AppLoadingButton() {
+    AppTheme {
+        AppPrimaryButton(
+            onClick = {},
+            text = "ورود",
+            isLoading = true
+        )
+    }
+}
 
 object AppButtonDefaults {
 

@@ -14,14 +14,9 @@ import javax.inject.Inject
 
 
 internal class MainViewModel @Inject constructor(
-    dispatcherProvider: DispatcherProvider
+    private val dispatcherProvider: DispatcherProvider
 ) :
-    BaseViewModel<MainViewState, MainAction, MainEvent>(
-        initialState = MainViewState(),
-        ioDispatcher = dispatcherProvider.io,
-        defaultDispatcher = dispatcherProvider.default,
-        mainDispatcher = dispatcherProvider.ui
-    ) {
+    BaseViewModel<MainViewState, MainAction, MainEvent>(initialState = MainViewState()) {
 
     override fun handleAction(action: MainAction) {
         when (action) {
