@@ -68,8 +68,8 @@ fun AppLoadingWheel(
         label = "wheel rotation animation"
     )
 
-    val baseLineColor = MaterialTheme.colorScheme.inversePrimary
-    val progressLineColor = MaterialTheme.colorScheme.onBackground
+    val baseLineColor = MaterialTheme.colorScheme.outline
+    val progressLineColor = MaterialTheme.colorScheme.primary
 
     val colorAnimValues = (0 until NUM_OF_LINES).map { index ->
         infiniteTransition.animateColor(

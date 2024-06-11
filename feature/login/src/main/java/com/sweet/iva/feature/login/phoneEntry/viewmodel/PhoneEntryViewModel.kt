@@ -1,5 +1,6 @@
 package com.sweet.iva.feature.login.phoneEntry.viewmodel
 
+import androidx.lifecycle.viewModelScope
 import com.sweet.iva.core.common.dispatcher.DispatcherProvider
 import com.sweet.iva.core.common.util.ValidationState
 import com.sweet.iva.core.common.util.ValidationUtil
@@ -10,6 +11,8 @@ import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -28,6 +31,26 @@ class PhoneEntryViewModel @Inject constructor(
         when (action) {
             is PhoneEntryAction.OnPhoneNumberChanged -> {
                 changePhoneNumber(action.phoneNumber)
+            }
+
+            PhoneEntryAction.OnConfirmClicked -> {
+                sendOtp()
+            }
+        }
+    }
+
+    private fun sendOtp() {
+        viewModelScope.launch(ioDispatcher) {
+            updateState {
+                it.copy(
+                    loading = true
+                )
+            }
+            delay(5000)
+            updateState {
+                it.copy(
+                    loading = false
+                )
             }
         }
     }
