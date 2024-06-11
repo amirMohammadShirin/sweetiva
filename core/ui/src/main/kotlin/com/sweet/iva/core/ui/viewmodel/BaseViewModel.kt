@@ -21,10 +21,7 @@ import kotlinx.coroutines.launch
 
 
 abstract class BaseViewModel<State, Action : IAction, Event : IEvent>(
-    val initialState: State,
-    val ioDispatcher: CoroutineDispatcher,
-    val mainDispatcher: CoroutineDispatcher,
-    val defaultDispatcher: CoroutineDispatcher,
+    val initialState: State
 ) : ViewModel() {
 
     private val _uiStateFlow = MutableStateFlow(initialState)
@@ -50,7 +47,7 @@ abstract class BaseViewModel<State, Action : IAction, Event : IEvent>(
     abstract fun handleAction(action: Action)
 
     init {
-        viewModelScope.launch{
+        viewModelScope.launch {
             _uiActionFlow.collect(this@BaseViewModel::handleAction)
         }
     }
