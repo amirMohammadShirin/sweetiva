@@ -7,6 +7,8 @@ import io.mockk.mockk
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestCoroutineScheduler
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -38,35 +40,48 @@ class PhoneEntryViewModelTest {
     }
 
     @Test
-    fun `when OnPhoneNumberChanged processed then phone number state should be changed`() {
+    fun `when phoneNumber changed with a valid value then phone number state should be changed`() {
 
-        val viewModel = createViewModel(mockk())
-        val phoneNumber = "09120425101"
+        runTest {
 
-        viewModel.process(PhoneEntryAction.OnPhoneNumberChanged(phoneNumber))
+            val viewModel = createViewModel(mockk())
+            val phoneNumber = "09120425101"
 
-        assertEquals(
-            phoneNumber,
-            viewModel.currentState.phoneNumberModel.value
-        )
+            viewModel.process(PhoneEntryAction.OnPhoneNumberChanged(phoneNumber))
+
+            advanceUntilIdle()
+
+            assertEquals(
+                phoneNumber,
+                viewModel.currentState.phoneNumberModel.value
+            )
+
+        }
 
     }
 
     @Test
-    fun `when OnPhoneNumberChanged processed with invalid phone number then error message should be shown`() {
+    fun `when phoneNumber changed with invalid phone number then error message should be shown`() {
 
-        val viewModel = createViewModel(mockk())
-        val phoneNumber = "02"
+        runTest {
 
-        viewModel.process(PhoneEntryAction.OnPhoneNumberChanged(phoneNumber))
+            val viewModel = createViewModel(mockk())
+            val phoneNumber = "02"
 
-        assertNotNull(
-            viewModel.currentState.phoneNumberModel.errorMessage
-        )
-        assertEquals(
-            phoneNumber,
-            viewModel.currentState.phoneNumberModel.value
-        )
+            viewModel.process(PhoneEntryAction.OnPhoneNumberChanged(phoneNumber))
+
+            advanceUntilIdle()
+
+            assertNotNull(
+                viewModel.currentState.phoneNumberModel.errorMessage
+            )
+
+            assertEquals(
+                phoneNumber,
+                viewModel.currentState.phoneNumberModel.value
+            )
+
+        }
 
     }
 
