@@ -2,8 +2,13 @@ package com.sweet.iva.core.designsystem.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -22,10 +27,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
@@ -33,6 +43,8 @@ import androidx.compose.ui.unit.dp
 import com.sweet.iva.core.designsystem.icon.AppIcons
 import com.sweet.iva.core.designsystem.theme.AppTheme
 import com.sweet.iva.core.designsystem.theme.Metal100
+import com.sweet.iva.core.designsystem.theme.dimens
+import com.sweet.iva.core.designsystem.theme.iransansFamily
 
 
 @Composable
@@ -44,11 +56,11 @@ fun AppTextField(
     enabled: Boolean = true,
     readonly: Boolean = false,
     textStyle: TextStyle = LocalTextStyle.current,
-    label: (@Composable () -> Unit)? = null,
-    placeHolder: (@Composable () -> Unit)? = null,
+    label: String? = null,
+    placeHolder: String? = null,
     leadingIcon: (@Composable () -> Unit)? = null,
     trailingIcon: (@Composable () -> Unit)? = null,
-    supportingText: @Composable (() -> Unit)? = null,
+    supportingText: String? = null,
     isError: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -94,71 +106,124 @@ fun AppTextField(
         cursorColor = MaterialTheme.colorScheme.primary
     ),
 ) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = modifier,
-        enabled = enabled,
-        readOnly = readonly,
-        textStyle = textStyle.copy(
-            textDirection = TextDirection.Rtl,
-        ),
-        label = label,
-        placeholder = placeHolder,
-        leadingIcon = leadingIcon,
-        trailingIcon = trailingIcon,
-        prefix = null,
-        suffix = null,
-        supportingText = supportingText,
-        isError = isError,
-        visualTransformation = VisualTransformation.None,
-        keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions,
-        singleLine = singleLine,
-        maxLines = if (singleLine) 1 else Int.MAX_VALUE,
-        minLines = 1,
-        interactionSource = remember { MutableInteractionSource() },
-        shape = shape,
-        colors = colors,
-    )
+
+    Column(
+        modifier = modifier
+            .padding(MaterialTheme.dimens.defaultPadding),
+        horizontalAlignment = Alignment.End,
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
+
+        label?.let {
+            AppTextFieldLabel(
+                value = label,
+                Modifier.padding(horizontal = MaterialTheme.dimens.smallPadding)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(MaterialTheme.dimens.defaultGap))
+
+        Box {
+
+            OutlinedTextField(
+                value = value,
+                onValueChange = onValueChange,
+                modifier = modifier,
+                enabled = enabled,
+                readOnly = readonly,
+                textStyle = textStyle.copy(
+                    textDirection = TextDirection.Rtl,
+                    fontFamily = iransansFamily,
+
+                    ),
+                leadingIcon = leadingIcon,
+                trailingIcon = trailingIcon,
+                prefix = null,
+                suffix = null,
+                isError = isError,
+                visualTransformation = VisualTransformation.None,
+                keyboardOptions = keyboardOptions,
+                keyboardActions = keyboardActions,
+                singleLine = singleLine,
+                maxLines = if (singleLine) 1 else Int.MAX_VALUE,
+                minLines = 1,
+                interactionSource = remember { MutableInteractionSource() },
+                shape = shape,
+                colors = colors,
+            )
+
+            placeHolder?.let {
+                if (value.isEmpty() || value.isBlank()) {
+                    AppTextFieldPlaceHolder(
+                        value = placeHolder,
+                        modifier
+                            .offset(x = if (trailingIcon != null) (-50).dp else (-10).dp, y = (20).dp)
+                            .matchParentSize()
+                            .padding(horizontal = MaterialTheme.dimens.smallPadding)
+                    )
+                }
+            }
+
+        }
+
+        supportingText?.let {
+            Spacer(modifier = Modifier.height(MaterialTheme.dimens.smallGap))
+            AppTextFieldSupportingText(
+                value = supportingText,
+                modifier = Modifier.padding(horizontal = MaterialTheme.dimens.smallPadding),
+                color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
+            )
+        }
+
+
+    }
 
 }
 
 @Composable
-fun AppTextFieldLabel(value: String) {
-    ProvideTextStyle(
-        value = MaterialTheme.typography.bodyMedium.copy(
-            textDirection = TextDirection.Rtl
-        )
-    ) {
+fun AppTextFieldLabel(value: String, modifier: Modifier = Modifier) {
+    ProvideTextStyle(value = MaterialTheme.typography.bodyMedium) {
         Text(
-            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = modifier,
+            style = MaterialTheme.typography.bodyMedium.copy(
+                textDirection = TextDirection.Rtl
+            ),
             text = value
         )
     }
 }
 
 @Composable
-fun AppTextFieldPlaceHolder(value: String) {
+fun AppTextFieldPlaceHolder(value: String, modifier: Modifier = Modifier) {
     ProvideTextStyle(
-        value = MaterialTheme.typography.bodyMedium.copy(
+        value = MaterialTheme.typography.labelMedium.copy(
             textDirection = TextDirection.Rtl
         )
     ) {
         Text(
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = modifier,
+            textAlign = TextAlign.Start,
             text = value
         )
     }
 }
 
 @Composable
-fun AppTextFieldSupportingText(value: String) {
+fun AppTextFieldSupportingText(
+    value: String,
+    modifier: Modifier = Modifier,
+    color: Color = MaterialTheme.colorScheme.onSurface
+) {
     ProvideTextStyle(
-        value = MaterialTheme.typography.bodySmall.copy(
+        value = MaterialTheme.typography.labelSmall.copy(
             textDirection = TextDirection.Rtl
         )
     ) {
         Text(
+            color = color,
+            modifier = modifier,
             textAlign = TextAlign.Center,
             text = value
         )
@@ -182,12 +247,8 @@ fun PreviewAppTextField() {
                 modifier = Modifier.fillMaxWidth(),
                 value = text,
                 onValueChange = { text = it },
-                label = {
-                    AppTextFieldLabel(value = "Hello i am inner label")
-                },
-                placeHolder = {
-                    AppTextFieldPlaceHolder(value = "I Am PlaceHolder")
-                },
+                label = "Hello i am inner label",
+                placeHolder = "I Am PlaceHolder",
                 leadingIcon = {
                     Icon(imageVector = AppIcons.Add, contentDescription = "leading icon")
                 },
@@ -197,46 +258,28 @@ fun PreviewAppTextField() {
                         contentDescription = "trailing icon"
                     )
                 },
-                supportingText = {
-                    AppTextFieldSupportingText(value = "supporting text")
-                }
+                supportingText = "supporting text"
             )
 
             AppTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = text,
                 onValueChange = { text = it },
-                label = {
-                    AppTextFieldLabel(value = "شماره تلفن")
-                },
-                placeHolder = {
-                    AppTextFieldPlaceHolder(value = "نمونه")
-                },
+                label = "شماره تلفن",
+                placeHolder = "نمونه",
                 leadingIcon = {
                     Icon(imageVector = AppIcons.Add, contentDescription = "leading icon")
                 },
-                trailingIcon = {
-                    Icon(
-                        imageVector = AppIcons.BookmarkBorder,
-                        contentDescription = "trailing icon"
-                    )
-                },
-                supportingText = {
-                    AppTextFieldSupportingText(value = "توضیحات بیشتر")
-                }
+                supportingText = "توضیحات بیشتر"
             )
 
             AppTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = text,
                 onValueChange = { text = it },
-                label = {
-                    AppTextFieldLabel(value = "disable label")
-                },
+                label = "disable label",
                 enabled = false,
-                placeHolder = {
-                    AppTextFieldPlaceHolder(value = "disable place holder")
-                },
+                placeHolder = "disable place holder",
                 leadingIcon = {
                     Icon(imageVector = AppIcons.Add, contentDescription = "leading icon")
                 },
@@ -246,22 +289,16 @@ fun PreviewAppTextField() {
                         contentDescription = "trailing icon"
                     )
                 },
-                supportingText = {
-                    AppTextFieldSupportingText(value = "supporting text")
-                }
+                supportingText = "supporting text"
             )
 
             AppTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = text,
                 onValueChange = { text = it },
-                label = {
-                    AppTextFieldLabel(value = "error label")
-                },
+                label = "error label",
                 isError = true,
-                placeHolder = {
-                    AppTextFieldPlaceHolder(value = "I am error")
-                },
+                placeHolder = "I am error",
                 leadingIcon = {
                     Icon(imageVector = AppIcons.Add, contentDescription = "leading icon")
                 },
@@ -271,9 +308,7 @@ fun PreviewAppTextField() {
                         contentDescription = "trailing icon"
                     )
                 },
-                supportingText = {
-                    AppTextFieldSupportingText(value = "supporting text")
-                }
+                supportingText = "supporting text"
             )
 
         }

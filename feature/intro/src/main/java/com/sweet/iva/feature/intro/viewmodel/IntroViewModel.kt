@@ -16,13 +16,10 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class IntroViewModel @Inject constructor(
-    dispatcherProvider: DispatcherProvider
+    private val dispatcherProvider: DispatcherProvider
 ) :
     BaseViewModel<IntroUiModel, IntroAction, IntroEvent>(
-        initialState = IntroUiModel(),
-        ioDispatcher = dispatcherProvider.io,
-        defaultDispatcher = dispatcherProvider.default,
-        mainDispatcher = dispatcherProvider.ui
+        initialState = IntroUiModel()
     ) {
     override fun handleAction(action: IntroAction) {
         when (action) {

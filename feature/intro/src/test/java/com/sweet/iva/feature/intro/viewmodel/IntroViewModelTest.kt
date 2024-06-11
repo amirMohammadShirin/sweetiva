@@ -1,5 +1,6 @@
 package com.sweet.iva.feature.intro.viewmodel
 
+import app.cash.turbine.test
 import com.sweet.iva.core.common.dispatcher.DispatcherProvider
 import com.sweet.iva.core.test.rule.MainDispatcherRule
 import com.sweet.iva.core.ui.navigation.ApplicationRoutes
@@ -15,6 +16,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import kotlin.test.assertEquals
 
 
 @RunWith(JUnit4::class)
@@ -50,10 +52,14 @@ class IntroViewModelTest {
 
             viewModel.process(IntroAction.EntryButtonClicked)
 
-            advanceUntilIdle()
+            viewModel.navigationFlow.test {
 
-            coVerify {
-                viewModel.navigateTo(ApplicationRoutes.loginGraphRoute)
+                val command = awaitItem()
+                assertEquals(
+                    ApplicationRoutes.loginGraphRoute,
+                    command.route
+                )
+
             }
 
         }

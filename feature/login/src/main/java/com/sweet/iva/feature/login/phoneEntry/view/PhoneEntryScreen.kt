@@ -1,18 +1,24 @@
 package com.sweet.iva.feature.login.phoneEntry.view
 
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProvideTextStyle
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sweet.iva.core.designsystem.component.AppBackground
+import com.sweet.iva.core.designsystem.component.AppPrimaryButton
 import com.sweet.iva.core.designsystem.component.AppTextField
-import com.sweet.iva.core.designsystem.component.AppTextFieldLabel
 import com.sweet.iva.core.designsystem.component.AppToolbar
 import com.sweet.iva.core.designsystem.component.ThemePreviews
 import com.sweet.iva.core.designsystem.theme.AppTheme
@@ -23,6 +29,7 @@ import com.sweet.iva.feature.login.R
 import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryAction
 import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryEvent
 import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryUiModel
+import com.sweet.iva.feature.login.phoneEntry.model.PhoneNumberModel
 import com.sweet.iva.feature.login.phoneEntry.viewmodel.PhoneEntryViewModel
 
 /**
@@ -40,9 +47,33 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
 
         val viewModel = viewModel()
 
-        ConstraintLayout {
+        PhoneNumberEntryContent(
+            isLoginEnable = state.isLoginEnable(),
+            loading = state.loading,
+            onToolbarIconClicked = { viewModel.navigateBack() },
+            phoneNumber = state.phoneNumberModel,
+            onPhoneNumberChanged = { viewModel.process(PhoneEntryAction.OnPhoneNumberChanged(it)) },
+            onConfirmClicked = { viewModel.process(PhoneEntryAction.OnConfirmClicked) }
+        )
 
-            val (toolbarRef, phoneNumberRef, topSpacerRef) = createRefs()
+    }
+
+    @Composable
+    private fun PhoneNumberEntryContent(
+        isLoginEnable: Boolean,
+        phoneNumber: PhoneNumberModel,
+        loading: Boolean,
+        onToolbarIconClicked: () -> Unit,
+        onPhoneNumberChanged: (value: String) -> Unit,
+        onConfirmClicked: () -> Unit
+    ) {
+        ConstraintLayout(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+
+            val (toolbarRef, phoneNumberRef, topSpacerRef, termsRef, btnEnterRef) = createRefs()
 
             AppToolbar(
                 modifier = Modifier
@@ -54,9 +85,7 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
                     .fillMaxWidth(),
                 toolbarTitle = "ایوا",
                 leftIcon = R.drawable.ic_arrow_left,
-                onLeftIconClicked = {
-                    viewModel.navigateBack()
-                }
+                onLeftIconClicked = onToolbarIconClicked
             )
 
             Spacer(
@@ -66,7 +95,7 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     }
-                    .height(50.dp)
+                    .height(MaterialTheme.dimens.largeGap)
             )
 
             AppTextField(
@@ -75,18 +104,48 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
                         top.linkTo(topSpacerRef.bottom, MaterialTheme.dimens.defaultGap)
                         start.linkTo(parent.start, MaterialTheme.dimens.defaultGap)
                         end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
+                    }
+                    .fillMaxWidth(),
+                value = phoneNumber.value,
+                onValueChange = onPhoneNumberChanged,
+                placeHolder = "09*********",
+                isError = !phoneNumber.errorMessage.isNullOrEmpty(),
+                supportingText = phoneNumber.errorMessage,
+                label = "شماره تلفن همراه"
+            )
+
+
+            ProvideTextStyle(value = MaterialTheme.typography.labelSmall) {
+                Text(
+                    modifier = Modifier
+                        .constrainAs(termsRef) {
+                            top.linkTo(phoneNumberRef.bottom)
+                            start.linkTo(phoneNumberRef.start, MaterialTheme.dimens.defaultGap)
+                            end.linkTo(phoneNumberRef.end, MaterialTheme.dimens.defaultGap)
+                            width = Dimension.fillToConstraints
+                        },
+
+                    textAlign = TextAlign.End,
+                    color = MaterialTheme.colorScheme.primary,
+                    text = "با ثبت نام و ورود قوانین و مقررات ایوا را می\u200Cپذیرم"
+                )
+            }
+
+            AppPrimaryButton(
+                enabled = isLoginEnable,
+                modifier = Modifier
+                    .constrainAs(btnEnterRef) {
+                        top.linkTo(termsRef.bottom, MaterialTheme.dimens.largeGap)
+                        start.linkTo(phoneNumberRef.start, MaterialTheme.dimens.defaultGap)
+                        end.linkTo(phoneNumberRef.end, MaterialTheme.dimens.defaultGap)
                         width = Dimension.fillToConstraints
                     },
-                value = "",
-                onValueChange = {},
-                label = {
-                    AppTextFieldLabel(value = "شماره تلفن همراه")
-                }
-
+                isLoading = loading,
+                onClick = onConfirmClicked,
+                text = "قبول شرایط و ادامه"
             )
 
         }
-
     }
 
     @ThemePreviews
@@ -96,7 +155,14 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
             AppBackground(modifier = Modifier) {
 
             }
-            Content(state = PhoneEntryUiModel())
+            PhoneNumberEntryContent(
+                isLoginEnable = false,
+                phoneNumber = PhoneNumberModel(),
+                loading = false,
+                onToolbarIconClicked = { },
+                onPhoneNumberChanged = {},
+                onConfirmClicked = {}
+            )
         }
     }
 

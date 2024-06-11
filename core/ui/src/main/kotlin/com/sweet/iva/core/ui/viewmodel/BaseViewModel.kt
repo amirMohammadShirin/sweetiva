@@ -21,10 +21,7 @@ import kotlinx.coroutines.launch
 
 
 abstract class BaseViewModel<State, Action : IAction, Event : IEvent>(
-    val initialState: State,
-    val ioDispatcher: CoroutineDispatcher,
-    val mainDispatcher: CoroutineDispatcher,
-    val defaultDispatcher: CoroutineDispatcher,
+    val initialState: State
 ) : ViewModel() {
 
     private val _uiStateFlow = MutableStateFlow(initialState)
@@ -50,13 +47,13 @@ abstract class BaseViewModel<State, Action : IAction, Event : IEvent>(
     abstract fun handleAction(action: Action)
 
     init {
-        viewModelScope.launch(ioDispatcher) {
+        viewModelScope.launch {
             _uiActionFlow.collect(this@BaseViewModel::handleAction)
         }
     }
 
     fun process(action: Action) {
-        viewModelScope.launch(ioDispatcher) {
+        viewModelScope.launch {
             _uiActionFlow.emit(action)
         }
     }
@@ -69,13 +66,13 @@ abstract class BaseViewModel<State, Action : IAction, Event : IEvent>(
     }
 
     fun sendEvent(event: IEvent) {
-        viewModelScope.launch(ioDispatcher) {
+        viewModelScope.launch {
             _uiEventFlow.emit(event)
         }
     }
 
     fun navigateTo(route: String) {
-        viewModelScope.launch(ioDispatcher) {
+        viewModelScope.launch {
             _navigationFlow.emit(
                 NavigationCommand.ToScreen(route)
             )
@@ -83,7 +80,7 @@ abstract class BaseViewModel<State, Action : IAction, Event : IEvent>(
     }
 
     fun navigateBack() {
-        viewModelScope.launch(ioDispatcher) {
+        viewModelScope.launch {
             _navigationFlow.emit(NavigationCommand.Back)
         }
     }
