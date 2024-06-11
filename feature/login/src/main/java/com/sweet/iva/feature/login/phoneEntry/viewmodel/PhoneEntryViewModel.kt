@@ -20,12 +20,9 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class PhoneEntryViewModel @Inject constructor(
-    dispatcherProvider: DispatcherProvider
+    private val dispatcherProvider: DispatcherProvider
 ) : BaseViewModel<PhoneEntryUiModel, PhoneEntryAction, PhoneEntryEvent>(
-    initialState = PhoneEntryUiModel(),
-    ioDispatcher = dispatcherProvider.io,
-    defaultDispatcher = dispatcherProvider.default,
-    mainDispatcher = dispatcherProvider.ui
+    initialState = PhoneEntryUiModel()
 ) {
     override fun handleAction(action: PhoneEntryAction) {
         when (action) {
@@ -40,7 +37,7 @@ class PhoneEntryViewModel @Inject constructor(
     }
 
     private fun sendOtp() {
-        viewModelScope.launch(ioDispatcher) {
+        viewModelScope.launch(dispatcherProvider.io) {
             updateState {
                 it.copy(
                     loading = true
