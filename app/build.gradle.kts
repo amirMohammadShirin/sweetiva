@@ -1,4 +1,4 @@
-
+import com.sweet.iva.ProjectBuildTypes
 
 plugins {
     alias(libs.plugins.my.android.application)
@@ -31,12 +31,12 @@ android {
     buildTypes {
 
         debug {
-//            applicationIdSuffix = ProjectBuildTypes.DEBUG.applicationIdSuffix
+            applicationIdSuffix = ProjectBuildTypes.DEBUG.applicationIdSuffix
         }
 
         val release by getting {
             isMinifyEnabled = true
-//            applicationIdSuffix = ProjectBuildTypes.RELEASE.applicationIdSuffix
+            applicationIdSuffix = ProjectBuildTypes.RELEASE.applicationIdSuffix
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

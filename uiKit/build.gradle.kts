@@ -14,7 +14,7 @@ android {
         versionName = "0.0.1"
         minSdk = 26
 
-        missingDimensionStrategy(FlavorDimension.contentType.name, IvaFlavor.demo.name)
+        missingDimensionStrategy(FlavorDimension.CONTENT.name, IvaFlavor.demo.name)
 
     }
     packaging {
