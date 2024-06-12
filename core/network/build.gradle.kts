@@ -8,13 +8,11 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.domain)
     implementation(projects.core.common)
-    implementation(projects.core.data)
 
     implementation(libs.retrofit.core)
-    implementation(libs.retrofit.moshi)
-    implementation(libs.moshi.kotlin)
+    implementation(libs.retrofit.gson)
+    implementation(libs.gson)
     implementation(libs.okhttp.logging)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.datetime)
