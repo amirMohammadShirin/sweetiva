@@ -1,16 +1,7 @@
-package com.sweet.iva.core.domain.usecase
-
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.withContext
+package com.sweet.arch.core.domain.usecase
 
 abstract class BaseUseCase<in PARAM, out RESULT> {
     protected abstract suspend fun onExecute(param: PARAM): RESULT
-
-    protected abstract val dispatcher: CoroutineDispatcher
-
-    suspend fun execute(param: PARAM) =
-        withContext(dispatcher) {
-            return@withContext onExecute(param)
-        }
+    suspend fun execute(param: PARAM) = onExecute(param)
 
 }

@@ -1,7 +1,8 @@
 package com.sweet.iva.feature.login.phoneEntry.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import com.sweet.arch.core.domain.usecase.user.GetLoginTokenUseCase
+import com.sweet.arch.core.domain.model.auth.LoginOtpParam
+import com.sweet.arch.core.domain.usecase.auth.SendLoginOtpUseCase
 import com.sweet.iva.core.common.dispatcher.DispatcherProvider
 import com.sweet.iva.core.common.util.ValidationState
 import com.sweet.iva.core.common.util.ValidationUtil
@@ -11,9 +12,7 @@ import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryAction
 import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryEvent
 import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PhoneEntryViewModel @Inject constructor(
     private val dispatcherProvider: DispatcherProvider,
-    private val loginTokenUseCase: GetLoginTokenUseCase
+    private val sendLoginOtpUseCase: SendLoginOtpUseCase
 ) : BaseViewModel<PhoneEntryUiModel, PhoneEntryAction, PhoneEntryEvent>(
     initialState = PhoneEntryUiModel()
 ) {
@@ -40,20 +39,25 @@ class PhoneEntryViewModel @Inject constructor(
     }
 
     private fun sendOtp() {
-        viewModelScope.launch(dispatcherProvider.io) {
-            val result = loginTokenUseCase.execute(null)
-            sendEvent(IEvent.ShowSnack(result))
+        viewModelScope.launch {
+
             updateState {
                 it.copy(
                     loading = true
                 )
             }
-            delay(5000)
+
+            val result =
+                sendLoginOtpUseCase.execute(LoginOtpParam(currentState.phoneNumberModel.value))
+
+            sendEvent(IEvent.ShowSnack(result.trackingCode))
+
             updateState {
                 it.copy(
                     loading = false
                 )
             }
+
         }
     }
 
