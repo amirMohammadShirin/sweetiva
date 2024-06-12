@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.sweet.arch.core.domain.model.auth.LoginOtpParam
 import com.sweet.arch.core.domain.usecase.auth.SendLoginOtpUseCase
 import com.sweet.iva.core.common.dispatcher.DispatcherProvider
+import com.sweet.iva.core.common.model.DisplayException
 import com.sweet.iva.core.common.util.ValidationState
 import com.sweet.iva.core.common.util.ValidationUtil
 import com.sweet.iva.core.ui.model.IEvent
@@ -21,7 +22,6 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class PhoneEntryViewModel @Inject constructor(
-    private val dispatcherProvider: DispatcherProvider,
     private val sendLoginOtpUseCase: SendLoginOtpUseCase
 ) : BaseViewModel<PhoneEntryUiModel, PhoneEntryAction, PhoneEntryEvent>(
     initialState = PhoneEntryUiModel()
@@ -39,7 +39,18 @@ class PhoneEntryViewModel @Inject constructor(
     }
 
     private fun sendOtp() {
-        viewModelScope.launch {
+        viewModelScope.launch(
+            CoroutineExceptionHandler { _, throwable ->
+
+                if (throwable is DisplayException) {
+                    sendEvent(IEvent.ShowSnack(throwable.message ?: "test"))
+                    return@CoroutineExceptionHandler
+                }
+
+                sendEvent(IEvent.ShowSnack("default error"))
+
+            }
+        ) {
 
             updateState {
                 it.copy(
