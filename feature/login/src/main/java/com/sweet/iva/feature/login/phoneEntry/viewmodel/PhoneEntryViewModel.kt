@@ -3,7 +3,6 @@ package com.sweet.iva.feature.login.phoneEntry.viewmodel
 import androidx.lifecycle.viewModelScope
 import com.sweet.arch.core.domain.model.auth.LoginOtpParam
 import com.sweet.arch.core.domain.usecase.auth.SendLoginOtpUseCase
-import com.sweet.iva.core.common.dispatcher.DispatcherProvider
 import com.sweet.iva.core.common.model.DisplayException
 import com.sweet.iva.core.common.util.ValidationState
 import com.sweet.iva.core.common.util.ValidationUtil
@@ -42,12 +41,16 @@ class PhoneEntryViewModel @Inject constructor(
         viewModelScope.launch(
             CoroutineExceptionHandler { _, throwable ->
 
+                updateState {
+                    it.copy(loading = false)
+                }
+
                 if (throwable is DisplayException) {
-                    sendEvent(IEvent.ShowSnack(throwable.message ?: "test"))
+                    sendEvent(IEvent.ShowSnack(throwable.message ?: "خطا در دریافت اطلاعات"))
                     return@CoroutineExceptionHandler
                 }
 
-                sendEvent(IEvent.ShowSnack("default error"))
+                sendEvent(IEvent.ShowSnack("خطا در دریافت اطلاعات"))
 
             }
         ) {
