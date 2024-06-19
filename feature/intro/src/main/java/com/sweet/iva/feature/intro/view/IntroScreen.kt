@@ -137,10 +137,10 @@ class IntroScreen : BaseScreen<IntroUiModel, IntroAction, IntroEvent>(
                         .border(
                             width = 1.dp,
                             shape = CircleShape,
-                            color = MaterialTheme.colorScheme.primary
+                            color = MaterialTheme.colorScheme.secondary
                         )
                         .background(
-                            if (selectedIndex == it) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background,
+                            if (selectedIndex == it) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.background,
                             CircleShape
                         )
                 ) {

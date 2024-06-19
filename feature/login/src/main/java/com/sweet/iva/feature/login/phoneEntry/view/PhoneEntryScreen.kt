@@ -78,9 +78,9 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
             AppToolbar(
                 modifier = Modifier
                     .constrainAs(toolbarRef) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
+                        top.linkTo(parent.top,MaterialTheme.dimens.largeGap)
+                        start.linkTo(parent.start,MaterialTheme.dimens.largeGap)
+                        end.linkTo(parent.end,MaterialTheme.dimens.largeGap)
                     }
                     .fillMaxWidth(),
                 toolbarTitle = "ایوا",

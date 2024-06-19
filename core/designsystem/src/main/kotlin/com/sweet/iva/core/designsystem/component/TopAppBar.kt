@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -102,10 +103,11 @@ fun AppToolbar(
 
     ConstraintLayout(
         modifier = modifier
-            .clip(RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp))
+            .padding(horizontal = MaterialTheme.dimens.largeGap)
+            .clip(RoundedCornerShape(10.dp))
             .background(
-                MaterialTheme.colorScheme.surface,
-                RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp),
+                MaterialTheme.colorScheme.secondary,
+                RoundedCornerShape(10.dp),
             )
     ) {
 
@@ -121,7 +123,8 @@ fun AppToolbar(
                     bottom.linkTo(parent.bottom, MaterialTheme.dimens.defaultGap)
                     width = Dimension.fillToConstraints
                 },
-                text = toolbarTitle
+                text = toolbarTitle,
+                color = MaterialTheme.colorScheme.background
             )
         }
 
