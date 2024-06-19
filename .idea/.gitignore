@@ -5,3 +5,5 @@
 /modules/feature/intro/iva.feature.intro.iml
 /gradle.xml
 /kotlinc.xml
+/modules/core/ui/sweetiva.core.ui.iml
+/modules/feature/intro/sweetiva.feature.intro.iml
