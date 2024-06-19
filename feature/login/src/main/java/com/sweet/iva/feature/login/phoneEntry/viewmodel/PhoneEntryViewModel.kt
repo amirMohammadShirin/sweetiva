@@ -77,7 +77,8 @@ class PhoneEntryViewModel @Inject constructor(
                 NavigationCommand.ToWithData(
                     ApplicationRoutes.loginVerificationScreenRoute,
                     linkedMapOf(
-                        NavigationParam.TRACKING_CODE to result.trackingCode
+                        NavigationParam.TRACKING_CODE to result.trackingCode,
+                        NavigationParam.PHONE_NUMBER to currentState.phoneNumberModel.value
                     )
                 )
             )
