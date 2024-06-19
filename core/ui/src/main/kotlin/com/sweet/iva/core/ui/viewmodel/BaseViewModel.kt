@@ -70,11 +70,15 @@ abstract class BaseViewModel<State, Action : IAction, Event : IEvent>(
         }
     }
 
-    fun navigateTo(route: String) {
+    fun navigateTo(command: NavigationCommand.ToScreen) {
         viewModelScope.launch {
-            _navigationFlow.emit(
-                NavigationCommand.ToScreen(route)
-            )
+            _navigationFlow.emit(command)
+        }
+    }
+
+    fun navigateTo(command: NavigationCommand.ToWithData) {
+        viewModelScope.launch {
+            _navigationFlow.emit(command)
         }
     }
 

@@ -234,7 +234,7 @@ class IntroScreen : BaseScreen<IntroUiModel, IntroAction, IntroEvent>(
     private fun PreviewIntroScreen() {
         AppTheme {
             IntroScreen()
-                .Screen()
+                .Screen(null)
         }
 
     }

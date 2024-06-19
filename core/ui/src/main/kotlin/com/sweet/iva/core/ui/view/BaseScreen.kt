@@ -10,6 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import com.sweet.iva.core.ui.entity.DisplayedError
 import com.sweet.iva.core.ui.helper.LocalNavController
@@ -19,6 +20,7 @@ import com.sweet.iva.core.ui.helper.showSnackbar
 import com.sweet.iva.core.ui.helper.showToast
 import com.sweet.iva.core.ui.model.IAction
 import com.sweet.iva.core.ui.model.IEvent
+import com.sweet.iva.core.ui.navigation.NavigationParam
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 
 abstract class BaseScreen<State, Action : IAction, Event : IEvent>(
@@ -26,12 +28,19 @@ abstract class BaseScreen<State, Action : IAction, Event : IEvent>(
     val name: String
 ) {
 
+    protected val parameters = linkedMapOf<NavigationParam, String>()
+
     @Composable
     abstract fun viewModel(): BaseViewModel<State, Action, Event>
 
     @Composable
-    open fun Screen() {
+    open fun Screen(navBackStackEntry: NavBackStackEntry?) {
         with(viewModel()) {
+
+            navBackStackEntry?.let {
+                initParameters(navBackStackEntry)
+            }
+
             val state = getComposableState()
             BaseScreenBehavior(this) {
                 Column(
@@ -40,6 +49,17 @@ abstract class BaseScreen<State, Action : IAction, Event : IEvent>(
                     verticalArrangement = Arrangement.Center
                 ) {
                     Content(state.value)
+                }
+            }
+
+        }
+    }
+
+    private fun initParameters(navBackStackEntry: NavBackStackEntry) {
+        navBackStackEntry.arguments?.let {
+            it.keySet().forEach { key ->
+                NavigationParam.getByName(key)?.let { param ->
+                    parameters[param] = it.getString(key) ?: ""
                 }
             }
         }
