@@ -11,5 +11,6 @@ object Dimens {
     val smallGap = 5.dp
     val defaultGap = 10.dp
     val largeGap = 15.dp
+    val xLargeGap = 25.dp
 
 }
