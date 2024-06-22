@@ -1,6 +1,5 @@
 package com.sweet.iva.feature.login.verification.view
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
@@ -26,7 +25,6 @@ import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 import com.sweet.iva.core.ui.navigation.NavigationParam
 import com.sweet.iva.core.ui.view.BaseScreen
 import com.sweet.iva.feature.login.R
-import com.sweet.iva.feature.login.phoneEntry.model.PhoneNumberModel
 import com.sweet.iva.feature.login.verification.model.VerificationAction
 import com.sweet.iva.feature.login.verification.model.VerificationEvent
 import com.sweet.iva.feature.login.verification.model.VerificationUiModel
@@ -46,14 +44,17 @@ class VerificationScreen :
         val viewModel = viewModel()
 
         VerificationContent(
-            onToolbarIconClicked = { viewModel.navigateBack() }
-        )
+            onToolbarIconClicked = { viewModel.navigateBack() },
+            phoneNumber = parameters[NavigationParam.PHONE_NUMBER],
+
+            )
 
     }
 
     @Composable
     private fun VerificationContent(
-        onToolbarIconClicked: () -> Unit
+        onToolbarIconClicked: () -> Unit,
+        phoneNumber: String?
     ) {
         ConstraintLayout(
             modifier = Modifier
@@ -76,13 +77,26 @@ class VerificationScreen :
                 onLeftIconClicked = onToolbarIconClicked
             )
 
-            parameters[NavigationParam.PHONE_NUMBER]?.let {
+            ProvideTextStyle(value = MaterialTheme.typography.titleLarge) {
+                Text(
+                    modifier = Modifier
+                        .constrainAs(counterRef) {
+                            top.linkTo(toolbarRef.bottom, MaterialTheme.dimens.largePadding)
+                            start.linkTo(parent.start, MaterialTheme.dimens.largeGap)
+                            end.linkTo(parent.end, MaterialTheme.dimens.largeGap)
+                        },
+                    text = "04:59",
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+
+            phoneNumber?.let {
 
                 ProvideTextStyle(value = MaterialTheme.typography.labelMedium) {
                     Text(
                         modifier = Modifier
                             .constrainAs(headerRef) {
-                                top.linkTo(toolbarRef.bottom, MaterialTheme.dimens.xLargeGap)
+                                top.linkTo(counterRef.bottom, MaterialTheme.dimens.smallGap)
                                 start.linkTo(parent.start, MaterialTheme.dimens.defaultGap)
                                 end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
                                 width = Dimension.fillToConstraints
@@ -112,7 +126,8 @@ class VerificationScreen :
 
             }
             VerificationContent(
-                onToolbarIconClicked = {}
+                onToolbarIconClicked = {},
+                phoneNumber = "09210425101"
             )
         }
     }
