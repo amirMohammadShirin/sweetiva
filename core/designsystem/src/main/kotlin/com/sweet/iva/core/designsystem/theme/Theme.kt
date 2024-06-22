@@ -37,7 +37,7 @@ val LightDefaultColorScheme = lightColorScheme(
     onError = White,
     errorContainer = ErrorContainer,
     onErrorContainer = Red50,
-    background = Gray500,
+    background = Gray600,
     onBackground = Black,
     surface = Gray500,
     onSurface = Gray800,
@@ -75,12 +75,12 @@ val DarkAndroidGradientColors = GradientColor(container = Metal200)
 /**
  * Light android background theme
  */
-val LightAndroidBackgroundTheme = BackgroundTheme(color = Metal50)
+val LightAndroidBackgroundTheme = BackgroundTheme(color = Color.Blue)
 
 /**
  * Dark android background theme
  */
-val DarkAndroidBackgroundTheme = BackgroundTheme(color = Metal50)
+val DarkAndroidBackgroundTheme = BackgroundTheme(color = Color.Blue)
 
 val MaterialTheme.dimens: Dimens
     get() = Dimens
