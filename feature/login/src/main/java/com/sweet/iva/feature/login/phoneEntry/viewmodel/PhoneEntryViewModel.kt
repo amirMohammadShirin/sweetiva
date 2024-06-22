@@ -7,6 +7,9 @@ import com.sweet.iva.core.common.model.DisplayException
 import com.sweet.iva.core.common.util.ValidationState
 import com.sweet.iva.core.common.util.ValidationUtil
 import com.sweet.iva.core.ui.model.IEvent
+import com.sweet.iva.core.ui.navigation.ApplicationRoutes
+import com.sweet.iva.core.ui.navigation.NavigationCommand
+import com.sweet.iva.core.ui.navigation.NavigationParam
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryAction
 import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryEvent
@@ -64,13 +67,21 @@ class PhoneEntryViewModel @Inject constructor(
             val result =
                 sendLoginOtpUseCase.execute(LoginOtpParam(currentState.phoneNumberModel.value))
 
-            sendEvent(IEvent.ShowSnack(result.trackingCode))
-
             updateState {
                 it.copy(
                     loading = false
                 )
             }
+
+            navigateTo(
+                NavigationCommand.ToWithData(
+                    ApplicationRoutes.loginVerificationScreenRoute,
+                    linkedMapOf(
+                        NavigationParam.TRACKING_CODE to result.trackingCode,
+                        NavigationParam.PHONE_NUMBER to currentState.phoneNumberModel.value
+                    )
+                )
+            )
 
         }
     }

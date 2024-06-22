@@ -99,7 +99,7 @@ fun AppTextField(
         focusedLabelColor = MaterialTheme.colorScheme.primary,
         focusedLeadingIconColor = MaterialTheme.colorScheme.primary,
         focusedPlaceholderColor = MaterialTheme.colorScheme.primary,
-        focusedTextColor = MaterialTheme.colorScheme.primary,
+        focusedTextColor = MaterialTheme.colorScheme.onBackground,
         focusedSupportingTextColor = MaterialTheme.colorScheme.onSurface,
         focusedTrailingIconColor = MaterialTheme.colorScheme.primary,
 

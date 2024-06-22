@@ -26,7 +26,7 @@ class AuthenticationRemoteDataSource @Inject constructor() {
             delay(1000)
             val response = gson.fromJson(
                 mockLoginOtpResponse,
-                object : TypeToken<Response<LoginOtpNetworkResult>>(){}
+                object : TypeToken<Response<LoginOtpNetworkResult>>() {}
             )
             return@withContext response.parseResponse()
         }
@@ -37,6 +37,6 @@ class AuthenticationRemoteDataSource @Inject constructor() {
 
 const val mockLoginOtpResponse = "{\n" +
         "  \"data\": {\n" +
-        "    \"trackingCode\": \"64684313\"\n" +
+        "    \"trackingCode\": \"0021477191\"\n" +
         "  }\n" +
         "}\n"

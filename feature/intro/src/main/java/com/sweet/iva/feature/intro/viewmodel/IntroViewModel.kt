@@ -2,6 +2,7 @@ package com.sweet.iva.feature.intro.viewmodel
 
 import com.sweet.iva.core.common.dispatcher.DispatcherProvider
 import com.sweet.iva.core.ui.navigation.ApplicationRoutes
+import com.sweet.iva.core.ui.navigation.NavigationCommand
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 import com.sweet.iva.feature.intro.model.IntroAction
 import com.sweet.iva.feature.intro.model.IntroEvent
@@ -30,6 +31,8 @@ class IntroViewModel @Inject constructor(
     }
 
     private fun navigateToLogin() {
-        navigateTo(ApplicationRoutes.loginGraphRoute)
+        navigateTo(
+            NavigationCommand.ToScreen(ApplicationRoutes.loginGraphRoute)
+        )
     }
 }

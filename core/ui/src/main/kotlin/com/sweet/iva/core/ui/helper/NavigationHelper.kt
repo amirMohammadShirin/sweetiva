@@ -31,7 +31,7 @@ fun NavGraphBuilder.registerDestination(
         popEnterTransition = popEnterTransition,
         popExitTransition = popExitTransition
     ) {
-        screen.Screen()
+        screen.Screen(it)
     }
 }
 

@@ -3,17 +3,34 @@ package com.sweet.iva.core.ui.navigation
 import androidx.navigation.NavController
 
 sealed class NavigationCommand(
-    val route: String
+    val route: String? = null
 ) {
     abstract fun navigate(navController: NavController)
 
     class ToScreen(route: String) : NavigationCommand(route) {
         override fun navigate(navController: NavController) {
-            navController.navigate(route)
+            route?.let {
+                navController.navigate(it)
+            }
         }
     }
 
-    data object Back : NavigationCommand("") {
+    class ToWithData(
+        route: String,
+        private val param: LinkedHashMap<NavigationParam, String>
+    ) : NavigationCommand(route) {
+        override fun navigate(navController: NavController) {
+            route?.let {
+                var destinationRoute = it
+                param.forEach {
+                    destinationRoute = destinationRoute.replace("{${it.key}}", it.value)
+                }
+                navController.navigate(destinationRoute)
+            }
+        }
+    }
+
+    data object Back : NavigationCommand(null) {
         override fun navigate(navController: NavController) {
             navController.popBackStack()
         }

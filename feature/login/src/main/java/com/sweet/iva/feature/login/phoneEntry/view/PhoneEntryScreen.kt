@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -67,6 +68,11 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
         onPhoneNumberChanged: (value: String) -> Unit,
         onConfirmClicked: () -> Unit
     ) {
+
+        LaunchedEffect(Unit) {
+            onPhoneNumberChanged("09210425101")
+        }
+
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
@@ -78,9 +84,9 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
             AppToolbar(
                 modifier = Modifier
                     .constrainAs(toolbarRef) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
+                        top.linkTo(parent.top, MaterialTheme.dimens.largeGap)
+                        start.linkTo(parent.start, MaterialTheme.dimens.largeGap)
+                        end.linkTo(parent.end, MaterialTheme.dimens.largeGap)
                     }
                     .fillMaxWidth(),
                 toolbarTitle = "ایوا",
