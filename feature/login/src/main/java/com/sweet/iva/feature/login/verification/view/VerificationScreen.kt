@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -42,6 +43,10 @@ class VerificationScreen :
     override fun Content(state: VerificationUiModel) {
 
         val viewModel = viewModel()
+
+        LaunchedEffect(Unit) {
+            viewModel.startTimer(3000, 1000)
+        }
 
         VerificationContent(
             onToolbarIconClicked = { viewModel.navigateBack() },
