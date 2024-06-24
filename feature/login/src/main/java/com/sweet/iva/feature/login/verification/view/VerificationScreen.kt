@@ -2,6 +2,7 @@ package com.sweet.iva.feature.login.verification.view
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -45,21 +46,24 @@ class VerificationScreen :
         val viewModel = viewModel()
 
         LaunchedEffect(Unit) {
-            viewModel.startTimer(3000, 1000)
+            viewModel.startTimer(10000, 1000)
         }
 
         VerificationContent(
             onToolbarIconClicked = { viewModel.navigateBack() },
             phoneNumber = parameters[NavigationParam.PHONE_NUMBER],
-
-            )
+            countDownValue = state.timer.value,
+            isTimeEnded = state.timer.finished
+        )
 
     }
 
     @Composable
     private fun VerificationContent(
         onToolbarIconClicked: () -> Unit,
-        phoneNumber: String?
+        phoneNumber: String?,
+        countDownValue: String,
+        isTimeEnded: Boolean
     ) {
         ConstraintLayout(
             modifier = Modifier
@@ -72,13 +76,14 @@ class VerificationScreen :
             AppToolbar(
                 modifier = Modifier
                     .constrainAs(toolbarRef) {
-                        top.linkTo(parent.top, MaterialTheme.dimens.largeGap)
-                        start.linkTo(parent.start, MaterialTheme.dimens.largeGap)
-                        end.linkTo(parent.end, MaterialTheme.dimens.largeGap)
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
                     }
                     .fillMaxWidth(),
                 toolbarTitle = name,
                 leftIcon = R.drawable.ic_arrow_left,
+                rightIcon = R.drawable.iv_iva_with_text,
                 onLeftIconClicked = onToolbarIconClicked
             )
 
@@ -89,8 +94,9 @@ class VerificationScreen :
                             top.linkTo(toolbarRef.bottom, MaterialTheme.dimens.largePadding)
                             start.linkTo(parent.start, MaterialTheme.dimens.largeGap)
                             end.linkTo(parent.end, MaterialTheme.dimens.largeGap)
-                        },
-                    text = "04:59",
+                        }
+                        .padding(MaterialTheme.dimens.smallPadding),
+                    text = countDownValue,
                     color = MaterialTheme.colorScheme.primary
                 )
             }
@@ -101,7 +107,7 @@ class VerificationScreen :
                     Text(
                         modifier = Modifier
                             .constrainAs(headerRef) {
-                                top.linkTo(counterRef.bottom, MaterialTheme.dimens.smallGap)
+                                top.linkTo(counterRef.bottom)
                                 start.linkTo(parent.start, MaterialTheme.dimens.defaultGap)
                                 end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
                                 width = Dimension.fillToConstraints
@@ -113,12 +119,13 @@ class VerificationScreen :
                             }
                             append("ارسال شده است")
                         },
-                        textAlign = TextAlign.Center,
-                        color = MaterialTheme.colorScheme.outline
+                        textAlign = TextAlign.Center
                     )
                 }
 
             }
+
+
 
         }
     }
@@ -132,7 +139,9 @@ class VerificationScreen :
             }
             VerificationContent(
                 onToolbarIconClicked = {},
-                phoneNumber = "09210425101"
+                phoneNumber = "09210425101",
+                countDownValue = "05:00",
+                isTimeEnded = false
             )
         }
     }

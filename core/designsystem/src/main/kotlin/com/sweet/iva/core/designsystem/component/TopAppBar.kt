@@ -31,8 +31,6 @@ import androidx.constraintlayout.compose.Dimension
 import com.sweet.iva.core.designsystem.R
 import com.sweet.iva.core.designsystem.icon.AppIcons
 import com.sweet.iva.core.designsystem.theme.AppTheme
-import com.sweet.iva.core.designsystem.theme.Gray500
-import com.sweet.iva.core.designsystem.theme.Gray600
 import com.sweet.iva.core.designsystem.theme.dimens
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -108,7 +106,7 @@ fun AppToolbar(
             .padding(horizontal = MaterialTheme.dimens.largeGap)
             .clip(RoundedCornerShape(10.dp))
             .background(
-                Gray600,
+                MaterialTheme.colorScheme.secondary,
                 RoundedCornerShape(10.dp),
             )
     ) {

@@ -84,13 +84,14 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
             AppToolbar(
                 modifier = Modifier
                     .constrainAs(toolbarRef) {
-                        top.linkTo(parent.top, MaterialTheme.dimens.largeGap)
-                        start.linkTo(parent.start, MaterialTheme.dimens.largeGap)
-                        end.linkTo(parent.end, MaterialTheme.dimens.largeGap)
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
                     }
                     .fillMaxWidth(),
                 toolbarTitle = "ایوا",
                 leftIcon = R.drawable.ic_arrow_left,
+                rightIcon = R.drawable.iv_iva_with_text,
                 onLeftIconClicked = onToolbarIconClicked
             )
 

@@ -1,6 +1,7 @@
 package com.sweet.iva.feature.login.verification.viewmodel
 
 import android.os.CountDownTimer
+import com.sweet.iva.core.common.util.TimeUtil
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 import com.sweet.iva.feature.login.verification.model.VerificationAction
 import com.sweet.iva.feature.login.verification.model.VerificationEvent
@@ -27,12 +28,11 @@ class VerificationViewModel @Inject constructor() :
                 updateState {
                     it.copy(
                         timer = it.timer.copy(
-                            value = p0.toString(),
+                            value = TimeUtil.toDualTimeFormat(p0),
                             finished = false
                         )
                     )
                 }
-                println("SWEET $p0")
             }
 
             override fun onFinish() {
@@ -44,7 +44,6 @@ class VerificationViewModel @Inject constructor() :
                         )
                     )
                 }
-                println("SWEET finished")
             }
         }.start()
 
