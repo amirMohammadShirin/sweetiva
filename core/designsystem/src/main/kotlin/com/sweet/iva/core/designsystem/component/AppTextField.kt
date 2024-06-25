@@ -1,16 +1,21 @@
 package com.sweet.iva.core.designsystem.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
@@ -39,7 +44,10 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.sweet.iva.core.designsystem.icon.AppIcons
 import com.sweet.iva.core.designsystem.theme.AppTheme
 import com.sweet.iva.core.designsystem.theme.Metal100
@@ -157,7 +165,10 @@ fun AppTextField(
                     AppTextFieldPlaceHolder(
                         value = placeHolder,
                         modifier
-                            .offset(x = if (trailingIcon != null) (-50).dp else (-10).dp, y = (20).dp)
+                            .offset(
+                                x = if (trailingIcon != null) (-50).dp else (-10).dp,
+                                y = (20).dp
+                            )
                             .matchParentSize()
                             .padding(horizontal = MaterialTheme.dimens.smallPadding)
                     )
@@ -211,6 +222,72 @@ fun AppTextFieldPlaceHolder(value: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
+fun OTPInput(
+    modifier: Modifier = Modifier,
+    value: String,
+    onValueChange: (String) -> Unit,
+    size: Int
+) {
+
+
+    BasicTextField(
+        modifier = modifier,
+        value = value,
+        onValueChange = onValueChange,
+        decorationBox = {
+            Row(horizontalArrangement = Arrangement.Center) {
+                repeat(size) { index ->
+                    OTPCharView(
+                        index = index,
+                        text = value
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+            }
+        }
+    )
+
+}
+
+@Composable
+private fun OTPCharView(
+    index: Int,
+    text: String
+) {
+    val isFocused = text.length == index
+    val char = when {
+        index == text.length -> ""
+        index > text.length -> ""
+        else -> text[index].toString()
+    }
+
+    ProvideTextStyle(value = MaterialTheme.typography.bodyLarge) {
+        Text(
+            maxLines = 1,
+            modifier = Modifier
+                .width(40.dp)
+                .height(50.dp)
+                .border(
+                    1.dp, when {
+                        isFocused -> MaterialTheme.colorScheme.primary
+                        else -> MaterialTheme.colorScheme.onSurface
+                    }, RoundedCornerShape(8.dp)
+                )
+                .padding(2.dp),
+            text = char,
+            color = if (isFocused) {
+                MaterialTheme.colorScheme.primary
+            } else {
+                MaterialTheme.colorScheme.onSurface
+            },
+            textAlign = TextAlign.Center,
+            lineHeight = 50.sp
+        )
+    }
+
+}
+
+@Composable
 fun AppTextFieldSupportingText(
     value: String,
     modifier: Modifier = Modifier,
@@ -228,6 +305,23 @@ fun AppTextFieldSupportingText(
             text = value
         )
     }
+}
+
+@ThemePreviews
+@Composable
+private fun PreviewOTPInput() {
+
+    AppTheme {
+
+        var value by remember {
+            mutableStateOf("")
+        }
+
+
+        OTPInput(value = value, onValueChange = { value = it }, size = 6)
+
+    }
+
 }
 
 @Composable

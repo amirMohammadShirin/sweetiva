@@ -21,6 +21,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sweet.iva.core.designsystem.component.AppBackground
 import com.sweet.iva.core.designsystem.component.AppToolbar
+import com.sweet.iva.core.designsystem.component.OTPInput
 import com.sweet.iva.core.designsystem.theme.AppTheme
 import com.sweet.iva.core.designsystem.theme.dimens
 import com.sweet.iva.core.ui.navigation.ApplicationRoutes
@@ -53,7 +54,12 @@ class VerificationScreen :
             onToolbarIconClicked = { viewModel.navigateBack() },
             phoneNumber = parameters[NavigationParam.PHONE_NUMBER],
             countDownValue = state.timer.value,
-            isTimeEnded = state.timer.finished
+            isTimeEnded = state.timer.finished,
+            verificationCodeLength = state.verificationCode.length,
+            verificationCode = state.verificationCode.value,
+            onVerificationCodeChanged = {
+                
+            }
         )
 
     }
@@ -63,7 +69,10 @@ class VerificationScreen :
         onToolbarIconClicked: () -> Unit,
         phoneNumber: String?,
         countDownValue: String,
-        isTimeEnded: Boolean
+        isTimeEnded: Boolean,
+        verificationCode: String,
+        verificationCodeLength: Int,
+        onVerificationCodeChanged: (String) -> Unit
     ) {
         ConstraintLayout(
             modifier = Modifier
@@ -71,12 +80,17 @@ class VerificationScreen :
                 .verticalScroll(rememberScrollState())
         ) {
 
-            val (toolbarRef, headerRef, counterRef) = createRefs()
+            val (
+                toolbarRef,
+                headerRef,
+                counterRef,
+                otpRef
+            ) = createRefs()
 
             AppToolbar(
                 modifier = Modifier
                     .constrainAs(toolbarRef) {
-                        top.linkTo(parent.top)
+                        top.linkTo(parent.top, MaterialTheme.dimens.defaultGap)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     }
@@ -125,7 +139,11 @@ class VerificationScreen :
 
             }
 
-
+            OTPInput(
+                value = verificationCode,
+                onValueChange = onVerificationCodeChanged,
+                size = verificationCodeLength
+            )
 
         }
     }
@@ -141,7 +159,10 @@ class VerificationScreen :
                 onToolbarIconClicked = {},
                 phoneNumber = "09210425101",
                 countDownValue = "05:00",
-                isTimeEnded = false
+                isTimeEnded = false,
+                verificationCode = "554",
+                verificationCodeLength = 4,
+                onVerificationCodeChanged = {}
             )
         }
     }
