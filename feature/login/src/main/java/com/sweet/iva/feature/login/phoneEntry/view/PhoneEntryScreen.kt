@@ -84,7 +84,7 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
             AppToolbar(
                 modifier = Modifier
                     .constrainAs(toolbarRef) {
-                        top.linkTo(parent.top)
+                        top.linkTo(parent.top,MaterialTheme.dimens.defaultGap)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     }
@@ -92,7 +92,7 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
                 toolbarTitle = "ایوا",
                 leftIcon = R.drawable.ic_arrow_left,
                 rightIcon = R.drawable.iv_iva_with_text,
-                onLeftIconClicked = onToolbarIconClicked
+                onLeftIconClicked = onToolbarIconClicked,
             )
 
             Spacer(
