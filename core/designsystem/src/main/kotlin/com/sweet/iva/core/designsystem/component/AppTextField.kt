@@ -234,7 +234,9 @@ fun OTPInput(
     BasicTextField(
         modifier = modifier,
         value = value,
-        onValueChange = onValueChange,
+        onValueChange = {
+            if (it.length <= size) onValueChange.invoke(it)
+        },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
         decorationBox = {
             Row(horizontalArrangement = Arrangement.Center) {
@@ -321,9 +323,10 @@ private fun PreviewOTPInput() {
 
 
         OTPInput(
-            modifier=Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             value = value, onValueChange = { value = it },
-            size = 6)
+            size = 6
+        )
 
     }
 
