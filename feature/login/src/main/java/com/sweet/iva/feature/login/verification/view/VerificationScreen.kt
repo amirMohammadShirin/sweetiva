@@ -51,6 +51,11 @@ class VerificationScreen :
             viewModel.process(
                 VerificationAction.StorePhoneNumber(parameters[NavigationParam.PHONE_NUMBER] ?: "")
             )
+            viewModel.process(
+                VerificationAction.StoreTrackingCode(
+                    (parameters[NavigationParam.TRACKING_CODE] ?: "")
+                )
+            )
         }
 
         VerificationContent(

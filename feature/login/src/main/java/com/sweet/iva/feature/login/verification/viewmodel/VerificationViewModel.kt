@@ -7,7 +7,6 @@ import com.sweet.iva.feature.login.verification.model.VerificationAction
 import com.sweet.iva.feature.login.verification.model.VerificationEvent
 import com.sweet.iva.feature.login.verification.model.VerificationUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.util.concurrent.CountDownLatch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,6 +16,7 @@ class VerificationViewModel @Inject constructor() :
     ) {
 
     private var phoneNumber = ""
+    private var trackingCode = ""
 
     override fun handleAction(action: VerificationAction) {
         when (action) {
@@ -24,8 +24,12 @@ class VerificationViewModel @Inject constructor() :
                 savePhoneNumber(action.phoneNumber)
             }
 
-            is VerificationAction.StoreTrackingCode -> TODO()
+            is VerificationAction.StoreTrackingCode -> saveTrackingCode(action.trackingCode)
         }
+    }
+
+    private fun saveTrackingCode(value: String) {
+        trackingCode = value
     }
 
     private fun savePhoneNumber(value: String) {
