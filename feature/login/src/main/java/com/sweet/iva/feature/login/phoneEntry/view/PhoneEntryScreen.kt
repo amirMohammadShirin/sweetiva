@@ -142,9 +142,9 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
                 enabled = isLoginEnable,
                 modifier = Modifier
                     .constrainAs(btnEnterRef) {
-                        top.linkTo(termsRef.bottom, MaterialTheme.dimens.largeGap)
                         start.linkTo(phoneNumberRef.start, MaterialTheme.dimens.defaultGap)
                         end.linkTo(phoneNumberRef.end, MaterialTheme.dimens.defaultGap)
+                        bottom.linkTo(parent.bottom,MaterialTheme.dimens.defaultGap)
                         width = Dimension.fillToConstraints
                     },
                 isLoading = loading,
