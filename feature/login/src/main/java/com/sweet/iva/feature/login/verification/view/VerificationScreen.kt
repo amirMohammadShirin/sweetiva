@@ -48,7 +48,9 @@ class VerificationScreen :
         val viewModel = viewModel()
 
         LaunchedEffect(Unit) {
-            viewModel.startTimer(10000, 1000)
+            viewModel.process(
+                VerificationAction.StorePhoneNumber(parameters[NavigationParam.PHONE_NUMBER] ?: "")
+            )
         }
 
         VerificationContent(

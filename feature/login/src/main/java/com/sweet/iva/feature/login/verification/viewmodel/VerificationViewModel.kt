@@ -16,8 +16,20 @@ class VerificationViewModel @Inject constructor() :
         initialState = VerificationUiModel()
     ) {
 
-    override fun handleAction(action: VerificationAction) {
+    private var phoneNumber = ""
 
+    override fun handleAction(action: VerificationAction) {
+        when (action) {
+            is VerificationAction.StorePhoneNumber -> {
+                savePhoneNumber(action.phoneNumber)
+            }
+
+            is VerificationAction.StoreTrackingCode -> TODO()
+        }
+    }
+
+    private fun savePhoneNumber(value: String) {
+        phoneNumber = value
     }
 
     fun startTimer(untilInMillis: Long, intervalInMillis: Long) {
