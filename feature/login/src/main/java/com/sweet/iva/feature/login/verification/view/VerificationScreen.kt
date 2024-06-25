@@ -66,9 +66,11 @@ class VerificationScreen :
             verificationCodeLength = state.verificationCode.length,
             verificationCode = state.verificationCode.value,
             onVerificationCodeChanged = {
-
+                viewModel.process(VerificationAction.VerificationCodeChanged(it))
             },
-            onSubmitButtonClicked = {}
+            onSubmitButtonClicked = {
+
+            }
         )
 
     }

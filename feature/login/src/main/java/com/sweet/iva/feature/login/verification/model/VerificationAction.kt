@@ -6,5 +6,6 @@ sealed interface VerificationAction : IAction {
 
     data class StoreTrackingCode(val trackingCode: String) : VerificationAction
     data class StorePhoneNumber(val phoneNumber: String) : VerificationAction
+    data class VerificationCodeChanged(val verificationCode: String) : VerificationAction
 
 }

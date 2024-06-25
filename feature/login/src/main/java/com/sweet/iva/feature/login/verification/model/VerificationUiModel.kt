@@ -7,7 +7,7 @@ data class VerificationUiModel(
 )
 
 data class VerificationCodeUiModel(
-    val value: String = "12",
+    val value: String = "",
     var length: Int = 4
 )
 

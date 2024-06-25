@@ -17,14 +17,28 @@ class VerificationViewModel @Inject constructor() :
 
     private var phoneNumber = ""
     private var trackingCode = ""
+    private val timerInterval: Long = 1000
+    private var timerValue: Long = 10000
 
     override fun handleAction(action: VerificationAction) {
         when (action) {
-            is VerificationAction.StorePhoneNumber -> {
-                savePhoneNumber(action.phoneNumber)
+            is VerificationAction.StorePhoneNumber -> savePhoneNumber(action.phoneNumber)
+            is VerificationAction.StoreTrackingCode -> {
+                saveTrackingCode(action.trackingCode)
+                startTimer()
             }
 
-            is VerificationAction.StoreTrackingCode -> saveTrackingCode(action.trackingCode)
+            is VerificationAction.VerificationCodeChanged -> changeVerificationCode(action.verificationCode)
+        }
+    }
+
+    private fun changeVerificationCode(verificationCode: String) {
+        updateState {
+            it.copy(
+                verificationCode = it.verificationCode.copy(
+                    value = verificationCode
+                )
+            )
         }
     }
 
@@ -36,9 +50,9 @@ class VerificationViewModel @Inject constructor() :
         phoneNumber = value
     }
 
-    fun startTimer(untilInMillis: Long, intervalInMillis: Long) {
+    private fun startTimer() {
 
-        object : CountDownTimer(untilInMillis, intervalInMillis) {
+        object : CountDownTimer(timerValue, timerInterval) {
 
             override fun onTick(p0: Long) {
                 updateState {
