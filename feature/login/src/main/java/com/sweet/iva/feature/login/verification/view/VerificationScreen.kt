@@ -20,6 +20,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sweet.iva.core.designsystem.component.AppBackground
+import com.sweet.iva.core.designsystem.component.AppPrimaryButton
 import com.sweet.iva.core.designsystem.component.AppToolbar
 import com.sweet.iva.core.designsystem.component.OTPInput
 import com.sweet.iva.core.designsystem.theme.AppTheme
@@ -58,8 +59,9 @@ class VerificationScreen :
             verificationCodeLength = state.verificationCode.length,
             verificationCode = state.verificationCode.value,
             onVerificationCodeChanged = {
-                
-            }
+
+            },
+            onSubmitButtonClicked = {}
         )
 
     }
@@ -72,8 +74,13 @@ class VerificationScreen :
         isTimeEnded: Boolean,
         verificationCode: String,
         verificationCodeLength: Int,
-        onVerificationCodeChanged: (String) -> Unit
+        onVerificationCodeChanged: (String) -> Unit,
+        onSubmitButtonClicked: () -> Unit
     ) {
+
+        val submitButtonEnabled =
+            !isTimeEnded && (verificationCode.length == verificationCodeLength)
+
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
@@ -84,7 +91,8 @@ class VerificationScreen :
                 toolbarRef,
                 headerRef,
                 counterRef,
-                otpRef
+                otpRef,
+                submitRef
             ) = createRefs()
 
             AppToolbar(
@@ -121,7 +129,7 @@ class VerificationScreen :
                     Text(
                         modifier = Modifier
                             .constrainAs(headerRef) {
-                                top.linkTo(counterRef.bottom)
+                                top.linkTo(counterRef.bottom, MaterialTheme.dimens.largeGap)
                                 start.linkTo(parent.start, MaterialTheme.dimens.defaultGap)
                                 end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
                                 width = Dimension.fillToConstraints
@@ -132,6 +140,9 @@ class VerificationScreen :
                                 append(" $it ")
                             }
                             append("ارسال شده است")
+                            append("\n")
+                            append("لطفا کد ارسال شده را در قسمت زیر ")
+                            append("وارد نمایید")
                         },
                         textAlign = TextAlign.Center
                     )
@@ -140,9 +151,27 @@ class VerificationScreen :
             }
 
             OTPInput(
+                modifier = Modifier.constrainAs(otpRef) {
+                    top.linkTo(headerRef.bottom, MaterialTheme.dimens.xLargeGap)
+                    start.linkTo(parent.start, MaterialTheme.dimens.largeGap)
+                    end.linkTo(parent.end, MaterialTheme.dimens.largeGap)
+                    width = Dimension.wrapContent
+                },
                 value = verificationCode,
                 onValueChange = onVerificationCodeChanged,
                 size = verificationCodeLength
+            )
+
+            AppPrimaryButton(
+                modifier = Modifier.constrainAs(submitRef) {
+                    start.linkTo(parent.start, MaterialTheme.dimens.defaultGap)
+                    end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
+                    bottom.linkTo(parent.bottom, MaterialTheme.dimens.defaultGap)
+                    width = Dimension.fillToConstraints
+                },
+                enabled = submitButtonEnabled,
+                onClick = onSubmitButtonClicked,
+                text = "تایید و ادامه"
             )
 
         }
@@ -162,7 +191,8 @@ class VerificationScreen :
                 isTimeEnded = false,
                 verificationCode = "554",
                 verificationCodeLength = 4,
-                onVerificationCodeChanged = {}
+                onVerificationCodeChanged = {},
+                onSubmitButtonClicked = {}
             )
         }
     }

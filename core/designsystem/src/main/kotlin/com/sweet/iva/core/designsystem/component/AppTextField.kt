@@ -223,7 +223,7 @@ fun AppTextFieldPlaceHolder(value: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun OTPInput(
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     value: String,
     onValueChange: (String) -> Unit,
     size: Int
@@ -318,7 +318,10 @@ private fun PreviewOTPInput() {
         }
 
 
-        OTPInput(value = value, onValueChange = { value = it }, size = 6)
+        OTPInput(
+            modifier=Modifier.fillMaxWidth(),
+            value = value, onValueChange = { value = it },
+            size = 6)
 
     }
 
