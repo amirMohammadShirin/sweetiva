@@ -1,7 +1,7 @@
 package com.sweet.iva.feature.login.verification.model
 
 data class VerificationUiModel(
-    val trackingCode: String = "",
+    val phoneNumber: String = "",
     val timer: TimerUiModel = TimerUiModel(),
     val verificationCode: VerificationCodeUiModel = VerificationCodeUiModel(),
 )

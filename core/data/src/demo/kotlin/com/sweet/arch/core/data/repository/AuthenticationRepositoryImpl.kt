@@ -28,7 +28,8 @@ class AuthenticationRepositoryImpl @Inject constructor(
 
 private fun LoginOtpNetworkResult.toDomainModel(): LoginOTPResult {
     return LoginOTPResult(
-        trackingCode = this.trackingCode
+        trackingCode = this.trackingCode,
+        otpTime = this.otpTime
     )
 }
 

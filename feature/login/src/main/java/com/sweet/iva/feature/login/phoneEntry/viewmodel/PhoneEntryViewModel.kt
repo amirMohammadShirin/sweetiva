@@ -78,7 +78,8 @@ class PhoneEntryViewModel @Inject constructor(
                     ApplicationRoutes.loginVerificationScreenRoute,
                     linkedMapOf(
                         NavigationParam.TRACKING_CODE to result.trackingCode,
-                        NavigationParam.PHONE_NUMBER to currentState.phoneNumberModel.value
+                        NavigationParam.PHONE_NUMBER to currentState.phoneNumberModel.value,
+                        NavigationParam.OTP_TIME to result.otpTime.toString()
                     )
                 )
             )

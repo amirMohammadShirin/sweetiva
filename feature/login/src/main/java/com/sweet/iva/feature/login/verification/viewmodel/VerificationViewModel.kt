@@ -2,6 +2,7 @@ package com.sweet.iva.feature.login.verification.viewmodel
 
 import android.os.CountDownTimer
 import com.sweet.iva.core.common.util.TimeUtil
+import com.sweet.iva.core.ui.model.IEvent
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 import com.sweet.iva.feature.login.verification.model.VerificationAction
 import com.sweet.iva.feature.login.verification.model.VerificationEvent
@@ -18,18 +19,43 @@ class VerificationViewModel @Inject constructor() :
     private var phoneNumber = ""
     private var trackingCode = ""
     private val timerInterval: Long = 1000
-    private var timerValue: Long = 10000
+    private var timerValue: Long = 20000
 
     override fun handleAction(action: VerificationAction) {
         when (action) {
-            is VerificationAction.StorePhoneNumber -> savePhoneNumber(action.phoneNumber)
-            is VerificationAction.StoreTrackingCode -> {
-                saveTrackingCode(action.trackingCode)
-                startTimer()
-            }
-
             is VerificationAction.VerificationCodeChanged -> changeVerificationCode(action.verificationCode)
+            is VerificationAction.Confirm -> confirm()
+            is VerificationAction.ResendVerificationCode -> navigateBack()
+            is VerificationAction.StoreInitialData -> {
+                start(action)
+            }
         }
+    }
+
+    private fun start(action: VerificationAction.StoreInitialData) {
+        run {
+            savePhoneNumber(action.phoneNumber)
+            saveTrackingCode(action.trackingCode)
+            saveOtpTime(action.otpTime)
+        }.also {
+            updateState {
+                it.copy(
+                    phoneNumber = phoneNumber
+                )
+            }
+            startTimer()
+        }
+    }
+
+    private fun saveOtpTime(time: String) {
+        try {
+            timerValue = time.toLong()
+        } catch (_: Exception) {
+        }
+    }
+
+    private fun confirm() {
+        sendEvent(IEvent.ShowSnack(currentState.verificationCode.value))
     }
 
     private fun changeVerificationCode(verificationCode: String) {

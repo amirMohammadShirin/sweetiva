@@ -20,6 +20,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sweet.iva.core.designsystem.component.AppBackground
+import com.sweet.iva.core.designsystem.component.AppOutlinedButton
 import com.sweet.iva.core.designsystem.component.AppPrimaryButton
 import com.sweet.iva.core.designsystem.component.AppToolbar
 import com.sweet.iva.core.designsystem.component.OTPInput
@@ -49,18 +50,17 @@ class VerificationScreen :
 
         LaunchedEffect(Unit) {
             viewModel.process(
-                VerificationAction.StorePhoneNumber(parameters[NavigationParam.PHONE_NUMBER] ?: "")
-            )
-            viewModel.process(
-                VerificationAction.StoreTrackingCode(
-                    (parameters[NavigationParam.TRACKING_CODE] ?: "")
+                VerificationAction.StoreInitialData(
+                    trackingCode = parameters[NavigationParam.TRACKING_CODE] ?: "",
+                    phoneNumber = parameters[NavigationParam.PHONE_NUMBER] ?: "",
+                    otpTime = parameters[NavigationParam.OTP_TIME] ?: ""
                 )
             )
         }
 
         VerificationContent(
             onToolbarIconClicked = { viewModel.navigateBack() },
-            phoneNumber = parameters[NavigationParam.PHONE_NUMBER],
+            phoneNumber = state.phoneNumber,
             countDownValue = state.timer.value,
             isTimeEnded = state.timer.finished,
             verificationCodeLength = state.verificationCode.length,
@@ -69,7 +69,10 @@ class VerificationScreen :
                 viewModel.process(VerificationAction.VerificationCodeChanged(it))
             },
             onSubmitButtonClicked = {
-
+                viewModel.process(VerificationAction.Confirm)
+            },
+            onResendVerificationCodeClicked = {
+                viewModel.process(VerificationAction.ResendVerificationCode)
             }
         )
 
@@ -84,7 +87,8 @@ class VerificationScreen :
         verificationCode: String,
         verificationCodeLength: Int,
         onVerificationCodeChanged: (String) -> Unit,
-        onSubmitButtonClicked: () -> Unit
+        onSubmitButtonClicked: () -> Unit,
+        onResendVerificationCodeClicked: () -> Unit
     ) {
 
         val submitButtonEnabled =
@@ -101,7 +105,8 @@ class VerificationScreen :
                 headerRef,
                 counterRef,
                 otpRef,
-                submitRef
+                submitRef,
+                resendRef
             ) = createRefs()
 
             AppToolbar(
@@ -132,32 +137,30 @@ class VerificationScreen :
                 )
             }
 
-            phoneNumber?.let {
 
-                ProvideTextStyle(value = MaterialTheme.typography.labelMedium) {
-                    Text(
-                        modifier = Modifier
-                            .constrainAs(headerRef) {
-                                top.linkTo(counterRef.bottom, MaterialTheme.dimens.largeGap)
-                                start.linkTo(parent.start, MaterialTheme.dimens.defaultGap)
-                                end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
-                                width = Dimension.fillToConstraints
-                            },
-                        text = buildAnnotatedString {
-                            append("کد فعال سازی به شماره")
-                            withStyle(style = SpanStyle(MaterialTheme.colorScheme.primary)) {
-                                append(" $it ")
-                            }
-                            append("ارسال شده است")
-                            append("\n")
-                            append("لطفا کد ارسال شده را در قسمت زیر ")
-                            append("وارد نمایید")
+            ProvideTextStyle(value = MaterialTheme.typography.labelMedium) {
+                Text(
+                    modifier = Modifier
+                        .constrainAs(headerRef) {
+                            top.linkTo(counterRef.bottom, MaterialTheme.dimens.largeGap)
+                            start.linkTo(parent.start, MaterialTheme.dimens.defaultGap)
+                            end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
+                            width = Dimension.fillToConstraints
                         },
-                        textAlign = TextAlign.Center
-                    )
-                }
-
+                    text = buildAnnotatedString {
+                        append("کد فعال سازی به شماره")
+                        withStyle(style = SpanStyle(MaterialTheme.colorScheme.primary)) {
+                            append(" $phoneNumber ")
+                        }
+                        append("ارسال شده است")
+                        append("\n")
+                        append("لطفا کد ارسال شده را در قسمت زیر ")
+                        append("وارد نمایید")
+                    },
+                    textAlign = TextAlign.Center
+                )
             }
+
 
             OTPInput(
                 modifier = Modifier.constrainAs(otpRef) {
@@ -171,11 +174,26 @@ class VerificationScreen :
                 size = verificationCodeLength
             )
 
+            AppOutlinedButton(
+                modifier = Modifier.constrainAs(resendRef) {
+                    start.linkTo(parent.start, MaterialTheme.dimens.defaultGap)
+                    end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
+                    bottom.linkTo(parent.bottom, MaterialTheme.dimens.defaultGap)
+                    width = Dimension.fillToConstraints
+                },
+                enabled = isTimeEnded,
+                onClick = onResendVerificationCodeClicked
+            ) {
+
+                Text(text = "ارسال مجدد کد فعال سازی")
+
+            }
+
             AppPrimaryButton(
                 modifier = Modifier.constrainAs(submitRef) {
                     start.linkTo(parent.start, MaterialTheme.dimens.defaultGap)
                     end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
-                    bottom.linkTo(parent.bottom, MaterialTheme.dimens.defaultGap)
+                    bottom.linkTo(resendRef.top, MaterialTheme.dimens.smallGap)
                     width = Dimension.fillToConstraints
                 },
                 enabled = submitButtonEnabled,
@@ -201,7 +219,8 @@ class VerificationScreen :
                 verificationCode = "554",
                 verificationCodeLength = 4,
                 onVerificationCodeChanged = {},
-                onSubmitButtonClicked = {}
+                onSubmitButtonClicked = {},
+                onResendVerificationCodeClicked = {}
             )
         }
     }

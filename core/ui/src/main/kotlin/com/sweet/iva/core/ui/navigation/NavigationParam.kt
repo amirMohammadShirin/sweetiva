@@ -3,7 +3,8 @@ package com.sweet.iva.core.ui.navigation
 enum class NavigationParam {
 
     TRACKING_CODE,
-    PHONE_NUMBER;
+    PHONE_NUMBER,
+    OTP_TIME;
 
     companion object {
         fun getByName(name: String): NavigationParam? {

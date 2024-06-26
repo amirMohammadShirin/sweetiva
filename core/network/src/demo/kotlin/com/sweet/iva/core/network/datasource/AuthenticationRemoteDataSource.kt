@@ -37,6 +37,7 @@ class AuthenticationRemoteDataSource @Inject constructor() {
 
 const val mockLoginOtpResponse = "{\n" +
         "  \"data\": {\n" +
-        "    \"trackingCode\": \"0021477191\"\n" +
+        "    \"trackingCode\": \"asdfdadasasdcxaw\",\n" +
+        "    \"otpTime\": 300000\n" +
         "  }\n" +
-        "}\n"
+        "}"

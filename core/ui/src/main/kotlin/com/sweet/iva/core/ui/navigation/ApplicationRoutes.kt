@@ -13,7 +13,7 @@ object ApplicationRoutes {
     const val introScreenRoute = "intro_screen_route"
     const val phoneEntryScreenRoute = "login_entry_screen_route"
     val loginVerificationScreenRoute =
-        "login_entry_screen_route/{${NavigationParam.TRACKING_CODE}}/{${NavigationParam.PHONE_NUMBER}}"
+        "login_entry_screen_route/{${NavigationParam.TRACKING_CODE}}/{${NavigationParam.PHONE_NUMBER}}/{${NavigationParam.OTP_TIME}}"
     //endregion
 
 }
