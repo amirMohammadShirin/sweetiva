@@ -6,7 +6,6 @@ import com.sweet.iva.core.ui.entity.DisplayedError
 import com.sweet.iva.core.ui.model.IAction
 import com.sweet.iva.core.ui.model.IEvent
 import com.sweet.iva.core.ui.navigation.NavigationCommand
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -71,11 +70,15 @@ abstract class BaseViewModel<State, Action : IAction, Event : IEvent>(
         }
     }
 
-    fun navigateTo(route: String) {
+    fun navigateTo(command: NavigationCommand.ToScreen) {
         viewModelScope.launch {
-            _navigationFlow.emit(
-                NavigationCommand.ToScreen(route)
-            )
+            _navigationFlow.emit(command)
+        }
+    }
+
+    fun navigateTo(command: NavigationCommand.ToWithData) {
+        viewModelScope.launch {
+            _navigationFlow.emit(command)
         }
     }
 

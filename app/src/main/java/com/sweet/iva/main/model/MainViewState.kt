@@ -7,6 +7,6 @@ import com.sweet.iva.core.ui.model.IViewState
 internal data class MainViewState(
     val loading: Boolean = true,
     val darkThemeConfig: DarkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
-    val themeBrand: ThemeBrand = ThemeBrand.DEFAULT,
+    val themeBrand: ThemeBrand = ThemeBrand.ANDROID,
     val useDynamicColor: Boolean = false,
 ) : IViewState

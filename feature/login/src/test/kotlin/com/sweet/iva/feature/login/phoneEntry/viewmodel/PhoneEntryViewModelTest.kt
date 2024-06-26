@@ -1,8 +1,10 @@
 package com.sweet.iva.feature.login.phoneEntry.viewmodel
 
+import com.sweet.arch.core.domain.usecase.auth.SendLoginOtpUseCase
 import com.sweet.iva.core.common.dispatcher.DispatcherProvider
 import com.sweet.iva.core.test.rule.MainDispatcherRule
 import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryAction
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -23,8 +25,10 @@ class PhoneEntryViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    private fun createViewModel(scheduler: TestCoroutineScheduler) =
-        PhoneEntryViewModel(mockDispatcherProvider(scheduler))
+    private fun createViewModel(
+        sendLoginOtpUseCase: SendLoginOtpUseCase = mockk()
+    ) =
+        PhoneEntryViewModel(sendLoginOtpUseCase)
 
     private fun mockDispatcherProvider(scheduler: TestCoroutineScheduler): DispatcherProvider {
         val dispatcher = StandardTestDispatcher(scheduler)
@@ -80,6 +84,26 @@ class PhoneEntryViewModelTest {
                 phoneNumber,
                 viewModel.currentState.phoneNumberModel.value
             )
+
+        }
+
+    }
+
+    @Test
+    fun `when send otp button clicked then send login otp useCase should be executed`() {
+
+        runTest {
+
+            val sendLoginOtpUseCase = mockk<SendLoginOtpUseCase>()
+            val viewModel = createViewModel(sendLoginOtpUseCase)
+
+            viewModel.process(PhoneEntryAction.OnConfirmClicked)
+
+            advanceUntilIdle()
+
+            coVerify {
+                sendLoginOtpUseCase.execute(any())
+            }
 
         }
 

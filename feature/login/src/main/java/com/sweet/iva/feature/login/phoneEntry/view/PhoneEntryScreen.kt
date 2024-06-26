@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -67,6 +68,11 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
         onPhoneNumberChanged: (value: String) -> Unit,
         onConfirmClicked: () -> Unit
     ) {
+
+        LaunchedEffect(Unit) {
+            onPhoneNumberChanged("09210425101")
+        }
+
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
@@ -78,14 +84,15 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
             AppToolbar(
                 modifier = Modifier
                     .constrainAs(toolbarRef) {
-                        top.linkTo(parent.top)
+                        top.linkTo(parent.top,MaterialTheme.dimens.defaultGap)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     }
                     .fillMaxWidth(),
                 toolbarTitle = "ایوا",
                 leftIcon = R.drawable.ic_arrow_left,
-                onLeftIconClicked = onToolbarIconClicked
+                rightIcon = R.drawable.iv_iva_with_text,
+                onLeftIconClicked = onToolbarIconClicked,
             )
 
             Spacer(
@@ -135,9 +142,9 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
                 enabled = isLoginEnable,
                 modifier = Modifier
                     .constrainAs(btnEnterRef) {
-                        top.linkTo(termsRef.bottom, MaterialTheme.dimens.largeGap)
                         start.linkTo(phoneNumberRef.start, MaterialTheme.dimens.defaultGap)
                         end.linkTo(phoneNumberRef.end, MaterialTheme.dimens.defaultGap)
+                        bottom.linkTo(parent.bottom,MaterialTheme.dimens.defaultGap)
                         width = Dimension.fillToConstraints
                     },
                 isLoading = loading,

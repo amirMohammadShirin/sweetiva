@@ -8,6 +8,6 @@ fun <T> Response<T>.parseResponse(): T {
     return try {
         data ?: throw ApiException(-1, "خطا در دریافت اطلاعت")
     } catch (e: Exception) {
-        throw ErrorParser.parse(e)
+        throw ApiErrorParser.parse(e)
     }
 }

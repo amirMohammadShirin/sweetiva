@@ -7,11 +7,13 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -19,6 +21,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.sweet.iva.DarkThemeConfig
 import com.sweet.iva.ThemeBrand
 import com.sweet.iva.application.App
+import com.sweet.iva.core.designsystem.component.AppBackground
 import com.sweet.iva.core.designsystem.theme.AppTheme
 import com.sweet.iva.main.model.MainViewState
 import com.sweet.iva.main.viewmodel.MainViewModel
@@ -69,7 +72,9 @@ internal class MainActivity : ComponentActivity() {
                 androidTheme = shouldUseAndroidTheme(uiState),
                 disableDynamicTheming = shouldDisableDynamicTheming(uiState)
             ) {
-                App()
+                AppBackground(modifier = Modifier.fillMaxSize()) {
+                    App()
+                }
             }
         }
     }

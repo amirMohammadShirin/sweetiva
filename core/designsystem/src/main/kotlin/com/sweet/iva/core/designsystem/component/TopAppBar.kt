@@ -1,11 +1,13 @@
 package com.sweet.iva.core.designsystem.component
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -14,12 +16,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -100,89 +105,97 @@ fun AppToolbar(
     rightIcon: Int? = null
 ) {
 
-    ConstraintLayout(
+    Surface(
         modifier = modifier
-            .clip(RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp))
-            .background(
-                MaterialTheme.colorScheme.surface,
-                RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp),
-            )
+            .padding(horizontal = MaterialTheme.dimens.largeGap)
+            .clip(RoundedCornerShape(10.dp)),
+        tonalElevation = 5.dp,
+        shadowElevation = 5.dp,
+        color = MaterialTheme.colorScheme.background,
+        border = BorderStroke(0.25.dp, MaterialTheme.colorScheme.surface)
     ) {
-
-        val (titleRef, leftIconRef, rightIconRef) = createRefs()
-
-        ProvideTextStyle(value = MaterialTheme.typography.bodyLarge) {
-            Text(
-                textAlign = TextAlign.Center,
-                modifier = Modifier.constrainAs(titleRef) {
-                    top.linkTo(parent.top, MaterialTheme.dimens.defaultGap)
-                    start.linkTo(leftIconRef.end, MaterialTheme.dimens.defaultGap)
-                    end.linkTo(rightIconRef.start, MaterialTheme.dimens.defaultGap)
-                    bottom.linkTo(parent.bottom, MaterialTheme.dimens.defaultGap)
-                    width = Dimension.fillToConstraints
-                },
-                text = toolbarTitle
-            )
-        }
-
-        Image(
+        ConstraintLayout(
             modifier = Modifier
-                .constrainAs(leftIconRef) {
-                    start.linkTo(parent.start, MaterialTheme.dimens.defaultGap)
-                    top.linkTo(parent.top, MaterialTheme.dimens.defaultGap)
-                    bottom.linkTo(parent.bottom, MaterialTheme.dimens.defaultGap)
-                    end.linkTo(titleRef.start, MaterialTheme.dimens.defaultGap)
-                    width = Dimension.wrapContent
-                    height = Dimension.wrapContent
-                }
-                .size(
-                    30.dp,
-                    30.dp
-                )
-                .clickable {
-                    onLeftIconClicked.invoke()
-                },
-            painter = painterResource(id = leftIcon),
-            contentDescription = "left icon"
-        )
+                .clip(RoundedCornerShape(10.dp))
+        ) {
 
-        rightIcon?.let {
+            val (titleRef, leftIconRef, rightIconRef) = createRefs()
+
+            ProvideTextStyle(value = MaterialTheme.typography.bodyLarge) {
+                Text(
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.constrainAs(titleRef) {
+                        top.linkTo(parent.top, MaterialTheme.dimens.defaultGap)
+                        start.linkTo(leftIconRef.end, MaterialTheme.dimens.defaultGap)
+                        end.linkTo(rightIconRef.start, MaterialTheme.dimens.defaultGap)
+                        bottom.linkTo(parent.bottom, MaterialTheme.dimens.defaultGap)
+                        width = Dimension.fillToConstraints
+                    },
+                    text = toolbarTitle,
+                    color = MaterialTheme.colorScheme.secondary
+                )
+            }
+
             Image(
                 modifier = Modifier
-                    .constrainAs(rightIconRef) {
-                        end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
+                    .constrainAs(leftIconRef) {
+                        start.linkTo(parent.start, MaterialTheme.dimens.defaultGap)
                         top.linkTo(parent.top, MaterialTheme.dimens.defaultGap)
                         bottom.linkTo(parent.bottom, MaterialTheme.dimens.defaultGap)
-                        start.linkTo(titleRef.end, MaterialTheme.dimens.defaultGap)
+                        end.linkTo(titleRef.start, MaterialTheme.dimens.defaultGap)
                         width = Dimension.wrapContent
                         height = Dimension.wrapContent
                     }
                     .size(
-                        40.dp,
-                        40.dp
-                    ),
-                painter = painterResource(id = it),
-                contentDescription = "right icon"
+                        30.dp,
+                        30.dp
+                    )
+                    .clickable {
+                        onLeftIconClicked.invoke()
+                    },
+                painter = painterResource(id = leftIcon),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary),
+                contentDescription = "left icon"
             )
 
-        } ?: run {
-            Box(
-                modifier = Modifier
-                    .constrainAs(rightIconRef) {
-                        end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
-                        top.linkTo(parent.top, MaterialTheme.dimens.defaultGap)
-                        bottom.linkTo(parent.bottom, MaterialTheme.dimens.defaultGap)
-                        start.linkTo(titleRef.end, MaterialTheme.dimens.defaultGap)
-                        width = Dimension.wrapContent
-                        height = Dimension.wrapContent
-                    }
-                    .size(
-                        40.dp,
-                        40.dp
-                    ),
-            )
+            rightIcon?.let {
+                Image(
+                    modifier = Modifier
+                        .constrainAs(rightIconRef) {
+                            end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
+                            top.linkTo(parent.top, MaterialTheme.dimens.defaultGap)
+                            bottom.linkTo(parent.bottom, MaterialTheme.dimens.defaultGap)
+                            start.linkTo(titleRef.end, MaterialTheme.dimens.defaultGap)
+                            width = Dimension.wrapContent
+                            height = Dimension.wrapContent
+                        }
+                        .size(
+                            40.dp,
+                            40.dp
+                        ),
+                    painter = painterResource(id = it),
+                    contentDescription = "right icon"
+                )
+
+            } ?: run {
+                Box(
+                    modifier = Modifier
+                        .constrainAs(rightIconRef) {
+                            end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
+                            top.linkTo(parent.top, MaterialTheme.dimens.defaultGap)
+                            bottom.linkTo(parent.bottom, MaterialTheme.dimens.defaultGap)
+                            start.linkTo(titleRef.end, MaterialTheme.dimens.defaultGap)
+                            width = Dimension.wrapContent
+                            height = Dimension.wrapContent
+                        }
+                        .size(
+                            40.dp,
+                            40.dp
+                        ),
+                )
+            }
+
         }
-
     }
 
 }

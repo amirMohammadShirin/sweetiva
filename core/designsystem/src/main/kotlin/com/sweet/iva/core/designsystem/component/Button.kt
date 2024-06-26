@@ -146,15 +146,16 @@ fun AppOutlinedButton(
         modifier = modifier,
         enabled = enabled,
         colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = MaterialTheme.colorScheme.onBackground
+            contentColor = MaterialTheme.colorScheme.secondary
         ),
         border = BorderStroke(
             width = AppButtonDefaults.OutlineButtonBorderWidth,
-            color = if (enabled) MaterialTheme.colorScheme.outline else MaterialTheme.colorScheme.onSurface.copy(
+            color = if (enabled) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onSurface.copy(
                 alpha = AppButtonDefaults.DisabledOutlineButtonBorderAlpha
             )
         ),
         contentPadding = contentPadding,
+        shape = RoundedCornerShape(8.dp),
         content = content
     )
 }

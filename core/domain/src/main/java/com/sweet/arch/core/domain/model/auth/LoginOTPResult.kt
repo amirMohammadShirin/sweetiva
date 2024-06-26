@@ -5,4 +5,5 @@ package com.sweet.arch.core.domain.model.auth
  */
 data class LoginOTPResult(
     val trackingCode: String,
+    val otpTime:Long,
 )

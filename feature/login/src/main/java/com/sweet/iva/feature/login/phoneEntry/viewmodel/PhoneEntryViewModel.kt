@@ -3,10 +3,13 @@ package com.sweet.iva.feature.login.phoneEntry.viewmodel
 import androidx.lifecycle.viewModelScope
 import com.sweet.arch.core.domain.model.auth.LoginOtpParam
 import com.sweet.arch.core.domain.usecase.auth.SendLoginOtpUseCase
-import com.sweet.iva.core.common.dispatcher.DispatcherProvider
+import com.sweet.iva.core.common.model.DisplayException
 import com.sweet.iva.core.common.util.ValidationState
 import com.sweet.iva.core.common.util.ValidationUtil
 import com.sweet.iva.core.ui.model.IEvent
+import com.sweet.iva.core.ui.navigation.ApplicationRoutes
+import com.sweet.iva.core.ui.navigation.NavigationCommand
+import com.sweet.iva.core.ui.navigation.NavigationParam
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryAction
 import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryEvent
@@ -21,7 +24,6 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class PhoneEntryViewModel @Inject constructor(
-    private val dispatcherProvider: DispatcherProvider,
     private val sendLoginOtpUseCase: SendLoginOtpUseCase
 ) : BaseViewModel<PhoneEntryUiModel, PhoneEntryAction, PhoneEntryEvent>(
     initialState = PhoneEntryUiModel()
@@ -39,7 +41,22 @@ class PhoneEntryViewModel @Inject constructor(
     }
 
     private fun sendOtp() {
-        viewModelScope.launch {
+        viewModelScope.launch(
+            CoroutineExceptionHandler { _, throwable ->
+
+                updateState {
+                    it.copy(loading = false)
+                }
+
+                if (throwable is DisplayException) {
+                    sendEvent(IEvent.ShowSnack(throwable.message ?: "خطا در دریافت اطلاعات"))
+                    return@CoroutineExceptionHandler
+                }
+
+                sendEvent(IEvent.ShowSnack("خطا در دریافت اطلاعات"))
+
+            }
+        ) {
 
             updateState {
                 it.copy(
@@ -50,13 +67,22 @@ class PhoneEntryViewModel @Inject constructor(
             val result =
                 sendLoginOtpUseCase.execute(LoginOtpParam(currentState.phoneNumberModel.value))
 
-            sendEvent(IEvent.ShowSnack(result.trackingCode))
-
             updateState {
                 it.copy(
                     loading = false
                 )
             }
+
+            navigateTo(
+                NavigationCommand.ToWithData(
+                    ApplicationRoutes.loginVerificationScreenRoute,
+                    linkedMapOf(
+                        NavigationParam.TRACKING_CODE to result.trackingCode,
+                        NavigationParam.PHONE_NUMBER to currentState.phoneNumberModel.value,
+                        NavigationParam.OTP_TIME to result.otpTime.toString()
+                    )
+                )
+            )
 
         }
     }
