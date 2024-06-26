@@ -65,6 +65,7 @@ class VerificationScreen :
             isTimeEnded = state.timer.finished,
             verificationCodeLength = state.verificationCode.length,
             verificationCode = state.verificationCode.value,
+            loading = state.loading,
             onVerificationCodeChanged = {
                 viewModel.process(VerificationAction.VerificationCodeChanged(it))
             },
@@ -85,6 +86,7 @@ class VerificationScreen :
         countDownValue: String,
         isTimeEnded: Boolean,
         verificationCode: String,
+        loading: Boolean,
         verificationCodeLength: Int,
         onVerificationCodeChanged: (String) -> Unit,
         onSubmitButtonClicked: () -> Unit,
@@ -190,6 +192,7 @@ class VerificationScreen :
             }
 
             AppPrimaryButton(
+                isLoading = loading,
                 modifier = Modifier.constrainAs(submitRef) {
                     start.linkTo(parent.start, MaterialTheme.dimens.defaultGap)
                     end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
@@ -220,7 +223,8 @@ class VerificationScreen :
                 verificationCodeLength = 4,
                 onVerificationCodeChanged = {},
                 onSubmitButtonClicked = {},
-                onResendVerificationCodeClicked = {}
+                onResendVerificationCodeClicked = {},
+                loading = true
             )
         }
     }

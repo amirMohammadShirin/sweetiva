@@ -1,6 +1,9 @@
 package com.sweet.iva.feature.login.verification.viewmodel
 
 import android.os.CountDownTimer
+import androidx.lifecycle.viewModelScope
+import com.sweet.arch.core.domain.model.auth.AuthTokenParam
+import com.sweet.arch.core.domain.usecase.auth.GetAuthTokenUseCase
 import com.sweet.iva.core.common.util.TimeUtil
 import com.sweet.iva.core.ui.model.IEvent
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
@@ -8,10 +11,13 @@ import com.sweet.iva.feature.login.verification.model.VerificationAction
 import com.sweet.iva.feature.login.verification.model.VerificationEvent
 import com.sweet.iva.feature.login.verification.model.VerificationUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class VerificationViewModel @Inject constructor() :
+class VerificationViewModel @Inject constructor(
+    private val getAuthTokenUseCase: GetAuthTokenUseCase
+) :
     BaseViewModel<VerificationUiModel, VerificationAction, VerificationEvent>(
         initialState = VerificationUiModel()
     ) {
@@ -55,7 +61,31 @@ class VerificationViewModel @Inject constructor() :
     }
 
     private fun confirm() {
-        sendEvent(IEvent.ShowSnack(currentState.verificationCode.value))
+        viewModelScope.launch {
+            updateState {
+                it.copy(
+                    loading = true
+                )
+            }
+            val result = getAuthTokenUseCase.execute(
+                AuthTokenParam(
+                    trackingCode = trackingCode,
+                    phoneNumber = currentState.phoneNumber,
+                    otpValue = currentState.verificationCode.value
+                )
+            )
+
+            updateState {
+                it.copy(
+                    loading = false
+                )
+            }
+
+            if (result) {
+                sendEvent(IEvent.ShowToast("logged in"))
+            }
+
+        }
     }
 
     private fun changeVerificationCode(verificationCode: String) {

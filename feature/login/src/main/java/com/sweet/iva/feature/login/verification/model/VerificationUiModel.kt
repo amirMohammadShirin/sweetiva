@@ -4,6 +4,7 @@ data class VerificationUiModel(
     val phoneNumber: String = "",
     val timer: TimerUiModel = TimerUiModel(),
     val verificationCode: VerificationCodeUiModel = VerificationCodeUiModel(),
+    val loading: Boolean = false
 )
 
 data class VerificationCodeUiModel(

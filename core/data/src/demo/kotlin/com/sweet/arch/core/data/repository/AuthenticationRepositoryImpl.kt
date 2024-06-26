@@ -1,10 +1,14 @@
 package com.sweet.arch.core.data.repository
 
+import com.sweet.arch.core.domain.model.auth.AuthTokenParam
+import com.sweet.arch.core.domain.model.auth.AuthTokenResult
 import com.sweet.arch.core.domain.model.auth.LoginOTPResult
 import com.sweet.arch.core.domain.model.auth.LoginOtpParam
 import com.sweet.arch.core.domain.repository.AuthenticationRepository
 import com.sweet.iva.core.common.dispatcher.DispatcherProvider
 import com.sweet.iva.core.network.datasource.AuthenticationRemoteDataSource
+import com.sweet.iva.core.network.model.AuthTokenNetworkParam
+import com.sweet.iva.core.network.model.AuthTokenNetworkResult
 import com.sweet.iva.core.network.model.LoginOtpNetworkParam
 import com.sweet.iva.core.network.model.LoginOtpNetworkResult
 import kotlinx.coroutines.withContext
@@ -24,7 +28,24 @@ class AuthenticationRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getAuthToken(param: AuthTokenParam): AuthTokenResult {
+        return withContext(dispatcherProvider.io) {
+            return@withContext remoteDataSource.getAuthToken(param.toNetworkModel()).toDomainModel()
+        }
+    }
+
 }
+
+private fun AuthTokenNetworkResult.toDomainModel() = AuthTokenResult(
+    accessToken = this.accessToken,
+    refreshToken = this.refreshToken
+)
+
+private fun AuthTokenParam.toNetworkModel() = AuthTokenNetworkParam(
+    phoneNumber = this.phoneNumber,
+    trackingCode = this.trackingCode,
+    otpValue = this.otpValue
+)
 
 private fun LoginOtpNetworkResult.toDomainModel(): LoginOTPResult {
     return LoginOTPResult(
