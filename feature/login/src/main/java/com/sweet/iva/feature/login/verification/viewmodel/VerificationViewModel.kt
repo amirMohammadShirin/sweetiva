@@ -11,6 +11,7 @@ import com.sweet.iva.feature.login.verification.model.VerificationAction
 import com.sweet.iva.feature.login.verification.model.VerificationEvent
 import com.sweet.iva.feature.login.verification.model.VerificationUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -61,7 +62,16 @@ class VerificationViewModel @Inject constructor(
     }
 
     private fun confirm() {
-        viewModelScope.launch {
+        viewModelScope.launch(
+            CoroutineExceptionHandler { _, throwable ->
+                updateState {
+                    it.copy(
+                        loading = false
+                    )
+                }
+                sendEvent(IEvent.ShowSnack(throwable.message ?: " "))
+            }
+        ) {
             updateState {
                 it.copy(
                     loading = true

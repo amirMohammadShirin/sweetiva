@@ -2,6 +2,7 @@ package com.sweet.iva.core.network.datasource
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.sweet.iva.core.network.helper.ApiException
 import com.sweet.iva.core.network.helper.Response
 import com.sweet.iva.core.network.helper.parseResponse
 import com.sweet.iva.core.network.model.AuthTokenNetworkParam
@@ -37,11 +38,17 @@ class AuthenticationRemoteDataSource @Inject constructor() {
 
     suspend fun getAuthToken(param: AuthTokenNetworkParam): AuthTokenNetworkResult {
         return withContext(Dispatchers.Default) {
+
             delay(3000)
+
+            if (param.otpValue != "1234")
+                throw ApiException(400,"کد فعال سازی اشتباه است")
+
             val response = gson.fromJson(
                 mockGetAuthTokenResponse,
                 object : TypeToken<Response<AuthTokenNetworkResult>>() {}
             )
+
             return@withContext response.parseResponse()
         }
     }
