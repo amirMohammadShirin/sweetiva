@@ -6,12 +6,14 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class CacheModule {
 
     @Binds
-    abstract fun bindSharedPreferencesCache(sharedPreferencesCache: SharedPreferencesCache):Cache
+    @Named("sharedPreferences")
+    abstract fun bindSharedPreferencesCache(sharedPreferencesCache: SharedPreferencesCache): Cache
 
 }
