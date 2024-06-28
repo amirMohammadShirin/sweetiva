@@ -1,7 +1,7 @@
 package com.sweet.arch.core.data.repository
 
-import com.sweet.arch.core.domain.model.auth.AuthTokenParam
-import com.sweet.arch.core.domain.model.auth.AuthTokenResult
+import com.sweet.arch.core.domain.model.auth.LoginParam
+import com.sweet.arch.core.domain.model.auth.LoginResult
 import com.sweet.arch.core.domain.model.auth.LoginOTPResult
 import com.sweet.arch.core.domain.model.auth.LoginOtpParam
 import com.sweet.arch.core.domain.repository.AuthenticationRepository
@@ -28,7 +28,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAuthToken(param: AuthTokenParam): AuthTokenResult {
+    override suspend fun login(param: LoginParam): LoginResult {
         return withContext(dispatcherProvider.io) {
             return@withContext remoteDataSource.getAuthToken(param.toNetworkModel()).toDomainModel()
         }
@@ -36,12 +36,12 @@ class AuthenticationRepositoryImpl @Inject constructor(
 
 }
 
-private fun AuthTokenNetworkResult.toDomainModel() = AuthTokenResult(
+private fun AuthTokenNetworkResult.toDomainModel() = LoginResult(
     accessToken = this.accessToken,
     refreshToken = this.refreshToken
 )
 
-private fun AuthTokenParam.toNetworkModel() = AuthTokenNetworkParam(
+private fun LoginParam.toNetworkModel() = AuthTokenNetworkParam(
     phoneNumber = this.phoneNumber,
     trackingCode = this.trackingCode,
     otpValue = this.otpValue

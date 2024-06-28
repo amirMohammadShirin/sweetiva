@@ -17,35 +17,35 @@ class SharedPreferencesCache @Inject constructor(
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("iva_preference", Context.MODE_PRIVATE)
 
-    override fun <T> saveObject(data: T, key: CacheKey) {
+    override fun <T> saveObject(key: CacheKey, data: T) {
         saveString(
-            Gson().toJson(data),
-            key
+            key,
+            Gson().toJson(data)
         )
     }
 
-    override fun saveString(data: String, key: CacheKey) {
+    override fun saveString(key: CacheKey, data: String) {
         sharedPreferences.edit {
             putString(key.name, data)
             apply()
         }
     }
 
-    override fun saveInt(data: Int, key: CacheKey) {
+    override fun saveInt(key: CacheKey, data: Int) {
         sharedPreferences.edit {
             putInt(key.name, data)
             apply()
         }
     }
 
-    override fun saveBoolean(data: Boolean, key: CacheKey) {
+    override fun saveBoolean(key: CacheKey, data: Boolean) {
         sharedPreferences.edit {
             putBoolean(key.name, data)
             apply()
         }
     }
 
-    override fun saveLong(data: Long, key: CacheKey) {
+    override fun saveLong(key: CacheKey, data: Long) {
         sharedPreferences.edit {
             putLong(key.name, data)
             apply()

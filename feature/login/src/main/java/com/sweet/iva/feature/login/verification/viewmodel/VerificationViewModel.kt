@@ -2,8 +2,9 @@ package com.sweet.iva.feature.login.verification.viewmodel
 
 import android.os.CountDownTimer
 import androidx.lifecycle.viewModelScope
-import com.sweet.arch.core.domain.model.auth.AuthTokenParam
-import com.sweet.arch.core.domain.usecase.auth.GetAuthTokenUseCase
+import com.sweet.arch.core.domain.model.auth.LoginParam
+import com.sweet.arch.core.domain.usecase.auth.LoginUseCase
+import com.sweet.arch.core.domain.usecase.user.GetCurrentUserUseCase
 import com.sweet.iva.core.common.util.TimeUtil
 import com.sweet.iva.core.ui.model.IEvent
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class VerificationViewModel @Inject constructor(
-    private val getAuthTokenUseCase: GetAuthTokenUseCase
+    private val loginUseCase: LoginUseCase,
+    private val getCurrentUserUseCase: GetCurrentUserUseCase
 ) :
     BaseViewModel<VerificationUiModel, VerificationAction, VerificationEvent>(
         initialState = VerificationUiModel()
@@ -77,8 +79,8 @@ class VerificationViewModel @Inject constructor(
                     loading = true
                 )
             }
-            val result = getAuthTokenUseCase.execute(
-                AuthTokenParam(
+            val result = loginUseCase.execute(
+                LoginParam(
                     trackingCode = trackingCode,
                     phoneNumber = currentState.phoneNumber,
                     otpValue = currentState.verificationCode.value
@@ -92,7 +94,10 @@ class VerificationViewModel @Inject constructor(
             }
 
             if (result) {
-                sendEvent(IEvent.ShowToast("logged in"))
+                val currentUser = getCurrentUserUseCase.execute(null)
+                currentUser?.let {
+                    sendEvent(IEvent.ShowSnack("${it.phoneNumber.value} -> ${it.identity?.accessToken}"))
+                }
             }
 
         }
