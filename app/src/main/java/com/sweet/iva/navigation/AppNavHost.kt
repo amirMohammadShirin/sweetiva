@@ -14,7 +14,7 @@ import com.sweet.iva.feature.login.loginGraph
 fun AppNavHost(
     appState: AppState,
     modifier: Modifier = Modifier,
-    startDestination: String = ApplicationRoutes.introGraphRoute
+    startDestination: String
 ) {
     CompositionLocalProvider(LocalNavController provides appState.navController) {
         NavHost(

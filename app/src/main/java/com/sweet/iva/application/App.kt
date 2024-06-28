@@ -25,8 +25,10 @@ import com.sweet.iva.navigation.TopLevelDestination
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun App(
-    appState: AppState = rememberMarkAppState()
+    startDestination: String,
+    appState: AppState = rememberMarkAppState(startDestination = startDestination)
 ) {
+
 
     AppBackground(
         modifier = Modifier
@@ -45,6 +47,7 @@ fun App(
         ) { padding ->
             CompositionLocalProvider(LocalSnackBarState provides snackBarHostState) {
                 AppNavHost(
+                    startDestination = appState.startDestination,
                     modifier = Modifier.padding(padding),
                     appState = appState
                 )

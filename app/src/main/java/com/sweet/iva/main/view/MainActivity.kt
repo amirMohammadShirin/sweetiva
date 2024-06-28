@@ -23,6 +23,7 @@ import com.sweet.iva.ThemeBrand
 import com.sweet.iva.application.App
 import com.sweet.iva.core.designsystem.component.AppBackground
 import com.sweet.iva.core.designsystem.theme.AppTheme
+import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 import com.sweet.iva.main.model.MainViewState
 import com.sweet.iva.main.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,7 +66,10 @@ internal class MainActivity : ComponentActivity() {
     @Composable
     private fun MainActivity.MainActivityContent(uiState: MainViewState) {
         if (!uiState.loading) {
+
             val darkTheme = shouldUserDarkTheme(uiState)
+            val startDestination =
+                if (uiState.isUserLoggedIn) ApplicationRoutes.loginGraphRoute else ApplicationRoutes.introGraphRoute
 
             AppTheme(
                 darkTheme = darkTheme,
@@ -73,9 +77,10 @@ internal class MainActivity : ComponentActivity() {
                 disableDynamicTheming = shouldDisableDynamicTheming(uiState)
             ) {
                 AppBackground(modifier = Modifier.fillMaxSize()) {
-                    App()
+                    App(startDestination = startDestination)
                 }
             }
+
         }
     }
 
