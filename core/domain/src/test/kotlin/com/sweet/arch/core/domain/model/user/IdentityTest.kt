@@ -6,15 +6,15 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
 @RunWith(JUnit4::class)
-class AuthenticationTest {
+class IdentityTest {
 
     @Test(expected = BusinessException::class)
     fun `empty access token test`() {
 
         val token = ""
 
-        Authentication.create(
-            Authentication.Companion.Argument(
+        Identity.create(
+            Identity.Companion.Argument(
                 accessToken = token,
                 refreshToken = "refresh token value"
             )
@@ -27,8 +27,8 @@ class AuthenticationTest {
 
         val token = ""
 
-        Authentication.create(
-            Authentication.Companion.Argument(
+        Identity.create(
+            Identity.Companion.Argument(
                 accessToken = "access token value",
                 refreshToken = token
             )

@@ -1,7 +1,7 @@
 package com.sweet.arch.core.domain.repository
 
-import com.sweet.arch.core.domain.model.auth.AuthTokenParam
-import com.sweet.arch.core.domain.model.auth.AuthTokenResult
+import com.sweet.arch.core.domain.model.auth.LoginParam
+import com.sweet.arch.core.domain.model.auth.LoginResult
 import com.sweet.arch.core.domain.model.auth.LoginOTPResult
 import com.sweet.arch.core.domain.model.auth.LoginOtpParam
 
@@ -10,6 +10,6 @@ import com.sweet.arch.core.domain.model.auth.LoginOtpParam
  */
 interface AuthenticationRepository {
     suspend fun sendLoginOtp(param: LoginOtpParam): LoginOTPResult
-    suspend fun getAuthToken(param: AuthTokenParam): AuthTokenResult
+    suspend fun login(param: LoginParam): LoginResult
 
 }

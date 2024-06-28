@@ -2,14 +2,14 @@ package com.sweet.arch.core.domain.model.user
 
 import com.sweet.iva.core.domain.model.exception.BusinessException
 
-data class Authentication(
+data class Identity(
     val accessToken: AccessToken,
     val refreshToken: RefreshToken
 ) {
     companion object {
 
         fun create(argument: Argument) =
-            Authentication(
+            Identity(
                 accessToken = AccessToken(argument.accessToken),
                 refreshToken = RefreshToken(argument.refreshToken)
             )

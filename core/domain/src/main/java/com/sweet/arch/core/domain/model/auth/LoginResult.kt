@@ -1,6 +1,6 @@
 package com.sweet.arch.core.domain.model.auth
 
-data class AuthTokenResult(
+data class LoginResult(
     val accessToken: String,
     val refreshToken: String,
 )
