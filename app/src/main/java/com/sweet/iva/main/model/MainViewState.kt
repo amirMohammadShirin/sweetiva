@@ -9,4 +9,5 @@ internal data class MainViewState(
     val darkThemeConfig: DarkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
     val themeBrand: ThemeBrand = ThemeBrand.ANDROID,
     val useDynamicColor: Boolean = false,
+    val isUserLoggedIn: Boolean = false
 ) : IViewState

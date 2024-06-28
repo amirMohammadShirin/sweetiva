@@ -15,6 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun rememberMarkAppState(
+    startDestination: String,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController()
 ): AppState {
@@ -23,6 +24,7 @@ fun rememberMarkAppState(
         navController
     ) {
         AppState(
+            startDestination = startDestination,
             navController = navController,
             coroutineScope = coroutineScope,
         )
@@ -30,6 +32,7 @@ fun rememberMarkAppState(
 }
 
 class AppState(
+    val startDestination: String,
     val navController: NavHostController,
     val coroutineScope: CoroutineScope,
 ) {
