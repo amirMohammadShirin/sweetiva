@@ -68,8 +68,6 @@ internal class MainActivity : ComponentActivity() {
         if (!uiState.loading) {
 
             val darkTheme = shouldUserDarkTheme(uiState)
-            val startDestination =
-                if (uiState.isUserLoggedIn) ApplicationRoutes.loginGraphRoute else ApplicationRoutes.introGraphRoute
 
             AppTheme(
                 darkTheme = darkTheme,
@@ -77,7 +75,7 @@ internal class MainActivity : ComponentActivity() {
                 disableDynamicTheming = shouldDisableDynamicTheming(uiState)
             ) {
                 AppBackground(modifier = Modifier.fillMaxSize()) {
-                    App(startDestination = startDestination)
+                    App(startDestination = uiState.startDestination)
                 }
             }
 

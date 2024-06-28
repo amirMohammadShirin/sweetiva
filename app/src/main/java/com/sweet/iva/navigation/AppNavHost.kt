@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import com.sweet.iva.application.AppState
 import com.sweet.iva.core.ui.helper.LocalNavController
 import com.sweet.iva.core.ui.navigation.ApplicationRoutes
+import com.sweet.iva.feature.home.homeGraph
 import com.sweet.iva.feature.intro.introGraph
 import com.sweet.iva.feature.login.loginGraph
 
@@ -24,6 +25,7 @@ fun AppNavHost(
         ) {
             introGraph()
             loginGraph()
+            homeGraph()
         }
     }
 }

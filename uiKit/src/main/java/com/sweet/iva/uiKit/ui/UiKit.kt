@@ -63,9 +63,7 @@ fun AppUiKit() {
                 item { Text("Buttons", Modifier.padding(top = 16.dp)) }
                 item {
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                        AppButton(onClick = {}) {
-                            Text(text = "Enabled")
-                        }
+                        AppButton(onClick = {}, text = { Text(text = "Enabled") })
                         AppOutlinedButton(onClick = {}) {
                             Text(text = "Enabled")
                         }
@@ -80,9 +78,10 @@ fun AppUiKit() {
                         AppButton(
                             onClick = {},
                             enabled = false,
-                        ) {
-                            Text(text = "Disabled")
-                        }
+                            text = {
+                                Text(text = "Disabled")
+                            }
+                        )
                         AppOutlinedButton(
                             onClick = {},
                             enabled = false,
