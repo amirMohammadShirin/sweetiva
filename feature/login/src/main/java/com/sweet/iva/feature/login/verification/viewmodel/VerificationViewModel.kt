@@ -7,6 +7,8 @@ import com.sweet.arch.core.domain.usecase.auth.LoginUseCase
 import com.sweet.arch.core.domain.usecase.user.GetCurrentUserUseCase
 import com.sweet.iva.core.common.util.TimeUtil
 import com.sweet.iva.core.ui.model.IEvent
+import com.sweet.iva.core.ui.navigation.ApplicationRoutes
+import com.sweet.iva.core.ui.navigation.NavigationCommand
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 import com.sweet.iva.feature.login.verification.model.VerificationAction
 import com.sweet.iva.feature.login.verification.model.VerificationEvent
@@ -79,6 +81,7 @@ class VerificationViewModel @Inject constructor(
                     loading = true
                 )
             }
+
             val result = loginUseCase.execute(
                 LoginParam(
                     trackingCode = trackingCode,
@@ -93,12 +96,13 @@ class VerificationViewModel @Inject constructor(
                 )
             }
 
-            if (result) {
-                val currentUser = getCurrentUserUseCase.execute(null)
-                currentUser?.let {
-                    sendEvent(IEvent.ShowSnack("${it.phoneNumber.value} -> ${it.identity?.accessToken}"))
-                }
-            }
+            if (result)
+                navigateTo(
+                    NavigationCommand.ToScreen(
+                        route = ApplicationRoutes.homeGraphRoute,
+                        clearTo = ApplicationRoutes.introGraphRoute
+                    )
+                )
 
         }
     }
