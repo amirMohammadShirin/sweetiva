@@ -3,12 +3,10 @@ package com.sweet.iva.core.designsystem.component
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,7 +21,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
@@ -101,6 +98,7 @@ fun AppToolbar(
     modifier: Modifier,
     toolbarTitle: String,
     onLeftIconClicked: () -> Unit,
+    onRightIconClicked: (() -> Unit)? = null,
     leftIcon: Int,
     rightIcon: Int? = null
 ) {
@@ -143,13 +141,10 @@ fun AppToolbar(
                         top.linkTo(parent.top, MaterialTheme.dimens.defaultGap)
                         bottom.linkTo(parent.bottom, MaterialTheme.dimens.defaultGap)
                         end.linkTo(titleRef.start, MaterialTheme.dimens.defaultGap)
-                        width = Dimension.wrapContent
-                        height = Dimension.wrapContent
+                        width = Dimension.value(30.dp)
+                        height = Dimension.value(30.dp)
                     }
-                    .size(
-                        30.dp,
-                        30.dp
-                    )
+                    .padding(MaterialTheme.dimens.smallPadding)
                     .clickable {
                         onLeftIconClicked.invoke()
                     },
@@ -166,13 +161,13 @@ fun AppToolbar(
                             top.linkTo(parent.top, MaterialTheme.dimens.defaultGap)
                             bottom.linkTo(parent.bottom, MaterialTheme.dimens.defaultGap)
                             start.linkTo(titleRef.end, MaterialTheme.dimens.defaultGap)
-                            width = Dimension.wrapContent
-                            height = Dimension.wrapContent
+                            width = Dimension.value(30.dp)
+                            height = Dimension.value(30.dp)
                         }
-                        .size(
-                            40.dp,
-                            40.dp
-                        ),
+                        .padding(MaterialTheme.dimens.smallPadding)
+                        .clickable {
+                            onRightIconClicked?.invoke()
+                        },
                     painter = painterResource(id = it),
                     contentDescription = "right icon"
                 )
@@ -185,13 +180,9 @@ fun AppToolbar(
                             top.linkTo(parent.top, MaterialTheme.dimens.defaultGap)
                             bottom.linkTo(parent.bottom, MaterialTheme.dimens.defaultGap)
                             start.linkTo(titleRef.end, MaterialTheme.dimens.defaultGap)
-                            width = Dimension.wrapContent
-                            height = Dimension.wrapContent
+                            width = Dimension.value(30.dp)
+                            height = Dimension.value(30.dp)
                         }
-                        .size(
-                            40.dp,
-                            40.dp
-                        ),
                 )
             }
 
@@ -223,7 +214,8 @@ private fun AppToolbarPreview() {
             modifier = Modifier.fillMaxWidth(),
             toolbarTitle = "ایوا",
             onLeftIconClicked = {},
-            R.drawable.ic_iva
+            leftIcon = R.drawable.ic_iva,
+            rightIcon = R.drawable.ic_iva
         )
     }
 }
