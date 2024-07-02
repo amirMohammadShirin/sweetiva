@@ -48,7 +48,9 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sweet.iva.core.designsystem.component.AppBackground
+import com.sweet.iva.core.designsystem.component.AppTextField
 import com.sweet.iva.core.designsystem.component.AppToolbar
+import com.sweet.iva.core.designsystem.component.SimpleTextField
 import com.sweet.iva.core.designsystem.component.ThemePreviews
 import com.sweet.iva.core.designsystem.theme.AppTheme
 import com.sweet.iva.core.designsystem.theme.dimens
@@ -311,6 +313,8 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                                 expTimeRef,
                                 moreRef) = createRefs()
 
+                            val centerGuidLine = createGuidelineFromStart(0.5F)
+
                             Image(
                                 modifier = Modifier
                                     .constrainAs(leftArrowRef) {
@@ -366,43 +370,53 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                                     color = Color(0XFF707070)
                                 )
                             }
-                            ProvideTextStyle(value = MaterialTheme.typography.titleLarge) {
-                                Text(
-                                    card.pan,
-                                    modifier = Modifier.constrainAs(panRef) {
-                                        top.linkTo(iconRef.bottom, MaterialTheme.dimens.xLargeGap)
-                                        start.linkTo(leftArrowRef.end)
-                                        end.linkTo(rightArrowRef.start)
-                                        width = Dimension.fillToConstraints
-                                    },
-                                    textAlign = TextAlign.Center,
-                                    color = Color(0XFF707070)
-                                )
-                            }
-                            ProvideTextStyle(value = MaterialTheme.typography.labelLarge) {
-                                Text(
-                                    card.cardHolderName,
-                                    modifier = Modifier.constrainAs(nameRef) {
-                                        top.linkTo(panRef.bottom)
-                                        end.linkTo(iconRef.end)
-                                        bottom.linkTo(moreRef.top)
-                                    },
-                                    textAlign = TextAlign.Center,
-                                    color = Color(0XFF707070)
-                                )
-                            }
-                            ProvideTextStyle(value = MaterialTheme.typography.labelLarge) {
-                                Text(
-                                    card.expTime,
-                                    modifier = Modifier.constrainAs(expTimeRef) {
-                                        top.linkTo(panRef.bottom)
-                                        start.linkTo(panRef.start)
-                                        bottom.linkTo(moreRef.top)
-                                    },
-                                    textAlign = TextAlign.Center,
-                                    color = Color(0XFF707070)
-                                )
-                            }
+
+                            SimpleTextField(
+                                enabled = showOptions,
+                                value = card.pan,
+                                modifier = Modifier.constrainAs(panRef) {
+                                    top.linkTo(parent.top)
+                                    start.linkTo(leftArrowRef.end)
+                                    end.linkTo(rightArrowRef.start)
+                                    bottom.linkTo(parent.bottom)
+                                    width = Dimension.fillToConstraints
+                                },
+                                onValueChange = {},
+                                textAlign = TextAlign.Center,
+                                fontSize = MaterialTheme.typography.titleLarge.fontSize
+                            )
+
+                            SimpleTextField(
+                                enabled = showOptions,
+                                value = card.cardHolderName,
+                                modifier = Modifier.constrainAs(nameRef) {
+                                    top.linkTo(panRef.bottom)
+                                    end.linkTo(parent.end)
+                                    bottom.linkTo(moreRef.top)
+                                    start.linkTo(centerGuidLine)
+                                    width = Dimension.fillToConstraints
+                                },
+                                onValueChange = {},
+                                textAlign = TextAlign.End,
+                                fontSize = MaterialTheme.typography.labelLarge.fontSize
+                            )
+
+                            SimpleTextField(
+                                enabled = showOptions,
+                                value = card.expTime,
+                                onValueChange = {},
+                                modifier = Modifier.constrainAs(expTimeRef) {
+                                    top.linkTo(panRef.bottom)
+                                    start.linkTo(parent.start)
+                                    bottom.linkTo(moreRef.top)
+                                    end.linkTo(centerGuidLine)
+                                    width = Dimension.fillToConstraints
+                                },
+                                textAlign = TextAlign.Start,
+                                fontSize = MaterialTheme.typography.labelLarge.fontSize
+
+                            )
+
                             ProvideTextStyle(value = MaterialTheme.typography.labelSmall) {
                                 Image(
                                     painterResource(id = R.drawable.ic_more_horizontal),
