@@ -5,7 +5,6 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateIntOffsetAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -49,7 +48,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sweet.iva.core.designsystem.component.AppBackground
-import com.sweet.iva.core.designsystem.component.AppTextField
 import com.sweet.iva.core.designsystem.component.AppToolbar
 import com.sweet.iva.core.designsystem.component.SimpleTextField
 import com.sweet.iva.core.designsystem.component.ThemePreviews
@@ -78,6 +76,8 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
     @Composable
     override fun Content(state: DashboardUiModel) {
 
+        val viewModel = viewModel()
+
         ConstraintLayout(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -102,7 +102,13 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                     end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
                     width = Dimension.fillToConstraints
                 },
-                cards = state.userCards
+                cards = state.userCards,
+                onPanChanged = { card, pan ->
+                    viewModel.process(DashboardAction.PanChanged(card, pan))
+                },
+                onNameChanged = { card, name ->
+                    viewModel.process(DashboardAction.NameChanged(card, name))
+                }
             )
 
         }
@@ -113,7 +119,9 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
     @Composable
     private fun HorizontalUserCards(
         modifier: Modifier,
-        cards: List<UserCardUiModel>
+        cards: List<UserCardUiModel>,
+        onPanChanged: (index: Int, pan: String) -> Unit,
+        onNameChanged: (index: Int, name: String) -> Unit
     ) {
 
         val pagerState =
@@ -139,7 +147,11 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                     coroutineScope.launch {
                         pagerState.animateScrollToPage(it + 1)
                     }
-                }
+                },
+                onPanChanged = { pan ->
+                    onPanChanged.invoke(it, pan)
+                },
+                onNameChanged = { name -> onNameChanged(it, name) }
             )
 
         }
@@ -150,6 +162,8 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
         card: UserCardUiModel,
         onRightArrowClicked: () -> Unit = {},
         onLeftIconClicked: () -> Unit = {},
+        onPanChanged: (pan: String) -> Unit,
+        onNameChanged: (name: String) -> Unit,
     ) {
 
         ConstraintLayout(
@@ -161,7 +175,7 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
 
             val (cardRef, optionsRef) = createRefs()
 
-            var isInEditMode by remember { mutableStateOf(false ) }
+            var isInEditMode by remember { mutableStateOf(false) }
 
             var showOptions by remember { mutableStateOf(false) }
             val pxToMove = with(LocalDensity.current) {
@@ -392,14 +406,14 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                                     bottom.linkTo(parent.bottom)
                                     width = Dimension.fillToConstraints
                                 },
-                                onValueChange = {},
+                                onValueChange = onPanChanged,
                                 textAlign = TextAlign.Center,
                                 fontSize = MaterialTheme.typography.titleLarge.fontSize
                             )
 
                             SimpleTextField(
                                 enabled = isInEditMode && showOptions,
-                                value = card.cardHolderName,
+                                value = card.name,
                                 modifier = Modifier.constrainAs(nameRef) {
                                     top.linkTo(panRef.bottom)
                                     end.linkTo(parent.end)
@@ -407,7 +421,7 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                                     start.linkTo(centerGuidLine)
                                     width = Dimension.fillToConstraints
                                 },
-                                onValueChange = {},
+                                onValueChange = onNameChanged,
                                 textAlign = TextAlign.End,
                                 fontSize = MaterialTheme.typography.labelLarge.fontSize
                             )
