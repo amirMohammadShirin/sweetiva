@@ -162,7 +162,7 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
 
             var isInEditMode by remember { mutableStateOf(false) }
 
-            var showOptions by remember { mutableStateOf(true) }
+            var showOptions by remember { mutableStateOf(false) }
             val pxToMove = with(LocalDensity.current) {
                 -20.dp.toPx().roundToInt()
             }
