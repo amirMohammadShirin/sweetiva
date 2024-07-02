@@ -160,7 +160,9 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
 
             val (cardRef, optionsRef) = createRefs()
 
-            var showOptions by remember { mutableStateOf(false) }
+            var isInEditMode by remember { mutableStateOf(false) }
+
+            var showOptions by remember { mutableStateOf(true) }
             val pxToMove = with(LocalDensity.current) {
                 -20.dp.toPx().roundToInt()
             }
@@ -187,6 +189,9 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                 ) {
 
                     Row(
+                        modifier = Modifier.clickable(!isInEditMode) {
+                            isInEditMode = true
+                        },
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
@@ -233,6 +238,11 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                         }
                     }
                     Row(
+                        modifier = Modifier
+                            .clickable(isInEditMode) {
+                                isInEditMode = false
+                                showOptions = false
+                            },
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
@@ -372,7 +382,7 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                             }
 
                             SimpleTextField(
-                                enabled = showOptions,
+                                enabled = isInEditMode,
                                 value = card.pan,
                                 modifier = Modifier.constrainAs(panRef) {
                                     top.linkTo(parent.top)
@@ -387,7 +397,7 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                             )
 
                             SimpleTextField(
-                                enabled = showOptions,
+                                enabled = isInEditMode,
                                 value = card.cardHolderName,
                                 modifier = Modifier.constrainAs(nameRef) {
                                     top.linkTo(panRef.bottom)
@@ -402,7 +412,7 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                             )
 
                             SimpleTextField(
-                                enabled = showOptions,
+                                enabled = isInEditMode,
                                 value = card.expTime,
                                 onValueChange = {},
                                 modifier = Modifier.constrainAs(expTimeRef) {
