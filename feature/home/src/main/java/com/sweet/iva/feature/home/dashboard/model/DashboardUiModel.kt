@@ -10,7 +10,8 @@ val mockCards = mutableListOf<UserCardUiModel>().apply {
             contentColor = "#006fb8",
             containerColor = "#CBECFB",
             pan = "6037 9972 6372 8496",
-            expTime = "تاریخ انقضا ۰۶/۰۸",
+            month = "08",
+            year = "1405",
             bankImage = R.drawable.ic_saman_bank
         )
     )
@@ -21,7 +22,8 @@ val mockCards = mutableListOf<UserCardUiModel>().apply {
             contentColor = "#97199a",
             containerColor = "#ead1eb",
             pan = "6037 9972 6372 8496",
-            expTime = "تاریخ انقضا ۰۶/۰۸",
+            month = "08",
+            year = "1405",
             bankImage = R.drawable.ic_eghtesad_novin_bank
         )
     )
@@ -32,7 +34,8 @@ val mockCards = mutableListOf<UserCardUiModel>().apply {
             contentColor = "#d32a3d",
             containerColor = "#ebd6d6",
             pan = "6037 9972 6372 8496",
-            expTime = "تاریخ انقضا ۰۶/۰۸",
+            month = "08",
+            year = "1405",
             bankImage = R.drawable.ic_mellat_bank
         )
     )
@@ -43,7 +46,8 @@ val mockCards = mutableListOf<UserCardUiModel>().apply {
             contentColor = "#fcb817",
             containerColor = "#fef1d1",
             pan = "6037 9972 6372 8496",
-            expTime = "تاریخ انقضا ۰۶/۰۸",
+            month = "08",
+            year = "1405",
             bankImage = R.drawable.ic_pasargad_bank
         )
     )
@@ -54,7 +58,8 @@ val mockCards = mutableListOf<UserCardUiModel>().apply {
             contentColor = "#202d14",
             containerColor = "#d2d5d0",
             pan = "6037 9972 6372 8496",
-            expTime = "تاریخ انقضا ۰۶/۰۸",
+            month = "08",
+            year = "1405",
             bankImage = R.drawable.ic_keshavarzi_bank
         )
     )
@@ -65,7 +70,8 @@ val mockCards = mutableListOf<UserCardUiModel>().apply {
             contentColor = "#e8651d",
             containerColor = "#fae0d2",
             pan = "6037 9972 6372 8496",
-            expTime = "تاریخ انقضا ۰۶/۰۸",
+            month = "08",
+            year = "1405",
             bankImage = R.drawable.ic_bank_sepah
         )
     )
@@ -76,7 +82,8 @@ val mockCards = mutableListOf<UserCardUiModel>().apply {
             contentColor = "#D3C400",
             containerColor = "#fffde6",
             pan = "6037 9972 6372 8496",
-            expTime = "تاریخ انقضا ۰۶/۰۸",
+            month = "08",
+            year = "1405",
             bankImage = R.drawable.ic_melli_bank
         )
     )
@@ -93,7 +100,8 @@ data class UserCardUiModel(
     val bankImage: Int,
     val bankName: String,
     val pan: String,
-    val expTime: String,
+    val month: String,
+    val year: String,
     val cardHolderName: String,
     val containerColor: String,
     val contentColor: String

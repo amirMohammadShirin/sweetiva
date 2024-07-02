@@ -5,6 +5,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateIntOffsetAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -160,7 +161,7 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
 
             val (cardRef, optionsRef) = createRefs()
 
-            var isInEditMode by remember { mutableStateOf(false) }
+            var isInEditMode by remember { mutableStateOf(false ) }
 
             var showOptions by remember { mutableStateOf(false) }
             val pxToMove = with(LocalDensity.current) {
@@ -382,7 +383,7 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                             }
 
                             SimpleTextField(
-                                enabled = isInEditMode,
+                                enabled = isInEditMode && showOptions,
                                 value = card.pan,
                                 modifier = Modifier.constrainAs(panRef) {
                                     top.linkTo(parent.top)
@@ -397,7 +398,7 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                             )
 
                             SimpleTextField(
-                                enabled = isInEditMode,
+                                enabled = isInEditMode && showOptions,
                                 value = card.cardHolderName,
                                 modifier = Modifier.constrainAs(nameRef) {
                                     top.linkTo(panRef.bottom)
@@ -411,21 +412,43 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                                 fontSize = MaterialTheme.typography.labelLarge.fontSize
                             )
 
-                            SimpleTextField(
-                                enabled = isInEditMode,
-                                value = card.expTime,
-                                onValueChange = {},
-                                modifier = Modifier.constrainAs(expTimeRef) {
-                                    top.linkTo(panRef.bottom)
-                                    start.linkTo(parent.start)
-                                    bottom.linkTo(moreRef.top)
-                                    end.linkTo(centerGuidLine)
-                                    width = Dimension.fillToConstraints
-                                },
-                                textAlign = TextAlign.Start,
-                                fontSize = MaterialTheme.typography.labelLarge.fontSize
-
-                            )
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier
+                                    .constrainAs(expTimeRef) {
+                                        top.linkTo(panRef.bottom)
+                                        start.linkTo(parent.start)
+                                        bottom.linkTo(moreRef.top)
+                                        end.linkTo(centerGuidLine)
+                                        width = Dimension.fillToConstraints
+                                    }
+                            ) {
+                                SimpleTextField(
+                                    enabled = isInEditMode && showOptions,
+                                    value = card.year,
+                                    onValueChange = {},
+                                    textAlign = TextAlign.Center,
+                                    fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                                    modifier = Modifier.weight(2F, true)
+                                )
+                                SimpleTextField(
+                                    enabled = false,
+                                    value = "/",
+                                    onValueChange = {},
+                                    textAlign = TextAlign.Center,
+                                    fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                                    modifier = Modifier.weight(1F)
+                                )
+                                SimpleTextField(
+                                    enabled = isInEditMode && showOptions,
+                                    value = card.month,
+                                    onValueChange = {},
+                                    textAlign = TextAlign.Center,
+                                    fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                                    modifier = Modifier.weight(1.5F, true)
+                                )
+                            }
 
                             ProvideTextStyle(value = MaterialTheme.typography.labelSmall) {
                                 Image(
