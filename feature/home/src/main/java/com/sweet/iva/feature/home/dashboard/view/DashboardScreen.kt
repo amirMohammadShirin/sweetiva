@@ -1,13 +1,10 @@
 package com.sweet.iva.feature.home.dashboard.view
 
-import android.widget.Space
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateIntOffsetAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -66,6 +63,7 @@ import com.sweet.iva.feature.home.dashboard.model.UserCardUiModel
 import com.sweet.iva.feature.home.dashboard.viewmodel.DashboardViewModel
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
+import com.sweet.iva.core.designsystem.theme.Success
 
 class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardEvent>(
     route = ApplicationRoutes.dashboardScreenRoute,
@@ -190,24 +188,38 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        ProvideTextStyle(value = MaterialTheme.typography.labelSmall.copy(fontSize = 8.sp)) {
-                            Text(text = "ویرایش", color = card.contentColor.asColor())
+                        ProvideTextStyle(value = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp)) {
+                            Text(text = "ویرایش", color = MaterialTheme.colorScheme.onBackground)
                             Spacer(modifier = Modifier.width(3.dp))
                             Image(
                                 modifier = Modifier.size(10.dp),
                                 painter = painterResource(id = R.drawable.ic_edit),
                                 contentDescription = "icEdit",
-                                colorFilter = ColorFilter.tint(card.contentColor.asColor())
+                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
                             )
                         }
                     }
-
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        ProvideTextStyle(value = MaterialTheme.typography.labelSmall.copy(fontSize = 8.sp)) {
+                        ProvideTextStyle(value = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp)) {
+                            Text(text = "کپی", color = MaterialTheme.colorScheme.onBackground)
+                            Spacer(modifier = Modifier.width(3.dp))
+                            Image(
+                                modifier = Modifier.size(10.dp),
+                                painter = painterResource(id = R.drawable.ic_copy),
+                                contentDescription = "icCopy",
+                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
+                            )
+                        }
+                    }
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        ProvideTextStyle(value = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp)) {
                             Text(text = "حذف", color = MaterialTheme.colorScheme.error)
                             Spacer(modifier = Modifier.width(3.dp))
                             Image(
@@ -218,19 +230,21 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                             )
                         }
                     }
-
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        ProvideTextStyle(value = MaterialTheme.typography.labelSmall.copy(fontSize = 8.sp)) {
-                            Text(text = "کپی", color = card.contentColor.asColor())
+                        ProvideTextStyle(value = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp)) {
+                            Text(
+                                text = "ذخیره تغییرات",
+                                color = Success
+                            )
                             Spacer(modifier = Modifier.width(3.dp))
                             Image(
                                 modifier = Modifier.size(10.dp),
                                 painter = painterResource(id = R.drawable.ic_copy),
-                                contentDescription = "icCopy",
-                                colorFilter = ColorFilter.tint(card.contentColor.asColor())
+                                contentDescription = "ic save",
+                                colorFilter = ColorFilter.tint(Success)
                             )
                         }
                     }
@@ -250,7 +264,10 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                     .animateContentSize()
                     .fillMaxWidth()
                     .heightIn(10.dp, 210.dp)
-                    .fillMaxHeight(),
+                    .fillMaxHeight()
+                    .clickable {
+                        if (showOptions) showOptions = false
+                    },
                 colors = CardDefaults.elevatedCardColors(
                     containerColor = Color.Transparent,
                     contentColor = Color.Transparent,
@@ -264,6 +281,8 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
             ) {
 
                 Surface(
+                    shadowElevation = if (showOptions) 1.dp else 0.dp,
+                    tonalElevation = if (showOptions) 1.dp else 0.dp,
                     contentColor = Color.Transparent,
                     color = card.containerColor.asColor(),
                     modifier = Modifier.fillMaxSize(),
