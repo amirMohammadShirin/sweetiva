@@ -18,28 +18,43 @@ class DashboardViewModel @Inject constructor() :
         when (action) {
             is DashboardAction.PanChanged -> changeCardPan(action.cardIndex, action.pan)
             is DashboardAction.NameChanged -> changeCardName(action.cardIndex, action.name)
+            is DashboardAction.MonthChanged -> changeCardMonth(action.cardIndex, action.month)
+        }
+    }
+
+    private fun changeCardMonth(cardIndex: Int, month: String) {
+        updateState {
+            it.copy(
+                userCards = updateUserCardAtIndex(it.userCards, cardIndex) { oldCard ->
+                    oldCard.copy(
+                        month = month
+                    )
+                }
+            )
         }
     }
 
     private fun changeCardName(index: Int, name: String) {
         updateState {
             it.copy(
-                userCards = updateList(it.userCards, it.userCards[index].copy(name = name), index)
+                userCards = updateUserCardAtIndex(it.userCards, index) { oldCard ->
+                    oldCard.copy(name = name)
+                }
             )
         }
     }
 
-    private fun updateList(
+    private fun updateUserCardAtIndex(
         source: List<UserCardUiModel>,
-        newCard: UserCardUiModel,
-        index: Int
+        index: Int,
+        update: (card: UserCardUiModel) -> UserCardUiModel
     ): List<UserCardUiModel> {
 
         return mutableListOf<UserCardUiModel>().apply {
 
             addAll(source)
             removeAt(index)
-            add(index, newCard)
+            add(index, update.invoke(source[index]))
 
         }
 
@@ -53,7 +68,9 @@ class DashboardViewModel @Inject constructor() :
 
         updateState {
             it.copy(
-                userCards = updateList(it.userCards, it.userCards[index].copy(pan = pan), index)
+                userCards = updateUserCardAtIndex(it.userCards, index) { oldCard ->
+                    oldCard.copy(pan = pan)
+                }
             )
         }
 

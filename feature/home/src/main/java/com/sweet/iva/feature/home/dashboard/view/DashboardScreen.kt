@@ -108,6 +108,9 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                 },
                 onNameChanged = { card, name ->
                     viewModel.process(DashboardAction.NameChanged(card, name))
+                },
+                onMonthChanged = { card, month ->
+                    viewModel.process(DashboardAction.MonthChanged(card, name))
                 }
             )
 
@@ -121,7 +124,8 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
         modifier: Modifier,
         cards: List<UserCardUiModel>,
         onPanChanged: (index: Int, pan: String) -> Unit,
-        onNameChanged: (index: Int, name: String) -> Unit
+        onNameChanged: (index: Int, name: String) -> Unit,
+        onMonthChanged: (index: Int, month: String) -> Unit
     ) {
 
         val pagerState =
@@ -151,7 +155,8 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                 onPanChanged = { pan ->
                     onPanChanged.invoke(it, pan)
                 },
-                onNameChanged = { name -> onNameChanged(it, name) }
+                onNameChanged = { name -> onNameChanged(it, name) },
+                onMonthChanged = { month -> onNameChanged(it, month) }
             )
 
         }
@@ -164,6 +169,7 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
         onLeftIconClicked: () -> Unit = {},
         onPanChanged: (pan: String) -> Unit,
         onNameChanged: (name: String) -> Unit,
+        onMonthChanged: (name: String) -> Unit,
     ) {
 
         ConstraintLayout(
@@ -457,7 +463,7 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                                 SimpleTextField(
                                     enabled = isInEditMode && showOptions,
                                     value = card.month,
-                                    onValueChange = {},
+                                    onValueChange = onMonthChanged,
                                     textAlign = TextAlign.Center,
                                     fontSize = MaterialTheme.typography.labelLarge.fontSize,
                                     modifier = Modifier.weight(1.5F, true)
