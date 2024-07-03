@@ -19,6 +19,17 @@ class DashboardViewModel @Inject constructor() :
             is DashboardAction.PanChanged -> changeCardPan(action.cardIndex, action.pan)
             is DashboardAction.NameChanged -> changeCardName(action.cardIndex, action.name)
             is DashboardAction.MonthChanged -> changeCardMonth(action.cardIndex, action.month)
+            is DashboardAction.YearChanged -> changeCardYear(action.cardIndex, action.year)
+        }
+    }
+
+    private fun changeCardYear(cardIndex: Int, year: String) {
+        updateState {
+            it.copy(
+                userCards = updateUserCardAtIndex(it.userCards, cardIndex) { oldCard ->
+                    oldCard.copy(year = year)
+                }
+            )
         }
     }
 

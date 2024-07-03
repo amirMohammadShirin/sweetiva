@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -40,6 +41,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -110,7 +112,10 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                     viewModel.process(DashboardAction.NameChanged(card, name))
                 },
                 onMonthChanged = { card, month ->
-                    viewModel.process(DashboardAction.MonthChanged(card, name))
+                    viewModel.process(DashboardAction.MonthChanged(card, month))
+                },
+                onYearChanged = { card, year ->
+                    viewModel.process(DashboardAction.YearChanged(card, year))
                 }
             )
 
@@ -125,7 +130,8 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
         cards: List<UserCardUiModel>,
         onPanChanged: (index: Int, pan: String) -> Unit,
         onNameChanged: (index: Int, name: String) -> Unit,
-        onMonthChanged: (index: Int, month: String) -> Unit
+        onMonthChanged: (index: Int, month: String) -> Unit,
+        onYearChanged: (index: Int, year: String) -> Unit,
     ) {
 
         val pagerState =
@@ -156,7 +162,8 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                     onPanChanged.invoke(it, pan)
                 },
                 onNameChanged = { name -> onNameChanged(it, name) },
-                onMonthChanged = { month -> onNameChanged(it, month) }
+                onMonthChanged = { month -> onMonthChanged(it, month) },
+                onYearChanged = { year -> onYearChanged(it, year) }
             )
 
         }
@@ -170,6 +177,7 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
         onPanChanged: (pan: String) -> Unit,
         onNameChanged: (name: String) -> Unit,
         onMonthChanged: (name: String) -> Unit,
+        onYearChanged: (year: String) -> Unit
     ) {
 
         ConstraintLayout(
@@ -447,7 +455,10 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                                 SimpleTextField(
                                     enabled = isInEditMode && showOptions,
                                     value = card.year,
-                                    onValueChange = {},
+                                    onValueChange = onYearChanged,
+                                    keyboardOptions = KeyboardOptions.Default.copy(
+                                        keyboardType = KeyboardType.Number
+                                    ),
                                     textAlign = TextAlign.Center,
                                     fontSize = MaterialTheme.typography.labelLarge.fontSize,
                                     modifier = Modifier.weight(2F, true)
@@ -466,7 +477,10 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                                     onValueChange = onMonthChanged,
                                     textAlign = TextAlign.Center,
                                     fontSize = MaterialTheme.typography.labelLarge.fontSize,
-                                    modifier = Modifier.weight(1.5F, true)
+                                    modifier = Modifier.weight(1.5F, true),
+                                    keyboardOptions = KeyboardOptions.Default.copy(
+                                        keyboardType = KeyboardType.Number
+                                    )
                                 )
                             }
 
