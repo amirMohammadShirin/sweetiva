@@ -1,5 +1,6 @@
 package com.sweet.iva.feature.home.dashboard.model
 
+import com.sweet.iva.core.designsystem.component.model.UserAccountUiModel
 import com.sweet.iva.core.designsystem.component.model.UserCardUiModel
 import com.sweet.iva.core.ui.util.ColorUtil.asColor
 import com.sweet.iva.feature.home.R
@@ -98,9 +99,25 @@ val mockCards = mutableListOf<UserCardUiModel>().apply {
     )
 }
 
+val mockAccounts = listOf(
+    UserAccountUiModel(
+        name = "حساب قرض الحسنه",
+        accountNumber = "0307160114004",
+        id = "1",
+        iban = "IR030716011400400000000",
+        balance = "100,000,000"
+    ),
+    UserAccountUiModel(
+        name = "حساب جاری",
+        accountNumber = "0307160114004",
+        id = "2",
+        iban = "IR030716011400400000000"
+    ),
+)
 
 data class DashboardUiModel(
     val loading: Boolean = false,
     val userCards: List<UserCardUiModel> = mockCards,
+    val userAccounts: List<UserAccountUiModel> = mockAccounts
 )
 

@@ -9,6 +9,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sweet.iva.core.designsystem.component.AppBackground
 import com.sweet.iva.core.designsystem.component.AppToolbar
+import com.sweet.iva.core.designsystem.component.HorizontalUserAccounts
 import com.sweet.iva.core.designsystem.component.HorizontalUserCards
 import com.sweet.iva.core.designsystem.component.ThemePreviews
 import com.sweet.iva.core.designsystem.theme.AppTheme
@@ -37,7 +38,7 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
             modifier = Modifier.fillMaxSize()
         ) {
 
-            val (toolbarRef, cardsRef) = createRefs()
+            val (toolbarRef, cardsRef, accountRef) = createRefs()
 
             DashboardToolbar(
                 modifier = Modifier.constrainAs(toolbarRef) {
@@ -70,6 +71,20 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                 onYearChanged = { card, year ->
                     viewModel.process(DashboardAction.YearChanged(card, year))
                 }
+            )
+
+            HorizontalUserAccounts(
+                modifier = Modifier.constrainAs(accountRef) {
+                    top.linkTo(cardsRef.bottom, MaterialTheme.dimens.defaultGap)
+                    start.linkTo(parent.start, MaterialTheme.dimens.defaultGap)
+                    end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
+                    width = Dimension.fillToConstraints
+                },
+                accounts = state.userAccounts,
+                onIbanIconClicked = {},
+                onAccountNumberIconClicked = {},
+                onBalanceIconClicked = {},
+                onSettingIconClicked = {}
             )
 
         }
