@@ -1,10 +1,10 @@
 package com.sweet.iva.feature.home.dashboard.viewmodel
 
+import com.sweet.iva.core.designsystem.component.model.UserCardUiModel
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 import com.sweet.iva.feature.home.dashboard.model.DashboardAction
 import com.sweet.iva.feature.home.dashboard.model.DashboardEvent
 import com.sweet.iva.feature.home.dashboard.model.DashboardUiModel
-import com.sweet.iva.feature.home.dashboard.model.UserCardUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

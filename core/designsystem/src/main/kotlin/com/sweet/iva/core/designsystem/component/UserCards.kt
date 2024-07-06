@@ -1,0 +1,451 @@
+package com.sweet.iva.core.designsystem.component
+
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateIntOffsetAsState
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProvideTextStyle
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
+import com.sweet.iva.core.designsystem.R
+import com.sweet.iva.core.designsystem.component.model.UserCardUiModel
+import com.sweet.iva.core.designsystem.theme.Success
+import com.sweet.iva.core.designsystem.theme.dimens
+import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
+
+/**
+ * Created by aShirin on 7/6/2024.
+ */
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun HorizontalUserCards(
+    modifier: Modifier,
+    cards: List<UserCardUiModel>,
+    onPanChanged: (index: Int, pan: String) -> Unit,
+    onNameChanged: (index: Int, name: String) -> Unit,
+    onMonthChanged: (index: Int, month: String) -> Unit,
+    onYearChanged: (index: Int, year: String) -> Unit,
+) {
+
+    val pagerState =
+        rememberPagerState(initialPage = 0, pageCount = { cards.size })
+
+    HorizontalPager(
+        modifier = modifier
+            .padding(horizontal = MaterialTheme.dimens.largePadding),
+        state = pagerState,
+        pageSpacing = MaterialTheme.dimens.defaultGap,
+    ) {
+
+        val coroutineScope = rememberCoroutineScope()
+
+        UserCard(
+            cards[it],
+            onLeftIconClicked = {
+                coroutineScope.launch {
+                    pagerState.animateScrollToPage(it - 1)
+                }
+            },
+            onRightArrowClicked = {
+                coroutineScope.launch {
+                    pagerState.animateScrollToPage(it + 1)
+                }
+            },
+            onPanChanged = { pan ->
+                onPanChanged.invoke(it, pan)
+            },
+            onNameChanged = { name -> onNameChanged(it, name) },
+            onMonthChanged = { month -> onMonthChanged(it, month) },
+            onYearChanged = { year -> onYearChanged(it, year) }
+        )
+
+    }
+}
+
+@Composable
+private fun UserCard(
+    card: UserCardUiModel,
+    onRightArrowClicked: () -> Unit = {},
+    onLeftIconClicked: () -> Unit = {},
+    onPanChanged: (pan: String) -> Unit,
+    onNameChanged: (name: String) -> Unit,
+    onMonthChanged: (name: String) -> Unit,
+    onYearChanged: (year: String) -> Unit
+) {
+
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(10.dp, 210.dp)
+            .fillMaxHeight()
+    ) {
+
+        val (cardRef, optionsRef) = createRefs()
+
+        var isInEditMode by remember { mutableStateOf(false) }
+
+        var showOptions by remember { mutableStateOf(false) }
+        val pxToMove = with(LocalDensity.current) {
+            -20.dp.toPx().roundToInt()
+        }
+        val cardOffset by animateIntOffsetAsState(
+            targetValue = if (showOptions) IntOffset(0, pxToMove) else IntOffset.Zero,
+            label = "offset"
+        )
+
+        AnimatedVisibility(
+            modifier = Modifier
+                .constrainAs(optionsRef) {
+                    top.linkTo(cardRef.bottom)
+                    start.linkTo(cardRef.start)
+                    end.linkTo(cardRef.end)
+                    bottom.linkTo(parent.bottom)
+                    width = Dimension.fillToConstraints
+                }
+                .padding(MaterialTheme.dimens.defaultPadding),
+            visible = showOptions,
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Absolute.SpaceBetween
+            ) {
+
+                Row(
+                    modifier = Modifier.clickable(!isInEditMode) {
+                        isInEditMode = true
+                    },
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    ProvideTextStyle(value = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp)) {
+                        Text(text = "ویرایش", color = MaterialTheme.colorScheme.onBackground)
+                        Spacer(modifier = Modifier.width(3.dp))
+                        Image(
+                            modifier = Modifier.size(10.dp),
+                            painter = painterResource(id = R.drawable.ic_edit),
+                            contentDescription = "icEdit",
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
+                        )
+                    }
+                }
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    ProvideTextStyle(value = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp)) {
+                        Text(text = "کپی", color = MaterialTheme.colorScheme.onBackground)
+                        Spacer(modifier = Modifier.width(3.dp))
+                        Image(
+                            modifier = Modifier.size(10.dp),
+                            painter = painterResource(id = R.drawable.ic_copy),
+                            contentDescription = "icCopy",
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
+                        )
+                    }
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    ProvideTextStyle(value = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp)) {
+                        Text(text = "حذف", color = MaterialTheme.colorScheme.error)
+                        Spacer(modifier = Modifier.width(3.dp))
+                        Image(
+                            modifier = Modifier.size(10.dp),
+                            painter = painterResource(id = R.drawable.ic_delete),
+                            contentDescription = "icDelete",
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.error)
+                        )
+                    }
+                }
+                Row(
+                    modifier = Modifier
+                        .clickable(isInEditMode) {
+                            isInEditMode = false
+                            showOptions = false
+                        },
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    ProvideTextStyle(value = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp)) {
+                        Text(
+                            text = "ذخیره تغییرات",
+                            color = Success
+                        )
+                        Spacer(modifier = Modifier.width(3.dp))
+                        Image(
+                            modifier = Modifier.size(10.dp),
+                            painter = painterResource(id = R.drawable.ic_copy),
+                            contentDescription = "ic save",
+                            colorFilter = ColorFilter.tint(Success)
+                        )
+                    }
+                }
+
+            }
+        }
+
+        Card(
+            modifier = Modifier
+                .constrainAs(cardRef) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                }
+                .offset { cardOffset }
+                .animateContentSize()
+                .fillMaxWidth()
+                .heightIn(10.dp, 210.dp)
+                .fillMaxHeight()
+                .clickable {
+                    if (showOptions) showOptions = false
+                },
+            colors = CardDefaults.elevatedCardColors(
+                containerColor = Color.Transparent,
+                contentColor = Color.Transparent,
+                disabledContainerColor = Color.Transparent,
+                disabledContentColor = Color.Transparent,
+            ),
+            elevation = CardDefaults.elevatedCardElevation(
+                defaultElevation = 1.dp,
+                disabledElevation = 1.dp
+            )
+        ) {
+
+            Surface(
+                shadowElevation = if (showOptions) 1.dp else 0.dp,
+                tonalElevation = if (showOptions) 1.dp else 0.dp,
+                contentColor = Color.Transparent,
+                color = card.containerColor,
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                Box(modifier = Modifier.fillMaxSize()) {
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .paint(
+                                painterResource(id = R.drawable.pattern_card),
+                                contentScale = ContentScale.FillBounds
+                            )
+                    )
+
+                    ConstraintLayout(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+
+                        val (leftArrowRef,
+                            rightArrowRef,
+                            titleRef,
+                            iconRef,
+                            panRef,
+                            nameRef,
+                            expTimeRef,
+                            moreRef) = createRefs()
+
+                        val centerGuidLine = createGuidelineFromStart(0.5F)
+
+                        Image(
+                            modifier = Modifier
+                                .constrainAs(leftArrowRef) {
+                                    start.linkTo(parent.start, MaterialTheme.dimens.defaultGap)
+                                    top.linkTo(parent.top)
+                                    bottom.linkTo(parent.bottom)
+                                    width = Dimension.value(8.dp)
+                                    height = Dimension.value(8.dp)
+                                }
+                                .clickable { onLeftIconClicked.invoke() },
+                            painter = painterResource(id = R.drawable.ic_double_arrow_left),
+                            contentDescription = "left arrow",
+                            colorFilter = ColorFilter.tint(card.contentColor)
+                        )
+
+                        Image(
+                            modifier = Modifier
+                                .constrainAs(rightArrowRef) {
+                                    end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
+                                    top.linkTo(parent.top)
+                                    bottom.linkTo(parent.bottom)
+                                    width = Dimension.value(8.dp)
+                                    height = Dimension.value(8.dp)
+                                }
+                                .clickable { onRightArrowClicked.invoke() },
+                            painter = painterResource(id = R.drawable.ic_double_arrow_right),
+                            contentDescription = "left arrow",
+                            colorFilter = ColorFilter.tint(card.contentColor)
+                        )
+
+                        Image(
+                            modifier = Modifier.constrainAs(iconRef) {
+                                top.linkTo(parent.top, MaterialTheme.dimens.defaultGap)
+                                end.linkTo(rightArrowRef.start, MaterialTheme.dimens.defaultGap)
+                                width = Dimension.value(55.dp)
+                                height = Dimension.value(55.dp)
+                            },
+                            painter = painterResource(id = card.bankImage),
+                            contentDescription = "ic bank"
+                        )
+
+                        ProvideTextStyle(value = MaterialTheme.typography.labelLarge) {
+                            Text(
+                                card.bankName,
+                                modifier = Modifier.constrainAs(titleRef) {
+                                    top.linkTo(iconRef.top)
+                                    start.linkTo(leftArrowRef.end)
+                                    end.linkTo(rightArrowRef.start)
+                                    bottom.linkTo(iconRef.bottom)
+                                    width = Dimension.fillToConstraints
+                                },
+                                textAlign = TextAlign.Center,
+                                color = Color(0XFF707070)
+                            )
+                        }
+
+                        SimpleTextField(
+                            enabled = isInEditMode && showOptions,
+                            value = card.pan,
+                            modifier = Modifier.constrainAs(panRef) {
+                                top.linkTo(parent.top)
+                                start.linkTo(leftArrowRef.end)
+                                end.linkTo(rightArrowRef.start)
+                                bottom.linkTo(parent.bottom)
+                                width = Dimension.fillToConstraints
+                            },
+                            onValueChange = onPanChanged,
+                            textAlign = TextAlign.Center,
+                            fontSize = MaterialTheme.typography.titleLarge.fontSize
+                        )
+
+                        SimpleTextField(
+                            enabled = isInEditMode && showOptions,
+                            value = card.name,
+                            modifier = Modifier.constrainAs(nameRef) {
+                                top.linkTo(panRef.bottom)
+                                end.linkTo(parent.end)
+                                bottom.linkTo(moreRef.top)
+                                start.linkTo(centerGuidLine)
+                                width = Dimension.fillToConstraints
+                            },
+                            onValueChange = onNameChanged,
+                            textAlign = TextAlign.End,
+                            fontSize = MaterialTheme.typography.labelLarge.fontSize
+                        )
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier
+                                .constrainAs(expTimeRef) {
+                                    top.linkTo(panRef.bottom)
+                                    start.linkTo(parent.start)
+                                    bottom.linkTo(moreRef.top)
+                                    end.linkTo(centerGuidLine)
+                                    width = Dimension.fillToConstraints
+                                }
+                        ) {
+                            SimpleTextField(
+                                enabled = isInEditMode && showOptions,
+                                value = card.year,
+                                onValueChange = onYearChanged,
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    keyboardType = KeyboardType.Number
+                                ),
+                                textAlign = TextAlign.Center,
+                                fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                                modifier = Modifier.weight(2F, true)
+                            )
+                            SimpleTextField(
+                                enabled = false,
+                                value = "/",
+                                onValueChange = {},
+                                textAlign = TextAlign.Center,
+                                fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                                modifier = Modifier.weight(1F)
+                            )
+                            SimpleTextField(
+                                enabled = isInEditMode && showOptions,
+                                value = card.month,
+                                onValueChange = onMonthChanged,
+                                textAlign = TextAlign.Center,
+                                fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                                modifier = Modifier.weight(1.5F, true),
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    keyboardType = KeyboardType.Number
+                                )
+                            )
+                        }
+
+                        ProvideTextStyle(value = MaterialTheme.typography.labelSmall) {
+                            Image(
+                                painterResource(id = R.drawable.ic_more_horizontal),
+                                contentDescription = "icon more",
+                                modifier = Modifier
+                                    .constrainAs(moreRef) {
+                                        bottom.linkTo(
+                                            parent.bottom,
+                                            MaterialTheme.dimens.defaultGap
+                                        )
+                                        end.linkTo(parent.end, MaterialTheme.dimens.xLargeGap)
+                                        width = Dimension.value(20.dp)
+                                        height = Dimension.value(20.dp)
+                                    }
+                                    .clickable {
+                                        showOptions = !showOptions
+                                    },
+                                colorFilter = ColorFilter.tint(card.contentColor)
+                            )
+                        }
+
+                    }
+                }
+            }
+        }
+
+    }
+
+
+}

@@ -1,5 +1,7 @@
 package com.sweet.iva.feature.home.dashboard.model
 
+import com.sweet.iva.core.designsystem.component.model.UserCardUiModel
+import com.sweet.iva.core.ui.util.ColorUtil.asColor
 import com.sweet.iva.feature.home.R
 
 val mockCards = mutableListOf<UserCardUiModel>().apply {
@@ -8,8 +10,8 @@ val mockCards = mutableListOf<UserCardUiModel>().apply {
             id = "saman",
             bankName = "بانک سامان",
             name = "امیر محمد شیرین",
-            contentColor = "#006fb8",
-            containerColor = "#CBECFB",
+            contentColor = "#006fb8".asColor(),
+            containerColor = "#CBECFB".asColor(),
             pan = "6037 9972 6372 8496",
             month = "08",
             year = "1405",
@@ -21,8 +23,8 @@ val mockCards = mutableListOf<UserCardUiModel>().apply {
             id = "eghtesad",
             bankName = "بانک اقتصاد نوین",
             name = "امیر محمد شیرین",
-            contentColor = "#97199a",
-            containerColor = "#ead1eb",
+            contentColor = "#97199a".asColor(),
+            containerColor = "#ead1eb".asColor(),
             pan = "6037 9972 6372 8496",
             month = "08",
             year = "1405",
@@ -34,8 +36,8 @@ val mockCards = mutableListOf<UserCardUiModel>().apply {
             id = "mellat",
             bankName = "بانک ملت",
             name = "امیر محمد شیرین",
-            contentColor = "#d32a3d",
-            containerColor = "#ebd6d6",
+            contentColor = "#d32a3d".asColor(),
+            containerColor = "#ebd6d6".asColor(),
             pan = "6037 9972 6372 8496",
             month = "08",
             year = "1405",
@@ -47,8 +49,8 @@ val mockCards = mutableListOf<UserCardUiModel>().apply {
             id = "pasargad",
             bankName = "بانک پاسارگاد",
             name = "امیر محمد شیرین",
-            contentColor = "#fcb817",
-            containerColor = "#fef1d1",
+            contentColor = "#fcb817".asColor(),
+            containerColor = "#fef1d1".asColor(),
             pan = "6037 9972 6372 8496",
             month = "08",
             year = "1405",
@@ -60,8 +62,8 @@ val mockCards = mutableListOf<UserCardUiModel>().apply {
             id = "keshavarzi",
             bankName = "بانک کشاورزی",
             name = "امیر محمد شیرین",
-            contentColor = "#202d14",
-            containerColor = "#d2d5d0",
+            contentColor = "#202d14".asColor(),
+            containerColor = "#d2d5d0".asColor(),
             pan = "6037 9972 6372 8496",
             month = "08",
             year = "1405",
@@ -73,8 +75,8 @@ val mockCards = mutableListOf<UserCardUiModel>().apply {
             id = "sepah",
             bankName = "بانک سپه",
             name = "امیر محمد شیرین",
-            contentColor = "#e8651d",
-            containerColor = "#fae0d2",
+            contentColor = "#e8651d".asColor(),
+            containerColor = "#fae0d2".asColor(),
             pan = "6037 9972 6372 8496",
             month = "08",
             year = "1405",
@@ -86,8 +88,8 @@ val mockCards = mutableListOf<UserCardUiModel>().apply {
             id = "melli",
             bankName = "بانک ملی ایران",
             name = "امیر محمد شیرین",
-            contentColor = "#D3C400",
-            containerColor = "#fffde6",
+            contentColor = "#D3C400".asColor(),
+            containerColor = "#fffde6".asColor(),
             pan = "6037 9972 6372 8496",
             month = "08",
             year = "1405",
@@ -102,15 +104,3 @@ data class DashboardUiModel(
     val userCards: List<UserCardUiModel> = mockCards,
 )
 
-
-data class UserCardUiModel(
-    val id: String,
-    val bankImage: Int,
-    val bankName: String,
-    val pan: String,
-    val month: String,
-    val year: String,
-    var name: String,
-    val containerColor: String,
-    val contentColor: String
-)
