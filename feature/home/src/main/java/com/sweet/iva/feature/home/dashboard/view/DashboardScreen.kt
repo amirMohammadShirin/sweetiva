@@ -1,6 +1,7 @@
 package com.sweet.iva.feature.home.dashboard.view
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -9,9 +10,11 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sweet.iva.core.designsystem.component.AppBackground
 import com.sweet.iva.core.designsystem.component.AppToolbar
+import com.sweet.iva.core.designsystem.component.HorizontalFeatureList
 import com.sweet.iva.core.designsystem.component.HorizontalUserAccounts
 import com.sweet.iva.core.designsystem.component.HorizontalUserCards
 import com.sweet.iva.core.designsystem.component.ThemePreviews
+import com.sweet.iva.core.designsystem.component.model.FeatureUiModel
 import com.sweet.iva.core.designsystem.theme.AppTheme
 import com.sweet.iva.core.designsystem.theme.dimens
 import com.sweet.iva.core.ui.navigation.ApplicationRoutes
@@ -38,7 +41,11 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
             modifier = Modifier.fillMaxSize()
         ) {
 
-            val (toolbarRef, cardsRef) = createRefs()
+            val (
+                toolbarRef,
+                cardsRef,
+                frequentFeaturesRef
+            ) = createRefs()
 
             DashboardToolbar(
                 modifier = Modifier.constrainAs(toolbarRef) {
@@ -65,8 +72,28 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                 onSettingIconClicked = {}
             )
 
+            FrequentFeatures(
+                modifier = Modifier.constrainAs(frequentFeaturesRef) {
+                    top.linkTo(cardsRef.bottom, MaterialTheme.dimens.defaultGap)
+                    start.linkTo(parent.start, MaterialTheme.dimens.defaultGap)
+                    end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
+                    width = Dimension.fillToConstraints
+                },
+                features = state.frequentFeatures
+            )
+
         }
 
+    }
+
+    @Composable
+    private fun FrequentFeatures(modifier: Modifier, features: List<FeatureUiModel>) {
+        HorizontalFeatureList(
+            actionIcon = com.sweet.iva.core.designsystem.R.drawable.ic_edit,
+            name = "خدمات پر کاربرد",
+            modifier = modifier,
+            features = features,
+            onFeatureClicked = {})
     }
 
     @Composable
