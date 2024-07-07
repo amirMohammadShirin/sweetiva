@@ -38,7 +38,7 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
             modifier = Modifier.fillMaxSize()
         ) {
 
-            val (toolbarRef, cardsRef, accountRef) = createRefs()
+            val (toolbarRef, cardsRef) = createRefs()
 
             DashboardToolbar(
                 modifier = Modifier.constrainAs(toolbarRef) {
@@ -51,31 +51,9 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                 onRightIconClicked = {}
             )
 
-            HorizontalUserCards(
+            HorizontalUserAccounts(
                 modifier = Modifier.constrainAs(cardsRef) {
                     top.linkTo(toolbarRef.bottom, MaterialTheme.dimens.defaultGap)
-                    start.linkTo(parent.start, MaterialTheme.dimens.defaultGap)
-                    end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
-                    width = Dimension.fillToConstraints
-                },
-                cards = state.userCards,
-                onPanChanged = { card, pan ->
-                    viewModel.process(DashboardAction.PanChanged(card, pan))
-                },
-                onNameChanged = { card, name ->
-                    viewModel.process(DashboardAction.NameChanged(card, name))
-                },
-                onMonthChanged = { card, month ->
-                    viewModel.process(DashboardAction.MonthChanged(card, month))
-                },
-                onYearChanged = { card, year ->
-                    viewModel.process(DashboardAction.YearChanged(card, year))
-                }
-            )
-
-            HorizontalUserAccounts(
-                modifier = Modifier.constrainAs(accountRef) {
-                    top.linkTo(cardsRef.bottom, MaterialTheme.dimens.defaultGap)
                     start.linkTo(parent.start, MaterialTheme.dimens.defaultGap)
                     end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
                     width = Dimension.fillToConstraints
