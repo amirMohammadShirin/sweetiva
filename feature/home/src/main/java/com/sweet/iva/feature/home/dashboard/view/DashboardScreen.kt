@@ -15,7 +15,6 @@ import com.sweet.iva.core.designsystem.component.AppToolbar
 import com.sweet.iva.core.designsystem.component.HorizontalBannerList
 import com.sweet.iva.core.designsystem.component.HorizontalFeatureList
 import com.sweet.iva.core.designsystem.component.HorizontalUserAccounts
-import com.sweet.iva.core.designsystem.component.HorizontalUserCards
 import com.sweet.iva.core.designsystem.component.ThemePreviews
 import com.sweet.iva.core.designsystem.component.model.BannerUiModel
 import com.sweet.iva.core.designsystem.component.model.FeatureUiModel
