@@ -7,10 +7,19 @@ sealed class NavigationCommand(
 ) {
     abstract fun navigate(navController: NavController)
 
-    class ToScreen(route: String) : NavigationCommand(route) {
+    class ToScreen(
+        route: String,
+        private val clearTo: String? = null
+    ) : NavigationCommand(route) {
         override fun navigate(navController: NavController) {
             route?.let {
-                navController.navigate(it)
+                navController.navigate(it) {
+                    clearTo?.let {
+                        popUpTo(clearTo) {
+                            inclusive = true
+                        }
+                    }
+                }
             }
         }
     }

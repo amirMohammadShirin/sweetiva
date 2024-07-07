@@ -94,3 +94,5 @@ val Black = Color(0XFF000000)
 
 val Error = Color(0xFFD32F2F)
 val ErrorContainer = Color(0xFFD32F2F)
+
+val Success = Color(0XFF149E53)

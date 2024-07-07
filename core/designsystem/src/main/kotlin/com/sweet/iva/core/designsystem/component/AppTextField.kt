@@ -74,6 +74,7 @@ fun AppTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     shape: Shape = RoundedCornerShape(15.dp),
+    textAlign: TextAlign = TextAlign.Start,
     colors: TextFieldColors = OutlinedTextFieldDefaults.colors(
         disabledLabelColor = MaterialTheme.colorScheme.outline,
         disabledContainerColor = Color.Transparent,
@@ -143,8 +144,8 @@ fun AppTextField(
                 textStyle = textStyle.copy(
                     textDirection = TextDirection.Rtl,
                     fontFamily = iransansFamily,
-
-                    ),
+                    textAlign = textAlign
+                ),
                 leadingIcon = leadingIcon,
                 trailingIcon = trailingIcon,
                 prefix = null,
@@ -189,6 +190,67 @@ fun AppTextField(
 
 
     }
+
+}
+
+@Composable
+fun SimpleTextField(
+    modifier: Modifier = Modifier,
+    value: String,
+    onValueChange: (String) -> Unit,
+    singleLine: Boolean = true,
+    enabled: Boolean = true,
+    readonly: Boolean = false,
+    textStyle: TextStyle = LocalTextStyle.current,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    textAlign: TextAlign = TextAlign.Start,
+    fontSize: TextUnit = 10.sp,
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(
+        disabledLabelColor = Color.Transparent,
+        disabledContainerColor = Color.Transparent,
+        disabledLeadingIconColor = Color.Transparent,
+        disabledPlaceholderColor = Color.Transparent,
+        disabledSupportingTextColor = Color.Transparent,
+        disabledTextColor = MaterialTheme.colorScheme.onSurface,
+        disabledTrailingIconColor = Color.Transparent,
+        disabledBorderColor = Color.Transparent,
+
+        unfocusedBorderColor = Color.Transparent,
+        unfocusedContainerColor = Color.Transparent,
+        unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+        unfocusedSupportingTextColor = MaterialTheme.colorScheme.outline,
+        unfocusedTrailingIconColor = MaterialTheme.colorScheme.onSurface,
+
+        focusedContainerColor = Color.Transparent,
+        focusedBorderColor = Color.Transparent,
+        focusedTextColor = MaterialTheme.colorScheme.onBackground,
+
+        cursorColor = MaterialTheme.colorScheme.primary
+    ),
+) {
+
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier,
+        enabled = enabled,
+        readOnly = readonly,
+
+        textStyle = textStyle.copy(
+            textDirection = TextDirection.Rtl,
+            fontFamily = iransansFamily,
+            textAlign = textAlign,
+            fontSize = fontSize
+        ),
+        visualTransformation = VisualTransformation.None,
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
+        singleLine = singleLine,
+        maxLines = if (singleLine) 1 else Int.MAX_VALUE,
+        minLines = 1,
+        interactionSource = remember { MutableInteractionSource() },
+        colors = colors)
 
 }
 
@@ -411,6 +473,14 @@ fun PreviewAppTextField() {
                     )
                 },
                 supportingText = "supporting text"
+            )
+
+            SimpleTextField(
+                value = "6037 9972 6372 8496",
+                modifier = Modifier.fillMaxWidth(),
+                onValueChange = { text = it },
+                textAlign = TextAlign.Center,
+                fontSize = 20.sp
             )
 
         }

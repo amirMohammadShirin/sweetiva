@@ -138,6 +138,10 @@ fun AppOutlinedButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    colors: ButtonColors = ButtonDefaults.outlinedButtonColors(
+        contentColor = MaterialTheme.colorScheme.secondary
+    ),
+    borderColor: Color = MaterialTheme.colorScheme.secondary,
     content: @Composable RowScope.() -> Unit
 ) {
 
@@ -145,12 +149,10 @@ fun AppOutlinedButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = MaterialTheme.colorScheme.secondary
-        ),
+        colors = colors,
         border = BorderStroke(
             width = AppButtonDefaults.OutlineButtonBorderWidth,
-            color = if (enabled) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onSurface.copy(
+            color = if (enabled) borderColor else MaterialTheme.colorScheme.onSurface.copy(
                 alpha = AppButtonDefaults.DisabledOutlineButtonBorderAlpha
             )
         ),
