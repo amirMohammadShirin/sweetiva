@@ -2,6 +2,8 @@ package com.sweet.iva.core.designsystem.component
 
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -10,6 +12,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -31,11 +34,11 @@ fun RowScope.AppNavigationBarItem(
     label: String? = null,
     alwaysShowLabel: Boolean = true,
     colors: NavigationBarItemColors = NavigationBarItemDefaults.colors(
-        selectedIconColor = MaterialTheme.colorScheme.onPrimary,
+        selectedIconColor = MaterialTheme.colorScheme.primary,
         unselectedIconColor = MaterialTheme.colorScheme.outline,
-        selectedTextColor = MaterialTheme.colorScheme.primaryContainer,
-        unselectedTextColor = MaterialTheme.colorScheme.outline,
-        indicatorColor = MaterialTheme.colorScheme.primary,
+        selectedTextColor = MaterialTheme.colorScheme.primary,
+        unselectedTextColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        indicatorColor = MaterialTheme.colorScheme.secondaryContainer,
     )
 ) {
 
@@ -45,18 +48,24 @@ fun RowScope.AppNavigationBarItem(
         icon = {
             if (selected)
                 Icon(
+                    modifier = Modifier.size(30.dp, 30.dp),
                     imageVector = selectedIcon,
                     contentDescription = "selected icon ${selectedIcon.name}"
                 )
             else
                 Icon(
+                    modifier = Modifier.size(25.dp, 25.dp),
                     imageVector = icon,
                     contentDescription = "selected icon ${icon.name}"
                 )
         },
         modifier = modifier,
         enabled = enabled,
-        label = { if (label != null) Text(label) },
+        label = {
+            if (label != null) ProvideTextStyle(value = MaterialTheme.typography.labelSmall) {
+                Text(label)
+            }
+        },
         alwaysShowLabel = alwaysShowLabel,
         colors = colors
     )
@@ -66,19 +75,19 @@ fun RowScope.AppNavigationBarItem(
 @Composable
 fun AppNavigationBar(
     modifier: Modifier = Modifier,
-    containerColor: Color = MaterialTheme.colorScheme.background,
+    containerColor: Color = MaterialTheme.colorScheme.secondaryContainer,
     contentColor: Color = MaterialTheme.colorScheme.background,
     content: @Composable RowScope.() -> Unit
 ) {
     NavigationBar(
         modifier = modifier
             .clip(
-                RoundedCornerShape(topStart = 5.dp, topEnd = 5.dp)
+                RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp)
             ),
         contentColor = contentColor,
         containerColor = containerColor,
-        tonalElevation = 10.dp,
-        content = content
+        content = content,
+        windowInsets = WindowInsets(0.dp)
     )
 }
 

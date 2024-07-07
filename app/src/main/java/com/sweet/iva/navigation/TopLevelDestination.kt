@@ -9,8 +9,26 @@ enum class TopLevelDestination(
     val selectedIcon: ImageVector,
     val unSelectedIcon: ImageVector,
 ) {
+    IVA_PLUS(
+        title = "ایوا پلاس",
+        route = "",
+        selectedIcon = AppIcons.Home,
+        unSelectedIcon = AppIcons.HomeBorder
+    ),
     HOME(
-        title = "Home",
+        title = "خانه",
+        route = "",
+        selectedIcon = AppIcons.Home,
+        unSelectedIcon = AppIcons.HomeBorder
+    ),
+    WALLET(
+        title = "کیف پول",
+        route = "",
+        selectedIcon = AppIcons.Home,
+        unSelectedIcon = AppIcons.HomeBorder
+    ),
+    SERVICES(
+        title = "خدمات",
         route = "",
         selectedIcon = AppIcons.Home,
         unSelectedIcon = AppIcons.HomeBorder

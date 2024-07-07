@@ -1,6 +1,8 @@
 package com.sweet.iva.application
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -18,6 +20,7 @@ import com.sweet.iva.core.designsystem.component.AppNavigationBarItem
 import com.sweet.iva.core.designsystem.component.ThemePreviews
 import com.sweet.iva.core.designsystem.component.TopAppBar
 import com.sweet.iva.core.designsystem.theme.AppTheme
+import com.sweet.iva.core.designsystem.theme.dimens
 import com.sweet.iva.core.ui.helper.LocalSnackBarState
 import com.sweet.iva.navigation.AppNavHost
 import com.sweet.iva.navigation.TopLevelDestination
@@ -40,7 +43,18 @@ fun App(
         Scaffold(
             modifier = Modifier,
             topBar = {},
-            bottomBar = {},
+            bottomBar = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = MaterialTheme.dimens.xLargeGap)
+                )
+                NavigationBar(
+                    destinations = TopLevelDestination.entries.toList(),
+                    currentTopLevelDestination = TopLevelDestination.HOME,
+                    onItemClicked = {}
+                )
+            },
             containerColor = Color.Transparent,
             contentColor = MaterialTheme.colorScheme.onBackground,
             snackbarHost = { SnackbarHost(snackBarHostState) },
