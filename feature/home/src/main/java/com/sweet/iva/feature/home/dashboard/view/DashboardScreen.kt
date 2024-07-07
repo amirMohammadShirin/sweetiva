@@ -20,6 +20,7 @@ import com.sweet.iva.core.designsystem.component.ThemePreviews
 import com.sweet.iva.core.designsystem.component.model.BannerUiModel
 import com.sweet.iva.core.designsystem.component.model.FeatureUiModel
 import com.sweet.iva.core.designsystem.theme.AppTheme
+import com.sweet.iva.core.designsystem.theme.BlueRoyal100
 import com.sweet.iva.core.designsystem.theme.dimens
 import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 import com.sweet.iva.core.ui.view.BaseScreen
@@ -138,6 +139,7 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
     @Composable
     private fun BankFeatures(modifier: Modifier, features: List<FeatureUiModel>) {
         HorizontalFeatureList(
+            containerColor = BlueRoyal100,
             actionIcon = com.sweet.iva.core.designsystem.R.drawable.ic_edit,
             name = "خدمات ویژه بانکی",
             modifier = modifier,
