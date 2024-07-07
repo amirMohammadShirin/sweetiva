@@ -129,7 +129,7 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
     private fun CarFeatures(modifier: Modifier, features: List<FeatureUiModel>) {
         HorizontalFeatureList(
             actionIcon = com.sweet.iva.core.designsystem.R.drawable.ic_edit,
-            name = "خدمات پر خودرو",
+            name = "خدمات خودرو",
             modifier = modifier,
             features = features,
             onFeatureClicked = {})
