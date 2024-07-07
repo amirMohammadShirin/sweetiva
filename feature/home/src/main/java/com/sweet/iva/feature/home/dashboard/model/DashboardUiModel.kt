@@ -1,11 +1,26 @@
 package com.sweet.iva.feature.home.dashboard.model
 
+import com.sweet.iva.core.designsystem.component.model.BannerUiModel
 import com.sweet.iva.core.designsystem.component.model.FeatureUiModel
 import com.sweet.iva.core.designsystem.component.model.UserAccountUiModel
 import com.sweet.iva.core.designsystem.component.model.UserCardUiModel
 import com.sweet.iva.core.ui.util.ColorUtil.asColor
 import com.sweet.iva.feature.home.R
 
+val bannersMock = listOf(
+    BannerUiModel(
+        "1",
+        com.sweet.iva.core.designsystem.R.drawable.banner3
+    ),
+    BannerUiModel(
+        "2",
+        com.sweet.iva.core.designsystem.R.drawable.banner2
+    ),
+    BannerUiModel(
+        "3",
+        com.sweet.iva.core.designsystem.R.drawable.banner1
+    ),
+)
 val mockFrequentFeatures = listOf(
     FeatureUiModel(
         "1",
@@ -151,6 +166,7 @@ data class DashboardUiModel(
     val loading: Boolean = false,
     val userCards: List<UserCardUiModel> = mockCards,
     val userAccounts: List<UserAccountUiModel> = mockAccounts,
+    val banners: List<BannerUiModel> = bannersMock,
     val frequentFeatures: List<FeatureUiModel> = mockFrequentFeatures,
 )
 

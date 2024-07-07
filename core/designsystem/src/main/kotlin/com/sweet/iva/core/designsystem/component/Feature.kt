@@ -6,11 +6,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -133,7 +135,7 @@ fun HorizontalFeatureList(
                         Spacer(modifier = Modifier.width(5.dp))
 
                     FeatureItem(
-                        modifier = Modifier.size(50.dp, 50.dp),
+                        modifier = Modifier.size(60.dp, 60.dp),
                         feature = features[it]
                     )
                     Spacer(modifier = Modifier.width(5.dp))
@@ -149,34 +151,37 @@ fun HorizontalFeatureList(
 @Composable
 private fun FeatureItem(modifier: Modifier, feature: FeatureUiModel) {
 
-    Column(
-        modifier = modifier
-            .background(
-                color = MaterialTheme.colorScheme.background,
-                shape = RoundedCornerShape(8.dp)
-            ),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Image(
-            modifier = Modifier.size(20.dp, 20.dp),
-            painter = painterResource(id = feature.logo),
-            contentDescription = "feature logo"
+    Card(
+        modifier = modifier,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.background
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.dimens.smallGap))
-        ProvideTextStyle(
-            value = MaterialTheme.typography.labelSmall.copy(
-                fontSize = 6.sp,
-                fontWeight = FontWeight.Bold
-            )
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = feature.title,
-                color = MaterialTheme.colorScheme.onBackground,
-                textAlign = TextAlign.Center
+            Image(
+                modifier = Modifier.size(20.dp, 20.dp),
+                painter = painterResource(id = feature.logo),
+                contentDescription = "feature logo"
             )
+            Spacer(modifier = Modifier.height(MaterialTheme.dimens.smallGap))
+            ProvideTextStyle(
+                value = MaterialTheme.typography.labelSmall.copy(
+                    fontSize = 8.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            ) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = feature.title,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    textAlign = TextAlign.Center
+                )
+            }
+
         }
     }
 

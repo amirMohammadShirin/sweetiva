@@ -10,10 +10,12 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sweet.iva.core.designsystem.component.AppBackground
 import com.sweet.iva.core.designsystem.component.AppToolbar
+import com.sweet.iva.core.designsystem.component.HorizontalBannerList
 import com.sweet.iva.core.designsystem.component.HorizontalFeatureList
 import com.sweet.iva.core.designsystem.component.HorizontalUserAccounts
 import com.sweet.iva.core.designsystem.component.HorizontalUserCards
 import com.sweet.iva.core.designsystem.component.ThemePreviews
+import com.sweet.iva.core.designsystem.component.model.BannerUiModel
 import com.sweet.iva.core.designsystem.component.model.FeatureUiModel
 import com.sweet.iva.core.designsystem.theme.AppTheme
 import com.sweet.iva.core.designsystem.theme.dimens
@@ -44,7 +46,8 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
             val (
                 toolbarRef,
                 cardsRef,
-                frequentFeaturesRef
+                frequentFeaturesRef,
+                bannerRef
             ) = createRefs()
 
             DashboardToolbar(
@@ -74,16 +77,35 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
 
             FrequentFeatures(
                 modifier = Modifier.constrainAs(frequentFeaturesRef) {
-                    top.linkTo(cardsRef.bottom, MaterialTheme.dimens.defaultGap)
-                    start.linkTo(parent.start, MaterialTheme.dimens.defaultGap)
-                    end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
+                    top.linkTo(cardsRef.bottom, MaterialTheme.dimens.smallGap)
+                    start.linkTo(parent.start, MaterialTheme.dimens.largeGap)
+                    end.linkTo(parent.end, MaterialTheme.dimens.largeGap)
                     width = Dimension.fillToConstraints
                 },
                 features = state.frequentFeatures
             )
 
+            BannerList(
+                modifier = Modifier.constrainAs(bannerRef) {
+                    top.linkTo(frequentFeaturesRef.bottom, MaterialTheme.dimens.smallGap)
+                    start.linkTo(parent.start, MaterialTheme.dimens.defaultGap)
+                    end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
+                    width = Dimension.fillToConstraints
+                },
+                banners = state.banners
+            )
+
         }
 
+    }
+
+    @Composable
+    private fun BannerList(modifier: Modifier, banners: List<BannerUiModel>) {
+        HorizontalBannerList(
+            modifier = modifier.fillMaxWidth(),
+            banners = banners,
+            onBannerClicked = {}
+        )
     }
 
     @Composable
