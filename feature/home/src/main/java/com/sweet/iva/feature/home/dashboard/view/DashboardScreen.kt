@@ -2,6 +2,8 @@ package com.sweet.iva.feature.home.dashboard.view
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -40,14 +42,18 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
         val viewModel = viewModel()
 
         ConstraintLayout(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
 
             val (
                 toolbarRef,
                 cardsRef,
                 frequentFeaturesRef,
-                bannerRef
+                bannerRef,
+                bankFeaturesRef,
+                carFeaturesRef
             ) = createRefs()
 
             DashboardToolbar(
@@ -95,8 +101,48 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                 banners = state.banners
             )
 
+            BankFeatures(
+                modifier = Modifier.constrainAs(bankFeaturesRef) {
+                    top.linkTo(bannerRef.bottom, MaterialTheme.dimens.smallGap)
+                    start.linkTo(parent.start, MaterialTheme.dimens.largeGap)
+                    end.linkTo(parent.end, MaterialTheme.dimens.largeGap)
+                    width = Dimension.fillToConstraints
+                },
+                features = state.bankFeatures
+            )
+
+            CarFeatures(
+                modifier = Modifier.constrainAs(carFeaturesRef) {
+                    top.linkTo(bankFeaturesRef.bottom, MaterialTheme.dimens.smallGap)
+                    start.linkTo(parent.start, MaterialTheme.dimens.largeGap)
+                    end.linkTo(parent.end, MaterialTheme.dimens.largeGap)
+                    width = Dimension.fillToConstraints
+                },
+                features = state.carFeatures
+            )
+
         }
 
+    }
+
+    @Composable
+    private fun CarFeatures(modifier: Modifier, features: List<FeatureUiModel>) {
+        HorizontalFeatureList(
+            actionIcon = com.sweet.iva.core.designsystem.R.drawable.ic_edit,
+            name = "خدمات پر خودرو",
+            modifier = modifier,
+            features = features,
+            onFeatureClicked = {})
+    }
+
+    @Composable
+    private fun BankFeatures(modifier: Modifier, features: List<FeatureUiModel>) {
+        HorizontalFeatureList(
+            actionIcon = com.sweet.iva.core.designsystem.R.drawable.ic_edit,
+            name = "خدمات ویژه بانکی",
+            modifier = modifier,
+            features = features,
+            onFeatureClicked = {})
     }
 
     @Composable

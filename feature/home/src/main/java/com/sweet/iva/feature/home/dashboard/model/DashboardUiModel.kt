@@ -168,5 +168,7 @@ data class DashboardUiModel(
     val userAccounts: List<UserAccountUiModel> = mockAccounts,
     val banners: List<BannerUiModel> = bannersMock,
     val frequentFeatures: List<FeatureUiModel> = mockFrequentFeatures,
+    val bankFeatures: List<FeatureUiModel> = mockFrequentFeatures,
+    val carFeatures: List<FeatureUiModel> = mockFrequentFeatures,
 )
 

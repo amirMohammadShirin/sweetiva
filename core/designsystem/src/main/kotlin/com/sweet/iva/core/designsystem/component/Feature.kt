@@ -46,7 +46,7 @@ import com.sweet.iva.core.designsystem.theme.dimens
 fun HorizontalFeatureList(
     modifier: Modifier,
     name: String = "",
-    containerColor: Color = Color(0xFFE2E2E2),
+    containerColor: Color = MaterialTheme.colorScheme.background,
     features: List<FeatureUiModel>,
     actionIcon: Int = -1,
     onActionIconClicked: (() -> Unit)? = null,
@@ -154,7 +154,7 @@ private fun FeatureItem(modifier: Modifier, feature: FeatureUiModel) {
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.background
+            containerColor = Color(0xFFF5F5F5)
         )
     ) {
         Column(
