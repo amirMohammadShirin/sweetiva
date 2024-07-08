@@ -1,7 +1,7 @@
 package com.sweet.arch.core.cache.di
 
 import com.sweet.arch.core.cache.SharedPreferencesCache
-import com.sweet.arch.core.domain.cache.Cache
+import com.sweet.arch.core.domain.infra.cache.Cache
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

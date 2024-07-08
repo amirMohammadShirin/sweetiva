@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.google.gson.Gson
-import com.sweet.arch.core.domain.cache.Cache
-import com.sweet.arch.core.domain.enum.CacheKey
+import com.sweet.arch.core.domain.infra.cache.Cache
+import com.sweet.arch.core.domain.infra.cache.CacheKey
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

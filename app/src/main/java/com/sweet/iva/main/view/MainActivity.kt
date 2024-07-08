@@ -46,10 +46,9 @@ internal class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiStateFlow
-                    .onEach {
+                    .collect {
                         uiState = it
                     }
-                    .collect {}
             }
         }
 
@@ -65,24 +64,22 @@ internal class MainActivity : ComponentActivity() {
 
     @Composable
     private fun MainActivity.MainActivityContent(uiState: MainViewState) {
-        if (!uiState.loading) {
 
-            val darkTheme = shouldUserDarkTheme(uiState)
+        val darkTheme = shouldUserDarkTheme(uiState)
 
-            AppTheme(
-                darkTheme = darkTheme,
-                androidTheme = shouldUseAndroidTheme(uiState),
-                disableDynamicTheming = shouldDisableDynamicTheming(uiState)
-            ) {
-                AppBackground(modifier = Modifier.fillMaxSize()) {
-                    App(
-                        startDestination = uiState.startDestination,
-                        user = uiState.user
-                    )
-                }
+        AppTheme(
+            darkTheme = darkTheme,
+            androidTheme = shouldUseAndroidTheme(uiState),
+            disableDynamicTheming = shouldDisableDynamicTheming(uiState)
+        ) {
+            AppBackground(modifier = Modifier.fillMaxSize()) {
+                App(
+                    startDestination = uiState.startDestination,
+                    user = uiState.user
+                )
             }
-
         }
+
     }
 
 

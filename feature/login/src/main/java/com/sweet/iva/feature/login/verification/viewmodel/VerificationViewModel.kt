@@ -2,7 +2,9 @@ package com.sweet.iva.feature.login.verification.viewmodel
 
 import android.os.CountDownTimer
 import androidx.lifecycle.viewModelScope
+import com.sweet.arch.core.domain.infra.cache.ReactiveCache
 import com.sweet.arch.core.domain.model.auth.LoginParam
+import com.sweet.arch.core.domain.model.user.User
 import com.sweet.arch.core.domain.usecase.auth.LoginUseCase
 import com.sweet.arch.core.domain.usecase.user.GetCurrentUserUseCase
 import com.sweet.iva.core.common.util.TimeUtil
@@ -21,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class VerificationViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
-    private val getCurrentUserUseCase: GetCurrentUserUseCase
+    private val getCurrentUserUseCase: GetCurrentUserUseCase,
+    private val reactiveUserCache: ReactiveCache<User>
 ) :
     BaseViewModel<VerificationUiModel, VerificationAction, VerificationEvent>(
         initialState = VerificationUiModel()
@@ -90,19 +93,21 @@ class VerificationViewModel @Inject constructor(
                 )
             )
 
+            reactiveUserCache.save(result)
+
             updateState {
                 it.copy(
                     loading = false
                 )
             }
 
-            if (result)
-                navigateTo(
-                    NavigationCommand.ToScreen(
-                        route = ApplicationRoutes.homeGraphRoute,
-                        clearTo = ApplicationRoutes.introGraphRoute
-                    )
+
+            navigateTo(
+                NavigationCommand.ToScreen(
+                    route = ApplicationRoutes.homeGraphRoute,
+                    clearTo = ApplicationRoutes.introGraphRoute
                 )
+            )
 
         }
     }

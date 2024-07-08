@@ -11,8 +11,8 @@ import javax.inject.Inject
 class LoginUseCase @Inject constructor(
     private val repository: AuthenticationRepository,
     private val upsertCurrentUserUseCase: UpsertCurrentUserUseCase,
-) : BaseUseCase<LoginParam, Boolean>() {
-    override suspend fun onExecute(param: LoginParam): Boolean {
+) : BaseUseCase<LoginParam, User>() {
+    override suspend fun onExecute(param: LoginParam): User {
         val authenticationData = repository.login(param)
         val user = User.create(
             User.Companion.Argument(
@@ -25,6 +25,7 @@ class LoginUseCase @Inject constructor(
                 } else null
             )
         )
-        return upsertCurrentUserUseCase.execute(user)
+        upsertCurrentUserUseCase.execute(user)
+        return user
     }
 }

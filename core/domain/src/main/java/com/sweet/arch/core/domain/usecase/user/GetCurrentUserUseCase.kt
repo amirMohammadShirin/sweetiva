@@ -1,8 +1,8 @@
 package com.sweet.arch.core.domain.usecase.user
 
 import com.google.gson.Gson
-import com.sweet.arch.core.domain.cache.Cache
-import com.sweet.arch.core.domain.enum.CacheKey
+import com.sweet.arch.core.domain.infra.cache.Cache
+import com.sweet.arch.core.domain.infra.cache.CacheKey
 import com.sweet.arch.core.domain.model.user.User
 import com.sweet.arch.core.domain.usecase.BaseUseCase
 import javax.inject.Inject
