@@ -3,6 +3,7 @@ package com.sweet.iva.navigation
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.sweet.iva.R
 import com.sweet.iva.core.designsystem.icon.AppIcons
+import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 
 enum class TopLevelDestination(
     val title: String,
@@ -18,7 +19,7 @@ enum class TopLevelDestination(
     ),
     HOME(
         title = "خانه",
-        route = "",
+        route = ApplicationRoutes.dashboardScreenRoute,
         selectedIcon = R.drawable.ic_home_filled,
         unSelectedIcon = R.drawable.ic_home_bordered
     ),

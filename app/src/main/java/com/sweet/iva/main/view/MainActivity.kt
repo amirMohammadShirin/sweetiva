@@ -44,7 +44,7 @@ internal class MainActivity : ComponentActivity() {
 
         var uiState: MainViewState by mutableStateOf(viewModel.initialState)
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.CREATED) {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiStateFlow
                     .onEach {
                         uiState = it
@@ -75,7 +75,10 @@ internal class MainActivity : ComponentActivity() {
                 disableDynamicTheming = shouldDisableDynamicTheming(uiState)
             ) {
                 AppBackground(modifier = Modifier.fillMaxSize()) {
-                    App(startDestination = uiState.startDestination)
+                    App(
+                        startDestination = uiState.startDestination,
+                        user = uiState.user
+                    )
                 }
             }
 

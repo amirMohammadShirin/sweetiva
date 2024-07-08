@@ -17,7 +17,6 @@ import javax.inject.Inject
 
 
 internal class MainViewModel @Inject constructor(
-    private val dispatcherProvider: DispatcherProvider,
     private val getCurrentUserUseCase: GetCurrentUserUseCase
 ) :
     BaseViewModel<MainViewState, MainAction, MainEvent>(initialState = MainViewState()) {
@@ -48,7 +47,8 @@ internal class MainViewModel @Inject constructor(
             updateState {
                 it.copy(
                     loading = false,
-                    startDestination = startDestination
+                    startDestination = startDestination,
+                    user = currentUser
                 )
             }
 

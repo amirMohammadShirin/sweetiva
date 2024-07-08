@@ -10,6 +10,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
+import com.sweet.arch.core.domain.model.user.User
 import com.sweet.iva.navigation.TopLevelDestination
 import kotlinx.coroutines.CoroutineScope
 
@@ -17,7 +18,8 @@ import kotlinx.coroutines.CoroutineScope
 fun rememberMarkAppState(
     startDestination: String,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    user: User? = null
 ): AppState {
     return remember(
         coroutineScope,
@@ -27,6 +29,7 @@ fun rememberMarkAppState(
             startDestination = startDestination,
             navController = navController,
             coroutineScope = coroutineScope,
+            user = user
         )
     }
 }
@@ -35,6 +38,7 @@ class AppState(
     val startDestination: String,
     val navController: NavHostController,
     val coroutineScope: CoroutineScope,
+    val user: User? = null
 ) {
     val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination

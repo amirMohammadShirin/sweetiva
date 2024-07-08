@@ -12,10 +12,13 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.sweet.arch.core.domain.model.user.User
 import com.sweet.iva.core.designsystem.component.AppBackground
 import com.sweet.iva.core.designsystem.component.AppNavigationBar
 import com.sweet.iva.core.designsystem.component.AppNavigationBarItem
@@ -30,10 +33,23 @@ import com.sweet.iva.navigation.TopLevelDestination
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun App(
+    user: User? = null,
     startDestination: String,
-    appState: AppState = rememberMarkAppState(startDestination = startDestination)
+    appState: AppState = rememberMarkAppState(
+        startDestination = startDestination,
+        user = user
+    )
 ) {
 
+    val currentDestination = appState.currentDestination
+
+    val showBottomNavigation by remember {
+        mutableStateOf(
+            ((appState.user != null) && (appState.user.identity != null)) && (TopLevelDestination.isTopLevelDestination(
+                currentDestination?.route ?: ""
+            ))
+        )
+    }
 
     AppBackground(
         modifier = Modifier
@@ -46,12 +62,12 @@ fun App(
             modifier = Modifier,
             topBar = {},
             bottomBar = {
-                NavigationBar(
-                    modifier = Modifier.height(50.dp),
-                    destinations = TopLevelDestination.entries.toList(),
-                    currentTopLevelDestination = TopLevelDestination.HOME,
-                    onItemClicked = {}
-                )
+                if (showBottomNavigation)
+                    NavigationBar(
+                        destinations = TopLevelDestination.entries.toList(),
+                        currentTopLevelDestination = TopLevelDestination.HOME,
+                        onItemClicked = {}
+                    )
             },
             containerColor = Color.Transparent,
             contentColor = MaterialTheme.colorScheme.onBackground,
