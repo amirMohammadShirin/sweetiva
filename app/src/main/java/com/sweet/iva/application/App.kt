@@ -3,6 +3,7 @@ package com.sweet.iva.application
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -14,6 +15,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import com.sweet.iva.core.designsystem.component.AppBackground
 import com.sweet.iva.core.designsystem.component.AppNavigationBar
 import com.sweet.iva.core.designsystem.component.AppNavigationBarItem
@@ -44,12 +46,8 @@ fun App(
             modifier = Modifier,
             topBar = {},
             bottomBar = {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = MaterialTheme.dimens.xLargeGap)
-                )
                 NavigationBar(
+                    modifier = Modifier.height(50.dp),
                     destinations = TopLevelDestination.entries.toList(),
                     currentTopLevelDestination = TopLevelDestination.HOME,
                     onItemClicked = {}
@@ -78,9 +76,7 @@ fun NavigationBar(
     currentTopLevelDestination: TopLevelDestination,
     onItemClicked: (destination: TopLevelDestination) -> Unit
 ) {
-    AppNavigationBar(
-        modifier = modifier
-    ) {
+    AppNavigationBar {
         destinations.forEach { topLevelDestination ->
             AppNavigationBarItem(
                 selected = currentTopLevelDestination == topLevelDestination,

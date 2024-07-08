@@ -1,37 +1,38 @@
 package com.sweet.iva.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.sweet.iva.R
 import com.sweet.iva.core.designsystem.icon.AppIcons
 
 enum class TopLevelDestination(
     val title: String,
     val route: String,
-    val selectedIcon: ImageVector,
-    val unSelectedIcon: ImageVector,
+    val selectedIcon: Int,
+    val unSelectedIcon: Int,
 ) {
     IVA_PLUS(
         title = "ایوا پلاس",
         route = "",
-        selectedIcon = AppIcons.Home,
-        unSelectedIcon = AppIcons.HomeBorder
+        selectedIcon = R.drawable.ic_plus_heavy,
+        unSelectedIcon = R.drawable.ic_plus_light
     ),
     HOME(
         title = "خانه",
         route = "",
-        selectedIcon = AppIcons.Home,
-        unSelectedIcon = AppIcons.HomeBorder
+        selectedIcon = R.drawable.ic_home_filled,
+        unSelectedIcon = R.drawable.ic_home_bordered
     ),
     WALLET(
         title = "کیف پول",
         route = "",
-        selectedIcon = AppIcons.Home,
-        unSelectedIcon = AppIcons.HomeBorder
+        selectedIcon = R.drawable.ic_wallet_bordered,
+        unSelectedIcon = R.drawable.ic_wallet_bordered
     ),
     SERVICES(
         title = "خدمات",
         route = "",
-        selectedIcon = AppIcons.Home,
-        unSelectedIcon = AppIcons.HomeBorder
+        selectedIcon = R.drawable.ic_menu_filled,
+        unSelectedIcon = R.drawable.ic_menu_bordered
     );
 
 

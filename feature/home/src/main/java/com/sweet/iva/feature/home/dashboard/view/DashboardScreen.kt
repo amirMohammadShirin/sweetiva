@@ -1,11 +1,15 @@
 package com.sweet.iva.feature.home.dashboard.view
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -44,7 +48,6 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
         ) {
 
             val (
@@ -53,7 +56,8 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                 frequentFeaturesRef,
                 bannerRef,
                 bankFeaturesRef,
-                carFeaturesRef
+                carFeaturesRef,
+                contentRef
             ) = createRefs()
 
             DashboardToolbar(
@@ -67,59 +71,53 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                 onRightIconClicked = {}
             )
 
-            HorizontalUserAccounts(
-                modifier = Modifier.constrainAs(cardsRef) {
-                    top.linkTo(toolbarRef.bottom, MaterialTheme.dimens.defaultGap)
-                    start.linkTo(parent.start, MaterialTheme.dimens.defaultGap)
-                    end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
-                    width = Dimension.fillToConstraints
-                },
-                accounts = state.userAccounts,
-                onIbanIconClicked = {},
-                onAccountNumberIconClicked = {},
-                onBalanceIconClicked = {},
-                onSettingIconClicked = {}
-            )
+            Column(
+                modifier = Modifier
+                    .constrainAs(contentRef) {
+                        top.linkTo(toolbarRef.bottom, MaterialTheme.dimens.smallGap)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom, MaterialTheme.dimens.smallGap)
+                        width = Dimension.fillToConstraints
+                        height = Dimension.fillToConstraints
+                    }
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = MaterialTheme.dimens.defaultPadding)
+                ,
+                verticalArrangement = Arrangement.SpaceEvenly,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-            FrequentFeatures(
-                modifier = Modifier.constrainAs(frequentFeaturesRef) {
-                    top.linkTo(cardsRef.bottom, MaterialTheme.dimens.smallGap)
-                    start.linkTo(parent.start, MaterialTheme.dimens.largeGap)
-                    end.linkTo(parent.end, MaterialTheme.dimens.largeGap)
-                    width = Dimension.fillToConstraints
-                },
-                features = state.frequentFeatures
-            )
+                HorizontalUserAccounts(
+                    modifier = Modifier,
+                    accounts = state.userAccounts,
+                    onIbanIconClicked = {},
+                    onAccountNumberIconClicked = {},
+                    onBalanceIconClicked = {},
+                    onSettingIconClicked = {}
+                )
 
-            BannerList(
-                modifier = Modifier.constrainAs(bannerRef) {
-                    top.linkTo(frequentFeaturesRef.bottom, MaterialTheme.dimens.smallGap)
-                    start.linkTo(parent.start, MaterialTheme.dimens.defaultGap)
-                    end.linkTo(parent.end, MaterialTheme.dimens.defaultGap)
-                    width = Dimension.fillToConstraints
-                },
-                banners = state.banners
-            )
+                FrequentFeatures(
+                    modifier = Modifier.fillMaxWidth(),
+                    features = state.frequentFeatures
+                )
 
-            BankFeatures(
-                modifier = Modifier.constrainAs(bankFeaturesRef) {
-                    top.linkTo(bannerRef.bottom, MaterialTheme.dimens.smallGap)
-                    start.linkTo(parent.start, MaterialTheme.dimens.largeGap)
-                    end.linkTo(parent.end, MaterialTheme.dimens.largeGap)
-                    width = Dimension.fillToConstraints
-                },
-                features = state.bankFeatures
-            )
+                BannerList(
+                    modifier = Modifier.fillMaxWidth(),
+                    banners = state.banners
+                )
 
-            CarFeatures(
-                modifier = Modifier.constrainAs(carFeaturesRef) {
-                    top.linkTo(bankFeaturesRef.bottom, MaterialTheme.dimens.smallGap)
-                    start.linkTo(parent.start, MaterialTheme.dimens.largeGap)
-                    end.linkTo(parent.end, MaterialTheme.dimens.largeGap)
-                    width = Dimension.fillToConstraints
-                },
-                features = state.carFeatures
-            )
+                BankFeatures(
+                    modifier = Modifier.fillMaxWidth(),
+                    features = state.bankFeatures
+                )
+
+                CarFeatures(
+                    modifier = Modifier.fillMaxWidth(),
+                    features = state.carFeatures
+                )
+
+            }
 
         }
 
