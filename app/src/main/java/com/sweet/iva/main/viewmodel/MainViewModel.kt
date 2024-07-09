@@ -1,10 +1,8 @@
 package com.sweet.iva.main.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.sweet.arch.core.domain.infra.cache.ReactiveCache
-import com.sweet.arch.core.domain.model.user.User
 import com.sweet.arch.core.domain.usecase.user.GetCurrentUserUseCase
+import com.sweet.arch.core.domain.usecase.user.StreamCurrentUserUseCase
 import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 import com.sweet.iva.main.model.MainAction
@@ -12,6 +10,7 @@ import com.sweet.iva.main.model.MainEvent
 import com.sweet.iva.main.model.MainViewState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -19,14 +18,13 @@ import javax.inject.Inject
 
 internal class MainViewModel @Inject constructor(
     private val getCurrentUserUseCase: GetCurrentUserUseCase,
-    private val reactiveUser: ReactiveCache<User>
+    private val streamCurrentUserUseCase: StreamCurrentUserUseCase
 ) :
     BaseViewModel<MainViewState, MainAction, MainEvent>(initialState = MainViewState()) {
 
     override fun handleAction(action: MainAction) {
         when (action) {
             is MainAction.FetchStartUpData -> {
-                start()
             }
         }
     }
@@ -37,11 +35,21 @@ internal class MainViewModel @Inject constructor(
 
     private fun collectCurrentUser() {
         viewModelScope.launch(Dispatchers.IO) {
-            reactiveUser.dataStream().collect { user ->
-                updateState {
-                    it.copy(user = user)
+            streamCurrentUserUseCase.start(null)
+                .collect { user ->
+
+                    val startDestination =
+                        if (user != null) ApplicationRoutes.homeGraphRoute else ApplicationRoutes.introGraphRoute
+
+                    updateState {
+                        it.copy(
+                            loading = false,
+                            startDestination = startDestination,
+                            user = user
+                        )
+                    }
+
                 }
-            }
         }
     }
 

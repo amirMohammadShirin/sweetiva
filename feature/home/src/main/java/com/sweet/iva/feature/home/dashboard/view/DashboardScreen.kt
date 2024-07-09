@@ -45,6 +45,7 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
 
         val viewModel = viewModel()
 
+
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
@@ -67,8 +68,12 @@ class DashboardScreen : BaseScreen<DashboardUiModel, DashboardAction, DashboardE
                     start.linkTo(parent.start)
                     width = Dimension.fillToConstraints
                 },
-                onLeftIconClicked = {},
-                onRightIconClicked = {}
+                onLeftIconClicked = {
+                    viewModel.test()
+                },
+                onRightIconClicked = {
+                    viewModel.test()
+                }
             )
 
             Column(
