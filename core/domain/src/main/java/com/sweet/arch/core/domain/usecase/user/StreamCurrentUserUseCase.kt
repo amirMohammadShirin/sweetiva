@@ -11,5 +11,5 @@ import javax.inject.Inject
 class StreamCurrentUserUseCase @Inject constructor(
     private val reactiveUserCache: ReactiveCache<User>
 ) : BaseStreamUseCase<Unit?, User>() {
-    override fun onStream(param: Unit?) = reactiveUserCache.dataStream()
+    override fun onStream(param: Unit?) = reactiveUserCache.stream
 }
