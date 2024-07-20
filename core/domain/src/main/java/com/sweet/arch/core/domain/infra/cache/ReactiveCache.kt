@@ -9,4 +9,6 @@ interface ReactiveCache<T> {
     fun dataStream(): Flow<T>
     suspend fun save(data: T)
 
+    suspend fun clear()
+
 }

@@ -30,4 +30,10 @@ class UserCache @Inject constructor(
         }
     }
 
+    override suspend fun clear() {
+        appDataStore.datastore.edit {
+            it[stringPreferencesKey(key.name)] = ""
+        }
+    }
+
 }
