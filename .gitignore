@@ -1296,3 +1296,5 @@
 /.idea/modules/core/cache/sweetiva.core.cache.main.iml
 /.idea/modules/feature/home/sweetiva.feature.home.main.iml
 /.idea/modules/feature/home/sweetiva.feature.home.iml
+/.idea/deploymentTargetSelector.xml
+/.idea/other.xml
