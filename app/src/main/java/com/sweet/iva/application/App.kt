@@ -1,5 +1,6 @@
 package com.sweet.iva.application
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -8,6 +9,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,9 +21,11 @@ import com.sweet.iva.core.designsystem.component.ThemePreviews
 import com.sweet.iva.core.designsystem.component.TopAppBar
 import com.sweet.iva.core.designsystem.theme.AppTheme
 import com.sweet.iva.core.ui.helper.LocalSnackBarState
+import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 import com.sweet.iva.navigation.AppNavHost
 import com.sweet.iva.navigation.TopLevelDestination
 
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun App(
     user: User? = null,
@@ -32,10 +36,15 @@ fun App(
             user = user,
         ),
 ) {
+    val currentUser = mutableStateOf(user)
     val currentRoute = appState.currentDestination?.route ?: ""
-
+    val destination =
+        if (currentUser.value?.identity != null) ApplicationRoutes.homeGraphRoute else ApplicationRoutes.introGraphRoute
     val showBottomNavigation =
-        (appState.user?.identity != null) && TopLevelDestination.isTopLevelDestination(currentRoute)
+        (currentUser.value?.identity != null) &&
+            TopLevelDestination.isTopLevelDestination(
+                currentRoute,
+            )
 
     AppBackground(
         modifier = Modifier,
@@ -65,6 +74,7 @@ fun App(
                 AppNavHost(
                     modifier = Modifier.padding(padding),
                     appState = appState,
+                    startDestination = destination,
                 )
             }
         }

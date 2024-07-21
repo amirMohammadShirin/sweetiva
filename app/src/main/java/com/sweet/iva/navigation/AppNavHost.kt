@@ -12,13 +12,14 @@ import com.sweet.iva.feature.login.loginGraph
 
 @Composable
 fun AppNavHost(
+    startDestination: String,
     appState: AppState,
     modifier: Modifier = Modifier,
 ) {
     CompositionLocalProvider(LocalNavController provides appState.navController) {
         NavHost(
             navController = appState.navController,
-            startDestination = appState.startDestination,
+            startDestination = startDestination,
             modifier = modifier,
         ) {
             introGraph()

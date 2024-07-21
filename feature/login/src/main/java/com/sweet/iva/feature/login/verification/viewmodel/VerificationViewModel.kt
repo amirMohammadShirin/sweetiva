@@ -6,8 +6,6 @@ import com.sweet.arch.core.domain.model.auth.LoginParam
 import com.sweet.arch.core.domain.usecase.auth.LoginUseCase
 import com.sweet.iva.core.common.util.TimeUtil
 import com.sweet.iva.core.ui.model.IEvent
-import com.sweet.iva.core.ui.navigation.ApplicationRoutes
-import com.sweet.iva.core.ui.navigation.NavigationCommand
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 import com.sweet.iva.feature.login.verification.model.VerificationAction
 import com.sweet.iva.feature.login.verification.model.VerificationEvent
@@ -80,18 +78,19 @@ class VerificationViewModel
                     )
                 }
 
+                loginUseCase.execute(
+                    LoginParam(
+                        trackingCode = trackingCode,
+                        phoneNumber = currentState.phoneNumber,
+                        otpValue = currentState.verificationCode.value,
+                    ),
+                )
+
                 updateState {
                     it.copy(
                         loading = false,
                     )
                 }
-
-                navigateTo(
-                    NavigationCommand.ToScreen(
-                        route = ApplicationRoutes.homeGraphRoute,
-                        clearTo = ApplicationRoutes.introGraphRoute,
-                    ),
-                )
             }
         }
 

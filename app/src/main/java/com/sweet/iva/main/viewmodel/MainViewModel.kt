@@ -9,6 +9,7 @@ import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 import com.sweet.iva.main.model.MainAction
 import com.sweet.iva.main.model.MainEvent
 import com.sweet.iva.main.model.MainViewState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,12 +27,15 @@ internal class MainViewModel
             }
         }
 
+        init {
+            collectCurrentUser()
+        }
+
         private fun start() {
             viewModelScope.launch {
                 updateState {
                     it.copy(loading = false)
                 }
-                collectCurrentUser()
             }
         }
 
@@ -57,6 +61,7 @@ internal class MainViewModel
                 it.copy(
                     startDestination = destination,
                     user = currentUser,
+                    loading = false
                 )
             }
         }
