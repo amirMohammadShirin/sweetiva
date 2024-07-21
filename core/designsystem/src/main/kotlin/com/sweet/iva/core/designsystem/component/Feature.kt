@@ -54,8 +54,7 @@ fun HorizontalFeatureList(
 ) {
 
     Card(
-        modifier = modifier
-            .padding(MaterialTheme.dimens.defaultPadding),
+        modifier = modifier,
         colors = CardDefaults.cardColors(
             containerColor = containerColor,
         )
