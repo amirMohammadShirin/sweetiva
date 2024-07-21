@@ -80,15 +80,6 @@ class VerificationViewModel
                     )
                 }
 
-                val result =
-                    loginUseCase.execute(
-                        LoginParam(
-                            trackingCode = trackingCode,
-                            phoneNumber = currentState.phoneNumber,
-                            otpValue = currentState.verificationCode.value,
-                        ),
-                    )
-
                 updateState {
                     it.copy(
                         loading = false,
