@@ -14,7 +14,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.sweet.arch.core.domain.model.user.User
-import com.sweet.iva.core.designsystem.component.AppBackground
 import com.sweet.iva.core.designsystem.component.AppNavigationBar
 import com.sweet.iva.core.designsystem.component.AppNavigationBarItem
 import com.sweet.iva.core.designsystem.component.ThemePreviews
@@ -46,44 +45,39 @@ fun App(
                 currentRoute,
             )
 
-    AppBackground(
-        modifier = Modifier,
-    ) {
-        val snackBarHostState =
-            remember {
-                SnackbarHostState()
-            }
+    val snackBarHostState =
+        remember {
+            SnackbarHostState()
+        }
 
-        Scaffold(
-            modifier = Modifier,
-            topBar = {},
-            bottomBar = {
-                if (showBottomNavigation) {
-                    NavigationBar(
-                        destinations = TopLevelDestination.entries.toList(),
-                        currentTopLevelDestination = TopLevelDestination.HOME,
-                        onItemClicked = {},
-                    )
-                }
-            },
-            containerColor = Color.Transparent,
-            contentColor = MaterialTheme.colorScheme.onBackground,
-            snackbarHost = { SnackbarHost(snackBarHostState) },
-        ) { padding ->
-            CompositionLocalProvider(LocalSnackBarState provides snackBarHostState) {
-                AppNavHost(
-                    modifier = Modifier.padding(padding),
-                    appState = appState,
-                    startDestination = destination,
+    Scaffold(
+        modifier = Modifier,
+        topBar = {},
+        bottomBar = {
+            if (showBottomNavigation) {
+                NavigationBar(
+                    destinations = TopLevelDestination.entries.toList(),
+                    currentTopLevelDestination = TopLevelDestination.HOME,
+                    onItemClicked = {},
                 )
             }
+        },
+        containerColor = Color.Transparent,
+        contentColor = MaterialTheme.colorScheme.onBackground,
+        snackbarHost = { SnackbarHost(snackBarHostState) },
+    ) { padding ->
+        CompositionLocalProvider(LocalSnackBarState provides snackBarHostState) {
+            AppNavHost(
+                modifier = Modifier.padding(padding),
+                appState = appState,
+                startDestination = destination,
+            )
         }
     }
 }
 
 @Composable
 fun NavigationBar(
-    modifier: Modifier = Modifier,
     destinations: List<TopLevelDestination>,
     currentTopLevelDestination: TopLevelDestination,
     onItemClicked: (destination: TopLevelDestination) -> Unit,

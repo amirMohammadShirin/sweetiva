@@ -1,8 +1,6 @@
 package com.sweet.iva.navigation
 
-import androidx.compose.ui.graphics.vector.ImageVector
 import com.sweet.iva.R
-import com.sweet.iva.core.designsystem.icon.AppIcons
 import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 
 enum class TopLevelDestination(
@@ -14,31 +12,30 @@ enum class TopLevelDestination(
     IVA_PLUS(
         title = "ایوا پلاس",
         route = "",
-        selectedIcon = R.drawable.ic_plus_heavy,
-        unSelectedIcon = R.drawable.ic_plus_light
+        selectedIcon = R.drawable.ic_plus_filled,
+        unSelectedIcon = R.drawable.ic_plus_bordered,
     ),
     HOME(
         title = "خانه",
         route = ApplicationRoutes.dashboardScreenRoute,
         selectedIcon = R.drawable.ic_home_filled,
-        unSelectedIcon = R.drawable.ic_home_bordered
+        unSelectedIcon = R.drawable.ic_home_bordered,
     ),
     WALLET(
         title = "کیف پول",
         route = "",
-        selectedIcon = R.drawable.ic_wallet_bordered,
-        unSelectedIcon = R.drawable.ic_wallet_bordered
+        selectedIcon = R.drawable.ic_wallet_filled,
+        unSelectedIcon = R.drawable.ic_wallet_bordered,
     ),
     SERVICES(
         title = "خدمات",
         route = "",
         selectedIcon = R.drawable.ic_menu_filled,
-        unSelectedIcon = R.drawable.ic_menu_bordered
-    );
-
+        unSelectedIcon = R.drawable.ic_menu_bordered,
+    ),
+    ;
 
     companion object {
-
         fun findByRoute(route: String): TopLevelDestination {
             var result: TopLevelDestination = HOME
             entries.forEach {
@@ -47,13 +44,6 @@ enum class TopLevelDestination(
             return result
         }
 
-        fun isTopLevelDestination(route: String): Boolean {
-            return entries.any { it.route.equals(route, true) }
-        }
-
-
+        fun isTopLevelDestination(route: String): Boolean = entries.any { it.route.equals(route, true) }
     }
-
-
 }
-
