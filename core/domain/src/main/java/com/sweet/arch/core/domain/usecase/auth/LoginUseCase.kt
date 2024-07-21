@@ -5,12 +5,14 @@ import com.sweet.arch.core.domain.model.user.Identity
 import com.sweet.arch.core.domain.model.user.User
 import com.sweet.arch.core.domain.repository.AuthenticationRepository
 import com.sweet.arch.core.domain.usecase.BaseUseCase
+import com.sweet.arch.core.domain.usecase.user.StreamCurrentUserUseCase
 import com.sweet.arch.core.domain.usecase.user.UpsertCurrentUserUseCase
 import javax.inject.Inject
 
 class LoginUseCase @Inject constructor(
     private val repository: AuthenticationRepository,
     private val upsertCurrentUserUseCase: UpsertCurrentUserUseCase,
+    private val streamCurrentUserUseCase: StreamCurrentUserUseCase
 ) : BaseUseCase<LoginParam, User>() {
     override suspend fun onExecute(param: LoginParam): User {
         val authenticationData = repository.login(param)
@@ -26,6 +28,7 @@ class LoginUseCase @Inject constructor(
             )
         )
         upsertCurrentUserUseCase.execute(user)
+        streamCurrentUserUseCase.execute(user)
         return user
     }
 }

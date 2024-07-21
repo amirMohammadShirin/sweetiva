@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken
 import com.sweet.arch.core.domain.infra.cache.CacheKey
 import com.sweet.arch.core.domain.infra.cache.ReactiveCache
 import com.sweet.arch.core.domain.model.user.User
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -14,7 +15,7 @@ import javax.inject.Inject
 class UserCache
     @Inject
     constructor(
-        private val appDataStore: AppDataStore,
+        private val appDataStore: AppDataStore
     ) : ReactiveCache<User> {
         override val key = CacheKey.CURRENT_USER
 

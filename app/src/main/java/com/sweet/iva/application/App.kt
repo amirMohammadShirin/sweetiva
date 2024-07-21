@@ -1,9 +1,5 @@
 package com.sweet.iva.application
 
-import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -12,12 +8,9 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import com.sweet.arch.core.domain.model.user.User
 import com.sweet.iva.core.designsystem.component.AppBackground
 import com.sweet.iva.core.designsystem.component.AppNavigationBar
@@ -25,49 +18,44 @@ import com.sweet.iva.core.designsystem.component.AppNavigationBarItem
 import com.sweet.iva.core.designsystem.component.ThemePreviews
 import com.sweet.iva.core.designsystem.component.TopAppBar
 import com.sweet.iva.core.designsystem.theme.AppTheme
-import com.sweet.iva.core.designsystem.theme.dimens
 import com.sweet.iva.core.ui.helper.LocalSnackBarState
 import com.sweet.iva.navigation.AppNavHost
 import com.sweet.iva.navigation.TopLevelDestination
 
-@SuppressLint("UnrememberedMutableState")
 @Composable
 fun App(
     user: User? = null,
     startDestination: String,
-    appState: AppState = rememberMarkAppState(
-        startDestination = startDestination,
-        user = user
-    )
+    appState: AppState =
+        rememberMarkAppState(
+            startDestination = startDestination,
+            user = user,
+        ),
 ) {
+    val currentRoute = appState.currentDestination?.route ?: ""
 
-    val currentDestination = appState.currentDestination
-
-    val showBottomNavigation by remember {
-        mutableStateOf(
-            ((appState.user != null) && (appState.user.identity != null)) && (TopLevelDestination.isTopLevelDestination(
-                currentDestination?.route ?: ""
-            ))
-        )
-    }
+    val showBottomNavigation =
+        (appState.user?.identity != null) && TopLevelDestination.isTopLevelDestination(currentRoute)
 
     AppBackground(
-        modifier = Modifier
+        modifier = Modifier,
     ) {
-        val snackBarHostState = remember {
-            SnackbarHostState()
-        }
+        val snackBarHostState =
+            remember {
+                SnackbarHostState()
+            }
 
         Scaffold(
             modifier = Modifier,
             topBar = {},
             bottomBar = {
-                if (showBottomNavigation)
+                if (showBottomNavigation) {
                     NavigationBar(
                         destinations = TopLevelDestination.entries.toList(),
                         currentTopLevelDestination = TopLevelDestination.HOME,
-                        onItemClicked = {}
+                        onItemClicked = {},
                     )
+                }
             },
             containerColor = Color.Transparent,
             contentColor = MaterialTheme.colorScheme.onBackground,
@@ -75,14 +63,12 @@ fun App(
         ) { padding ->
             CompositionLocalProvider(LocalSnackBarState provides snackBarHostState) {
                 AppNavHost(
-                    startDestination = appState.startDestination,
                     modifier = Modifier.padding(padding),
-                    appState = appState
+                    appState = appState,
                 )
             }
         }
     }
-
 }
 
 @Composable
@@ -90,7 +76,7 @@ fun NavigationBar(
     modifier: Modifier = Modifier,
     destinations: List<TopLevelDestination>,
     currentTopLevelDestination: TopLevelDestination,
-    onItemClicked: (destination: TopLevelDestination) -> Unit
+    onItemClicked: (destination: TopLevelDestination) -> Unit,
 ) {
     AppNavigationBar {
         destinations.forEach { topLevelDestination ->
@@ -99,20 +85,22 @@ fun NavigationBar(
                 onClick = { onItemClicked.invoke(topLevelDestination) },
                 icon = topLevelDestination.unSelectedIcon,
                 label = topLevelDestination.title,
-                selectedIcon = topLevelDestination.selectedIcon
+                selectedIcon = topLevelDestination.selectedIcon,
             )
-
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun Toolbar(modifier: Modifier = Modifier, topLevelDestination: TopLevelDestination) {
+private fun Toolbar(
+    modifier: Modifier = Modifier,
+    topLevelDestination: TopLevelDestination,
+) {
     AppTheme {
         TopAppBar(
             modifier = modifier,
-            title = topLevelDestination.title
+            title = topLevelDestination.title,
         )
     }
 }
@@ -132,7 +120,7 @@ fun PreviewNavigationBar() {
         NavigationBar(
             destinations = TopLevelDestination.entries.toList(),
             currentTopLevelDestination = TopLevelDestination.HOME,
-            onItemClicked = {}
+            onItemClicked = {},
         )
     }
 }

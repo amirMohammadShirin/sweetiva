@@ -1,15 +1,11 @@
 package com.sweet.iva.main.view
 
-import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -23,11 +19,10 @@ import com.sweet.iva.ThemeBrand
 import com.sweet.iva.application.App
 import com.sweet.iva.core.designsystem.component.AppBackground
 import com.sweet.iva.core.designsystem.theme.AppTheme
-import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 import com.sweet.iva.main.model.MainViewState
 import com.sweet.iva.main.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -46,7 +41,7 @@ internal class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiStateFlow
-                    .collect {
+                    .collectLatest {
                         uiState = it
                     }
             }
@@ -72,12 +67,11 @@ internal class MainActivity : ComponentActivity() {
             androidTheme = shouldUseAndroidTheme(uiState),
             disableDynamicTheming = shouldDisableDynamicTheming(uiState)
         ) {
-            AppBackground(modifier = Modifier.fillMaxSize()) {
-                App(
-                    startDestination = uiState.startDestination,
-                    user = uiState.user
-                )
-            }
+            AppBackground(modifier = Modifier.fillMaxSize()) {}
+            App(
+                startDestination = uiState.startDestination,
+                user = uiState.user
+            )
         }
 
     }

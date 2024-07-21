@@ -93,8 +93,6 @@ class VerificationViewModel @Inject constructor(
                 )
             )
 
-            reactiveUserCache.save(result)
-
             updateState {
                 it.copy(
                     loading = false
