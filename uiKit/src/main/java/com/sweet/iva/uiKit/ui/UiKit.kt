@@ -36,6 +36,7 @@ import com.sweet.iva.core.designsystem.component.AppTextButton
 import com.sweet.iva.core.designsystem.component.ThemePreviews
 import com.sweet.iva.core.designsystem.icon.AppIcons
 import com.sweet.iva.core.designsystem.theme.AppTheme
+import com.sweet.task.uiKit.R
 
 /**
  * Mark component catalog.
@@ -303,14 +304,14 @@ fun AppUiKit() {
                     var selectedItem by rememberSaveable { mutableIntStateOf(0) }
                     val items = listOf("For you", "Saved", "Interests")
                     val icons = listOf(
-                        AppIcons.UpcomingBorder,
-                        AppIcons.BookmarksBorder,
-                        AppIcons.Grid3x3,
+                        com.sweet.iva.core.designsystem.R.drawable.ic_setting,
+                        com.sweet.iva.core.designsystem.R.drawable.ic_setting,
+                        com.sweet.iva.core.designsystem.R.drawable.ic_setting,
                     )
                     val selectedIcons = listOf(
-                        AppIcons.Upcoming,
-                        AppIcons.Bookmarks,
-                        AppIcons.Grid3x3,
+                        com.sweet.iva.core.designsystem.R.drawable.ic_setting,
+                        com.sweet.iva.core.designsystem.R.drawable.ic_setting,
+                        com.sweet.iva.core.designsystem.R.drawable.ic_setting,
                     )
                     AppNavigationBar {
                         items.forEachIndexed { index, item ->

@@ -1,7 +1,11 @@
 package com.sweet.iva.core.designsystem.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -10,90 +14,110 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.ProvideTextStyle
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.sweet.iva.core.designsystem.icon.AppIcons
+import com.sweet.iva.core.designsystem.R
 import com.sweet.iva.core.designsystem.theme.AppTheme
+import com.sweet.iva.core.designsystem.theme.dimens
 
 @Composable
 fun RowScope.AppNavigationBarItem(
     selected: Boolean,
     onClick: () -> Unit,
-    icon: ImageVector,
+    icon: Int,
     modifier: Modifier = Modifier,
-    selectedIcon: ImageVector = icon,
+    selectedIcon: Int = icon,
     enabled: Boolean = true,
     label: String? = null,
     alwaysShowLabel: Boolean = true,
-    colors: NavigationBarItemColors = NavigationBarItemDefaults.colors(
-        selectedIconColor = MaterialTheme.colorScheme.onPrimary,
-        unselectedIconColor = MaterialTheme.colorScheme.outline,
-        selectedTextColor = MaterialTheme.colorScheme.primaryContainer,
-        unselectedTextColor = MaterialTheme.colorScheme.outline,
-        indicatorColor = MaterialTheme.colorScheme.primary,
-    )
+    colors: NavigationBarItemColors =
+        NavigationBarItemDefaults.colors(
+            selectedIconColor = MaterialTheme.colorScheme.secondary,
+            unselectedIconColor = MaterialTheme.colorScheme.outline,
+            selectedTextColor = MaterialTheme.colorScheme.secondary,
+            unselectedTextColor = MaterialTheme.colorScheme.outline,
+            indicatorColor = MaterialTheme.colorScheme.background,
+        ),
 ) {
-
     NavigationBarItem(
         selected = selected,
         onClick = onClick,
         icon = {
-            if (selected)
+            if (selected) {
                 Icon(
-                    imageVector = selectedIcon,
-                    contentDescription = "selected icon ${selectedIcon.name}"
+                    modifier = Modifier.size(30.dp, 30.dp),
+                    painter = painterResource(id = selectedIcon),
+                    contentDescription = "selected icon $selectedIcon",
                 )
-            else
+            } else {
                 Icon(
-                    imageVector = icon,
-                    contentDescription = "selected icon ${icon.name}"
+                    modifier = Modifier.size(25.dp, 25.dp),
+                    painter = painterResource(id = icon),
+                    contentDescription = "selected icon $icon",
                 )
+            }
         },
         modifier = modifier,
         enabled = enabled,
-        label = { if (label != null) Text(label) },
+        label = {
+            if (label != null) {
+                ProvideTextStyle(
+                    value =
+                        MaterialTheme.typography.labelSmall,
+                ) {
+                    Text(label)
+                }
+            }
+        },
         alwaysShowLabel = alwaysShowLabel,
-        colors = colors
+        colors = colors,
     )
-
 }
 
 @Composable
 fun AppNavigationBar(
     modifier: Modifier = Modifier,
     containerColor: Color = MaterialTheme.colorScheme.background,
-    contentColor: Color = MaterialTheme.colorScheme.background,
-    content: @Composable RowScope.() -> Unit
+    contentColor: Color = MaterialTheme.colorScheme.secondary,
+    content: @Composable RowScope.() -> Unit,
 ) {
-    NavigationBar(
-        modifier = modifier
-            .clip(
-                RoundedCornerShape(topStart = 5.dp, topEnd = 5.dp)
-            ),
-        contentColor = contentColor,
-        containerColor = containerColor,
-        tonalElevation = 10.dp,
-        content = content
-    )
+    Surface(
+        modifier =
+            modifier
+                .padding(horizontal = MaterialTheme.dimens.largeGap)
+                .clip(RoundedCornerShape(10.dp)),
+        tonalElevation = 5.dp,
+        shadowElevation = 5.dp,
+        color = MaterialTheme.colorScheme.background,
+        border = BorderStroke(0.25.dp, MaterialTheme.colorScheme.surface),
+    ) {
+        NavigationBar(
+            contentColor = contentColor,
+            containerColor = containerColor,
+            content = content,
+        )
+    }
 }
 
 @Composable
 fun AppNavigationRail(
     modifier: Modifier = Modifier,
     header: @Composable (ColumnScope.() -> Unit)? = null,
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     NavigationRail(
         modifier = modifier,
         containerColor = Color.Transparent,
         contentColor = MaterialTheme.colorScheme.background,
         header = header,
-        content = content
+        content = content,
     )
 }
 
@@ -101,19 +125,25 @@ fun AppNavigationRail(
 @Composable
 fun AppNavigationPreview() {
     val items = listOf("Home", "Profile", "Setting")
-    val icons = listOf(
-        AppIcons.UpcomingBorder,
-        AppIcons.BookmarksBorder,
-        AppIcons.Grid3x3,
-    )
-    val selectedIcons = listOf(
-        AppIcons.Upcoming,
-        AppIcons.Bookmarks,
-        AppIcons.Grid3x3,
-    )
+    val icons =
+        listOf(
+            R.drawable.ic_list_bullet,
+            R.drawable.ic_edit,
+            R.drawable.ic_setting,
+        )
+    val selectedIcons =
+        listOf(
+            R.drawable.ic_list_bullet,
+            R.drawable.ic_edit,
+            R.drawable.ic_setting,
+        )
 
     AppTheme {
-        AppNavigationBar {
+        AppNavigationBar(
+            modifier =
+                Modifier
+                    .height(30.dp),
+        ) {
             items.forEachIndexed { index, item ->
                 AppNavigationBarItem(
                     icon = icons[index],

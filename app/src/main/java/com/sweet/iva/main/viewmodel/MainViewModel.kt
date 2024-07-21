@@ -1,60 +1,68 @@
 package com.sweet.iva.main.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import com.sweet.arch.core.domain.usecase.user.GetCurrentUserUseCase
+import com.sweet.arch.core.domain.model.user.User
+import com.sweet.arch.core.domain.usecase.user.ListenToCurrentUserUseCase
 import com.sweet.iva.core.common.dispatcher.DispatcherProvider
 import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 import com.sweet.iva.main.model.MainAction
 import com.sweet.iva.main.model.MainEvent
 import com.sweet.iva.main.model.MainViewState
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-
-internal class MainViewModel @Inject constructor(
-    private val dispatcherProvider: DispatcherProvider,
-    private val getCurrentUserUseCase: GetCurrentUserUseCase
-) :
-    BaseViewModel<MainViewState, MainAction, MainEvent>(initialState = MainViewState()) {
-
-    override fun handleAction(action: MainAction) {
-        when (action) {
-            is MainAction.FetchStartUpData -> {
-                callApi()
+internal class MainViewModel
+    @Inject
+    constructor(
+        private val dispatcherProvider: DispatcherProvider,
+        private val listenToCurrentUserUseCase: ListenToCurrentUserUseCase,
+    ) : BaseViewModel<MainViewState, MainAction, MainEvent>(initialState = MainViewState()) {
+        override fun handleAction(action: MainAction) {
+            when (action) {
+                is MainAction.FetchStartUpData -> {
+                    start()
+                }
             }
         }
-    }
 
-    fun getStartupData() {
-        process(MainAction.FetchStartUpData)
-    }
+        init {
+            collectCurrentUser()
+        }
 
-    private fun callApi() {
-        viewModelScope.launch {
-
-            val currentUser = getCurrentUserUseCase.execute(null)
-            val startDestination =
-                if (currentUser != null) ApplicationRoutes.homeGraphRoute else ApplicationRoutes.introGraphRoute
-
-            withContext(Dispatchers.IO) {
-                delay(1000)
+        private fun start() {
+            viewModelScope.launch {
+                updateState {
+                    it.copy(loading = false)
+                }
             }
+        }
+
+        private fun collectCurrentUser() {
+            viewModelScope.launch(dispatcherProvider.io) {
+                listenToCurrentUserUseCase
+                    .start(null)
+                    .collect { user ->
+                        navigate(user)
+                    }
+            }
+        }
+
+        fun getStartupData() {
+            process(MainAction.FetchStartUpData)
+        }
+
+        private fun navigate(currentUser: User?) {
+            val destination =
+                if (currentUser?.identity != null) ApplicationRoutes.homeGraphRoute else ApplicationRoutes.introGraphRoute
 
             updateState {
                 it.copy(
-                    loading = false,
-                    startDestination = startDestination
+                    startDestination = destination,
+                    user = currentUser,
+                    loading = false
                 )
             }
-
         }
     }
-
-
-}
-

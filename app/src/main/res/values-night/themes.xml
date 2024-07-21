@@ -9,7 +9,7 @@
     <!-- The final theme we use -->
     <style name="Theme.Mark" parent="NightAdjusted.Theme.Mark">
         <item name="android:statusBarColor">#EDEDED</item>
-        <item name="android:navigationBarColor">#EDEDED</item>
+        <item name="android:navigationBarColor">#F4F4F4</item>
     </style>
 
     <style name="NightAdjusted.Theme.Splash" parent="Theme.SplashScreen">

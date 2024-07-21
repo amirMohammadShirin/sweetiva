@@ -1,15 +1,21 @@
 package com.sweet.iva.feature.home.dashboard.viewmodel
 
+import androidx.lifecycle.viewModelScope
+import com.sweet.arch.core.domain.infra.cache.ReactiveCache
+import com.sweet.arch.core.domain.model.user.User
 import com.sweet.iva.core.designsystem.component.model.UserCardUiModel
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 import com.sweet.iva.feature.home.dashboard.model.DashboardAction
 import com.sweet.iva.feature.home.dashboard.model.DashboardEvent
 import com.sweet.iva.feature.home.dashboard.model.DashboardUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DashboardViewModel @Inject constructor() :
+class DashboardViewModel @Inject constructor(
+    private val userCache: ReactiveCache<User>
+) :
     BaseViewModel<DashboardUiModel, DashboardAction, DashboardEvent>(
         initialState = DashboardUiModel()
     ) {
@@ -83,6 +89,14 @@ class DashboardViewModel @Inject constructor() :
                     oldCard.copy(pan = pan)
                 }
             )
+        }
+
+    }
+
+    fun test() {
+
+        viewModelScope.launch {
+            userCache.clear()
         }
 
     }

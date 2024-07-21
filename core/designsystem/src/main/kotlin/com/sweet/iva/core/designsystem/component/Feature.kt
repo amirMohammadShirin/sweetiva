@@ -163,7 +163,7 @@ private fun FeatureItem(modifier: Modifier, feature: FeatureUiModel) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                modifier = Modifier.size(20.dp, 20.dp),
+                modifier = Modifier.size(30.dp, 30.dp),
                 painter = painterResource(id = feature.logo),
                 contentDescription = "feature logo"
             )
