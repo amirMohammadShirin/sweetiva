@@ -1,8 +1,8 @@
 package com.sweet.iva.feature.login.verification.model
 
-import com.sweet.iva.core.ui.model.IAction
+import com.sweet.iva.core.ui.model.Action
 
-sealed interface VerificationAction : IAction {
+sealed interface VerificationAction : Action {
     data class StoreInitialData(
         val phoneNumber: String,
         val trackingCode: String,

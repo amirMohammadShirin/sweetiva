@@ -1,11 +1,11 @@
 package com.sweet.iva.main.model
 
-import com.sweet.iva.core.ui.model.IAction
-import com.sweet.iva.core.ui.model.IEvent
+import com.sweet.iva.core.ui.model.Action
+import com.sweet.iva.core.ui.model.Event
 
 
-internal sealed interface MainAction : IAction {
+internal sealed interface MainAction : Action {
     data object FetchStartUpData : MainAction
 }
 
-internal sealed interface MainEvent : IEvent
+internal sealed interface MainEvent : Event

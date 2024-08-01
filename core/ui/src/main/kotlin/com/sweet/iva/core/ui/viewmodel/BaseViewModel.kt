@@ -3,8 +3,6 @@ package com.sweet.iva.core.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sweet.iva.core.ui.entity.DisplayedError
-import com.sweet.iva.core.ui.model.IAction
-import com.sweet.iva.core.ui.model.IEvent
 import com.sweet.iva.core.ui.navigation.NavigationCommand
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,7 +17,7 @@ import kotlinx.coroutines.launch
  */
 
 
-abstract class BaseViewModel<State, Action : IAction, Event : IEvent>(
+abstract class BaseViewModel<State, Action : com.sweet.iva.core.ui.model.Action, Event : com.sweet.iva.core.ui.model.Event>(
     val initialState: State
 ) : ViewModel() {
 
@@ -32,8 +30,8 @@ abstract class BaseViewModel<State, Action : IAction, Event : IEvent>(
 
     private val _uiActionFlow = MutableSharedFlow<Action>()
 
-    private val _uiEventFlow = MutableSharedFlow<IEvent>()
-    val uiEventFlow: SharedFlow<IEvent>
+    private val _uiEventFlow = MutableSharedFlow<com.sweet.iva.core.ui.model.Event>()
+    val uiEventFlow: SharedFlow<com.sweet.iva.core.ui.model.Event>
         get() = _uiEventFlow
 
     private val _navigationFlow = MutableSharedFlow<NavigationCommand>()
@@ -64,7 +62,7 @@ abstract class BaseViewModel<State, Action : IAction, Event : IEvent>(
         }
     }
 
-    fun sendEvent(event: IEvent) {
+    fun sendEvent(event: com.sweet.iva.core.ui.model.Event) {
         viewModelScope.launch {
             _uiEventFlow.emit(event)
         }

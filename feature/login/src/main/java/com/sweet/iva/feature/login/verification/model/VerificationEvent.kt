@@ -1,5 +1,5 @@
 package com.sweet.iva.feature.login.verification.model
 
-import com.sweet.iva.core.ui.model.IEvent
+import com.sweet.iva.core.ui.model.Event
 
-sealed interface VerificationEvent : IEvent
+sealed interface VerificationEvent : Event

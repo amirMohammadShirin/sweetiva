@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.sweet.arch.core.domain.model.auth.LoginParam
 import com.sweet.arch.core.domain.usecase.auth.LoginUseCase
 import com.sweet.iva.core.common.util.TimeUtil
-import com.sweet.iva.core.ui.model.IEvent
+import com.sweet.iva.core.ui.model.Event
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 import com.sweet.iva.feature.login.verification.model.VerificationAction
 import com.sweet.iva.feature.login.verification.model.VerificationEvent
@@ -69,7 +69,7 @@ class VerificationViewModel
                             loading = false,
                         )
                     }
-                    sendEvent(IEvent.ShowSnack(throwable.message ?: " "))
+                    sendEvent(Event.ShowSnack(throwable.message ?: " "))
                 },
             ) {
                 updateState {

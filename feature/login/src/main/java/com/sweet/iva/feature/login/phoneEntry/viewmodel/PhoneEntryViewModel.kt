@@ -6,7 +6,7 @@ import com.sweet.arch.core.domain.usecase.auth.SendLoginOtpUseCase
 import com.sweet.iva.core.common.model.DisplayException
 import com.sweet.iva.core.common.util.ValidationState
 import com.sweet.iva.core.common.util.ValidationUtil
-import com.sweet.iva.core.ui.model.IEvent
+import com.sweet.iva.core.ui.model.Event
 import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 import com.sweet.iva.core.ui.navigation.NavigationCommand
 import com.sweet.iva.core.ui.navigation.NavigationParam
@@ -49,11 +49,11 @@ class PhoneEntryViewModel @Inject constructor(
                 }
 
                 if (throwable is DisplayException) {
-                    sendEvent(IEvent.ShowSnack(throwable.message ?: "خطا در دریافت اطلاعات"))
+                    sendEvent(Event.ShowSnack(throwable.message ?: "خطا در دریافت اطلاعات"))
                     return@CoroutineExceptionHandler
                 }
 
-                sendEvent(IEvent.ShowSnack("خطا در دریافت اطلاعات"))
+                sendEvent(Event.ShowSnack("خطا در دریافت اطلاعات"))
 
             }
         ) {
