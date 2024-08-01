@@ -40,7 +40,6 @@ import com.sweet.iva.core.designsystem.theme.dimens
 import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 import com.sweet.iva.core.ui.view.BaseScreen
 import com.sweet.iva.feature.intro.R
-import com.sweet.iva.feature.intro.model.IntroAction
 import com.sweet.iva.feature.intro.model.IntroEvent
 import com.sweet.iva.feature.intro.model.IntroItemModel
 import com.sweet.iva.feature.intro.model.IntroUiModel
@@ -49,7 +48,7 @@ import com.sweet.iva.feature.intro.viewmodel.IntroViewModel
 /**
  * Created by aShirin on 6/8/2024.
  */
-class IntroScreen : BaseScreen<IntroUiModel, IntroAction, IntroEvent>(
+class IntroScreen : BaseScreen<IntroUiModel, IntroEvent>(
     name = "intro",
     route = ApplicationRoutes.introScreenRoute
 ) {
@@ -112,7 +111,7 @@ class IntroScreen : BaseScreen<IntroUiModel, IntroAction, IntroEvent>(
                         width = Dimension.fillToConstraints
                     },
                 onClick = {
-                    viewModel.process(IntroAction.EntryButtonClicked)
+//                    viewModel.process(IntroAction.EntryButtonClicked)
                 },
                 text = "ورود"
             )

@@ -4,7 +4,6 @@ import com.sweet.iva.core.common.dispatcher.DispatcherProvider
 import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 import com.sweet.iva.core.ui.navigation.NavigationCommand
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
-import com.sweet.iva.feature.intro.model.IntroAction
 import com.sweet.iva.feature.intro.model.IntroEvent
 import com.sweet.iva.feature.intro.model.IntroUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,16 +18,9 @@ import javax.inject.Inject
 class IntroViewModel @Inject constructor(
     private val dispatcherProvider: DispatcherProvider
 ) :
-    BaseViewModel<IntroUiModel, IntroAction, IntroEvent>(
+    BaseViewModel<IntroUiModel, IntroEvent>(
         initialState = IntroUiModel()
     ) {
-    override fun handleAction(action: IntroAction) {
-        when (action) {
-            IntroAction.EntryButtonClicked -> {
-                navigateToLogin()
-            }
-        }
-    }
 
     private fun navigateToLogin() {
         navigateTo(

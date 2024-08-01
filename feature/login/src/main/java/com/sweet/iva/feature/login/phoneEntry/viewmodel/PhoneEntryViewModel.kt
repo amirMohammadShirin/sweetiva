@@ -11,7 +11,6 @@ import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 import com.sweet.iva.core.ui.navigation.NavigationCommand
 import com.sweet.iva.core.ui.navigation.NavigationParam
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
-import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryAction
 import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryEvent
 import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,20 +24,9 @@ import javax.inject.Inject
 @HiltViewModel
 class PhoneEntryViewModel @Inject constructor(
     private val sendLoginOtpUseCase: SendLoginOtpUseCase
-) : BaseViewModel<PhoneEntryUiModel, PhoneEntryAction, PhoneEntryEvent>(
+) : BaseViewModel<PhoneEntryUiModel, PhoneEntryEvent>(
     initialState = PhoneEntryUiModel()
 ) {
-    override fun handleAction(action: PhoneEntryAction) {
-        when (action) {
-            is PhoneEntryAction.OnPhoneNumberChanged -> {
-                changePhoneNumber(action.phoneNumber)
-            }
-
-            PhoneEntryAction.OnConfirmClicked -> {
-                sendOtp()
-            }
-        }
-    }
 
     private fun sendOtp() {
         viewModelScope.launch(

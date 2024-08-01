@@ -18,11 +18,10 @@ import com.sweet.iva.core.ui.helper.LocalSnackBarState
 import com.sweet.iva.core.ui.helper.getComposableState
 import com.sweet.iva.core.ui.helper.showSnackbar
 import com.sweet.iva.core.ui.helper.showToast
-import com.sweet.iva.core.ui.model.Event
 import com.sweet.iva.core.ui.navigation.NavigationParam
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 
-abstract class BaseScreen<State, Action : com.sweet.iva.core.ui.model.Action, Event : com.sweet.iva.core.ui.model.Event>(
+abstract class BaseScreen<State, Event : com.sweet.iva.core.ui.model.Event>(
     val route: String,
     val name: String
 ) {
@@ -30,7 +29,7 @@ abstract class BaseScreen<State, Action : com.sweet.iva.core.ui.model.Action, Ev
     protected val parameters = linkedMapOf<NavigationParam, String>()
 
     @Composable
-    abstract fun viewModel(): BaseViewModel<State, Action, Event>
+    abstract fun viewModel(): BaseViewModel<State, Event>
 
     @Composable
     open fun Screen(navBackStackEntry: NavBackStackEntry?) {
@@ -92,7 +91,7 @@ abstract class BaseScreen<State, Action : com.sweet.iva.core.ui.model.Action, Ev
      */
     @Composable
     private fun BaseScreenBehavior(
-        viewModel: BaseViewModel<State, Action, Event>,
+        viewModel: BaseViewModel<State, Event>,
         snackbarHostState: SnackbarHostState = LocalSnackBarState.current,
         context: Context = LocalContext.current,
         feature: (@Composable () -> Unit)
@@ -120,7 +119,7 @@ abstract class BaseScreen<State, Action : com.sweet.iva.core.ui.model.Action, Ev
 
     @Composable
     private fun NavigationHandler(
-        viewModel: BaseViewModel<State, Action, Event>,
+        viewModel: BaseViewModel<State, Event>,
         navController: NavController,
         content: (@Composable () -> Unit)
     ) {
@@ -135,7 +134,7 @@ abstract class BaseScreen<State, Action : com.sweet.iva.core.ui.model.Action, Ev
 
     @Composable
     fun ErrorHandler(
-        viewModel: BaseViewModel<*, out com.sweet.iva.core.ui.model.Action, *>,
+        viewModel: BaseViewModel<*, *>,
         snackbarHostState: SnackbarHostState,
         context: Context,
         content: (@Composable () -> Unit)
@@ -158,7 +157,7 @@ abstract class BaseScreen<State, Action : com.sweet.iva.core.ui.model.Action, Ev
 
     @Composable
     fun SnackHandler(
-        viewModel: BaseViewModel<*, out com.sweet.iva.core.ui.model.Action, *>,
+        viewModel: BaseViewModel<*, *>,
         snackbarHostState: SnackbarHostState,
         content: (@Composable () -> Unit)
     ) {
@@ -174,7 +173,7 @@ abstract class BaseScreen<State, Action : com.sweet.iva.core.ui.model.Action, Ev
 
     @Composable
     fun ToastHandler(
-        viewModel: BaseViewModel<*, out com.sweet.iva.core.ui.model.Action, *>,
+        viewModel: BaseViewModel<*, *>,
         context: Context,
         content: (@Composable () -> Unit)
     ) {

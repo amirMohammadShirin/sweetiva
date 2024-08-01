@@ -6,10 +6,8 @@ import com.sweet.arch.core.domain.usecase.user.ListenToCurrentUserUseCase
 import com.sweet.iva.core.common.dispatcher.DispatcherProvider
 import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
-import com.sweet.iva.main.model.MainAction
 import com.sweet.iva.main.model.MainEvent
 import com.sweet.iva.main.model.MainViewState
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,14 +16,7 @@ internal class MainViewModel
     constructor(
         private val dispatcherProvider: DispatcherProvider,
         private val listenToCurrentUserUseCase: ListenToCurrentUserUseCase,
-    ) : BaseViewModel<MainViewState, MainAction, MainEvent>(initialState = MainViewState()) {
-        override fun handleAction(action: MainAction) {
-            when (action) {
-                is MainAction.FetchStartUpData -> {
-                    start()
-                }
-            }
-        }
+    ) : BaseViewModel<MainViewState, MainEvent>(initialState = MainViewState()) {
 
         init {
             collectCurrentUser()
@@ -50,7 +41,7 @@ internal class MainViewModel
         }
 
         fun getStartupData() {
-            process(MainAction.FetchStartUpData)
+//            process(MainAction.FetchStartUpData)
         }
 
         private fun navigate(currentUser: User?) {

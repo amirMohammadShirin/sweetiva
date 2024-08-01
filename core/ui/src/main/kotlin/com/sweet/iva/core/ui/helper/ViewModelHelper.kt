@@ -7,6 +7,6 @@ import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 
 
 @Composable
-fun <STATE> BaseViewModel<STATE, *, *>.getComposableState(): State<STATE> {
+fun <STATE> BaseViewModel<STATE, *>.getComposableState(): State<STATE> {
     return this.uiStateFlow.collectAsStateWithLifecycle(initialValue = this.initialState)
 }

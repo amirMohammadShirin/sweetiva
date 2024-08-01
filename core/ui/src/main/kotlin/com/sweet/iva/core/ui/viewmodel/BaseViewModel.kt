@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
  */
 
 
-abstract class BaseViewModel<State, Action : com.sweet.iva.core.ui.model.Action, Event : com.sweet.iva.core.ui.model.Event>(
+abstract class BaseViewModel<State, Event : com.sweet.iva.core.ui.model.Event>(
     val initialState: State
 ) : ViewModel() {
 
@@ -27,8 +27,6 @@ abstract class BaseViewModel<State, Action : com.sweet.iva.core.ui.model.Action,
 
     val currentState: State
         get() = _uiStateFlow.value
-
-    private val _uiActionFlow = MutableSharedFlow<Action>()
 
     private val _uiEventFlow = MutableSharedFlow<com.sweet.iva.core.ui.model.Event>()
     val uiEventFlow: SharedFlow<com.sweet.iva.core.ui.model.Event>
@@ -40,20 +38,6 @@ abstract class BaseViewModel<State, Action : com.sweet.iva.core.ui.model.Action,
     private val _errorFlow: MutableSharedFlow<DisplayedError> = MutableSharedFlow()
     val errorFlow: Flow<DisplayedError>
         get() = _errorFlow
-
-    abstract fun handleAction(action: Action)
-
-    init {
-        viewModelScope.launch {
-            _uiActionFlow.collect(this@BaseViewModel::handleAction)
-        }
-    }
-
-    fun process(action: Action) {
-        viewModelScope.launch {
-            _uiActionFlow.emit(action)
-        }
-    }
 
 
     fun updateState(mutation: (currentState: State) -> State) {

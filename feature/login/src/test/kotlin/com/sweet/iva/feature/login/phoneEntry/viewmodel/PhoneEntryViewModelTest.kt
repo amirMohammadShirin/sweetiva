@@ -3,7 +3,6 @@ package com.sweet.iva.feature.login.phoneEntry.viewmodel
 import com.sweet.arch.core.domain.usecase.auth.SendLoginOtpUseCase
 import com.sweet.iva.core.common.dispatcher.DispatcherProvider
 import com.sweet.iva.core.test.rule.MainDispatcherRule
-import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryAction
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineDispatcher
