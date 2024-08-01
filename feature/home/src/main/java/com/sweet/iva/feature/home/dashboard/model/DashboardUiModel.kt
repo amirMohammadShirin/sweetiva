@@ -165,7 +165,7 @@ val mockAccounts = listOf(
 data class DashboardUiModel(
     val loading: Boolean = false,
     val userCards: List<UserCardUiModel> = mockCards,
-    val userAccounts: List<UserAccountUiModel> = mockAccounts,
+    val userAccounts: List<UserAccountUiModel> = listOf(),
     val banners: List<BannerUiModel> = bannersMock,
     val frequentFeatures: List<FeatureUiModel> = mockFrequentFeatures,
     val bankFeatures: List<FeatureUiModel> = mockFrequentFeatures,

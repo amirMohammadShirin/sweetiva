@@ -67,8 +67,7 @@ fun HorizontalUserAccounts(
         rememberPagerState(initialPage = 0, pageCount = { accounts.size })
 
     HorizontalPager(
-        modifier = modifier
-            .padding(horizontal = MaterialTheme.dimens.largePadding),
+        modifier = modifier ,
         state = pagerState,
         pageSpacing = MaterialTheme.dimens.defaultGap,
     ) {
