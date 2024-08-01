@@ -47,6 +47,7 @@ import com.sweet.iva.core.ui.view.SnackHandler
 import com.sweet.iva.core.ui.view.SnackHandlerImpl
 import com.sweet.iva.core.ui.view.ToastHandler
 import com.sweet.iva.core.ui.view.ToastHandlerImpl
+import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 import com.sweet.iva.feature.intro.R
 import com.sweet.iva.feature.intro.model.IntroEvent
 import com.sweet.iva.feature.intro.model.IntroItemModel
@@ -59,21 +60,20 @@ import com.sweet.iva.feature.intro.viewmodel.IntroViewModel
 class IntroScreen : BaseScreen<IntroUiModel, IntroEvent>(
     name = "intro",
     route = ApplicationRoutes.introScreenRoute
-), NavigationHandler by NavigationHandlerImpl(), SnackHandler by SnackHandlerImpl(),
-    ToastHandler by ToastHandlerImpl(), ErrorHandler by ErrorHandlerImpl() {
+), NavigationHandler by NavigationHandlerImpl() {
     @Composable
     override fun viewModel(): IntroViewModel = hiltViewModel()
+
+    @Composable
+    override fun AppendHandlers(viewModel: BaseViewModel<*, *>) {
+        NavigationHandler(viewModel)
+    }
 
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
     override fun Content(state: IntroUiModel) {
 
         val viewModel = viewModel()
-
-        NavigationHandler(viewModel)
-        ErrorHandler(viewModel)
-        SnackHandler(viewModel)
-        ToastHandler(viewModel)
 
         ConstraintLayout(
             modifier = Modifier
