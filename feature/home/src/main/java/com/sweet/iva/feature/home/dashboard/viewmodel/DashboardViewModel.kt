@@ -1,5 +1,7 @@
 package com.sweet.iva.feature.home.dashboard.viewmodel
 
+import androidx.lifecycle.viewModelScope
+import com.sweet.iva.core.common.dispatcher.DispatcherProvider
 import com.sweet.iva.core.designsystem.component.model.UserCardUiModel
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 import com.sweet.iva.feature.home.dashboard.model.DashboardAction
@@ -7,100 +9,38 @@ import com.sweet.iva.feature.home.dashboard.model.DashboardEvent
 import com.sweet.iva.feature.home.dashboard.model.DashboardUiModel
 import com.sweet.iva.feature.home.dashboard.model.mockAccounts
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class DashboardViewModel
-    @Inject
-    constructor() :
+class DashboardViewModel @Inject constructor(
+    private val dispatcherProvider: DispatcherProvider
+) :
     BaseViewModel<DashboardUiModel, DashboardAction, DashboardEvent>(
             initialState = DashboardUiModel(),
         ) {
         override fun handleAction(action: DashboardAction) {
             when (action) {
-                is DashboardAction.PanChanged -> changeCardPan(action.cardIndex, action.pan)
-                is DashboardAction.NameChanged -> changeCardName(action.cardIndex, action.name)
-                is DashboardAction.MonthChanged -> changeCardMonth(action.cardIndex, action.month)
-                is DashboardAction.YearChanged -> changeCardYear(action.cardIndex, action.year)
+                DashboardAction.GetUserAccounts -> {
+                    getUserAccounts()
+                }
             }
         }
 
-        private fun changeCardYear(
-            cardIndex: Int,
-            year: String,
-        ) {
-            updateState {
-                it.copy(
-                    userCards =
-                        updateUserCardAtIndex(it.userCards, cardIndex) { oldCard ->
-                            oldCard.copy(year = year)
-                        },
-                )
+        private fun getUserAccounts() {
+            viewModelScope.launch {
+                withContext(dispatcherProvider.io) {
+                    delay(2000)
+                }
+                updateState {
+                    it.copy(
+                        userAccounts = mockAccounts,
+                    )
+                }
             }
         }
 
-        private fun changeCardMonth(
-            cardIndex: Int,
-            month: String,
-        ) {
-            updateState {
-                it.copy(
-                    userCards =
-                        updateUserCardAtIndex(it.userCards, cardIndex) { oldCard ->
-                            oldCard.copy(
-                                month = month,
-                            )
-                        },
-                )
-            }
-        }
-
-        private fun changeCardName(
-            index: Int,
-            name: String,
-        ) {
-            updateState {
-                it.copy(
-                    userCards =
-                        updateUserCardAtIndex(it.userCards, index) { oldCard ->
-                            oldCard.copy(name = name)
-                        },
-                )
-            }
-        }
-
-        private fun updateUserCardAtIndex(
-            source: List<UserCardUiModel>,
-            index: Int,
-            update: (card: UserCardUiModel) -> UserCardUiModel,
-        ): List<UserCardUiModel> =
-            mutableListOf<UserCardUiModel>().apply {
-                addAll(source)
-                removeAt(index)
-                add(index, update.invoke(source[index]))
-            }
-
-        private fun isPanValid(pan: String): Boolean = pan.length <= 16
-
-        private fun changeCardPan(
-            index: Int,
-            pan: String,
-        ) {
-            updateState {
-                it.copy(
-                    userCards =
-                        updateUserCardAtIndex(it.userCards, index) { oldCard ->
-                            oldCard.copy(pan = pan)
-                        },
-                )
-            }
-        }
-
-        fun test() {
-            updateState {
-                it.copy(
-                    userAccounts = mockAccounts,
-                )
-            }
-        }
     }
