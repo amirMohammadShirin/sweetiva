@@ -1,7 +1,9 @@
 package com.sweet.arch.core.data.di
 
 import com.sweet.arch.core.data.repository.AuthenticationRepositoryImpl
+import com.sweet.arch.core.data.repository.UserRepositoryImpl
 import com.sweet.arch.core.domain.repository.AuthenticationRepository
+import com.sweet.arch.core.domain.repository.UserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -16,5 +18,8 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindAuthenticationRepository(authenticationRepositoryImpl: AuthenticationRepositoryImpl): AuthenticationRepository
+
+    @Binds
+    abstract fun bindUserRepository(userRepositoryImpl: UserRepositoryImpl): UserRepository
 
 }

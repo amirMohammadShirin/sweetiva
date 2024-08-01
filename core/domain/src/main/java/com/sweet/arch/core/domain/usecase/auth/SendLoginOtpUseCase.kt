@@ -1,7 +1,7 @@
 package com.sweet.arch.core.domain.usecase.auth
 
 import com.sweet.arch.core.domain.model.auth.LoginOTPResult
-import com.sweet.arch.core.domain.model.auth.LoginOtpParam
+import com.sweet.arch.core.domain.model.user.PhoneNumber
 import com.sweet.arch.core.domain.repository.AuthenticationRepository
 import com.sweet.arch.core.domain.usecase.BaseUseCase
 import javax.inject.Inject
@@ -12,10 +12,14 @@ import javax.inject.Inject
 class SendLoginOtpUseCase @Inject constructor(
     private val authenticationRepository: AuthenticationRepository
 ) :
-    BaseUseCase<LoginOtpParam, LoginOTPResult>() {
+    BaseUseCase<SendLoginOtpUseCase.Companion.Param, LoginOTPResult>() {
 
-    override suspend fun onExecute(param: LoginOtpParam): LoginOTPResult {
-        return authenticationRepository.sendLoginOtp(param)
+    companion object {
+        data class Param(val phoneNumber: String)
+    }
+
+    override suspend fun onExecute(param: Param): LoginOTPResult {
+        return authenticationRepository.sendLoginOtp(PhoneNumber(param.phoneNumber))
     }
 
 }

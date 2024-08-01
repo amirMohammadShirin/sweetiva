@@ -12,7 +12,6 @@ interface Cache {
     fun getBoolean(key: CacheKey): Boolean
     fun getLong(key: CacheKey): Long
     fun getInt(key: CacheKey): Int
-    fun getObject(key: CacheKey): String
     fun clearData()
 
 }

@@ -9,7 +9,8 @@ import javax.inject.Named
 
 class UpsertCurrentUserUseCase @Inject constructor(
     @Named("sharedPreferences")
-    private val cache: Cache) : BaseUseCase<User, Boolean>() {
+    private val cache: Cache
+) : BaseUseCase<User, Boolean>() {
     override suspend fun onExecute(param: User): Boolean {
         return try {
             cache.saveObject(CacheKey.CURRENT_USER, param)
