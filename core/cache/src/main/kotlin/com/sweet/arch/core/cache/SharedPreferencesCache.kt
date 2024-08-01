@@ -68,10 +68,6 @@ class SharedPreferencesCache @Inject constructor(
         return sharedPreferences.getInt(key.name, -1)
     }
 
-    override fun getObject(key: CacheKey): String {
-        return getString(key)
-    }
-
     override fun clearData() {
         sharedPreferences.edit {
             clear()

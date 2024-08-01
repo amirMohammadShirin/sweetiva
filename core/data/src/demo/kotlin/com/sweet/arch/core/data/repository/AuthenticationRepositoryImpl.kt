@@ -1,9 +1,11 @@
 package com.sweet.arch.core.data.repository
 
-import com.sweet.arch.core.domain.model.auth.LoginParam
+import com.sweet.arch.core.domain.model.auth.LoginOTP
 import com.sweet.arch.core.domain.model.auth.LoginResult
 import com.sweet.arch.core.domain.model.auth.LoginOTPResult
-import com.sweet.arch.core.domain.model.auth.LoginOtpParam
+import com.sweet.arch.core.domain.model.auth.LoginTrackingCode
+import com.sweet.arch.core.domain.model.user.PhoneNumber
+import com.sweet.arch.core.domain.model.user.User
 import com.sweet.arch.core.domain.repository.AuthenticationRepository
 import com.sweet.iva.core.common.dispatcher.DispatcherProvider
 import com.sweet.iva.core.network.datasource.AuthenticationRemoteDataSource
@@ -22,30 +24,40 @@ class AuthenticationRepositoryImpl @Inject constructor(
     private val remoteDataSource: AuthenticationRemoteDataSource
 ) : AuthenticationRepository {
 
-    override suspend fun sendLoginOtp(param: LoginOtpParam): LoginOTPResult {
+    override suspend fun sendLoginOtp(phoneNumber: PhoneNumber): LoginOTPResult {
         return withContext(dispatcherProvider.io) {
-            return@withContext remoteDataSource.sendLoginOtp(param.toNetworkModel()).toDomainModel()
+            remoteDataSource.sendLoginOtp(phoneNumber.toNetworkModel())
+                .toDomainModel()
         }
     }
 
-    override suspend fun login(param: LoginParam): LoginResult {
+    override suspend fun login(
+        phoneNumber: PhoneNumber,
+        trackingCode: LoginTrackingCode,
+        otp: LoginOTP
+    ): LoginResult {
         return withContext(dispatcherProvider.io) {
-            return@withContext remoteDataSource.getAuthToken(param.toNetworkModel()).toDomainModel()
+            remoteDataSource.getAuthToken(
+                AuthTokenNetworkParam(
+                    phoneNumber = phoneNumber.value,
+                    otpValue = otp.value,
+                    trackingCode = trackingCode.value
+                )
+            ).toDomainModel()
         }
     }
 
 }
+
+private fun PhoneNumber.toNetworkModel(): LoginOtpNetworkParam = LoginOtpNetworkParam(
+    this.value
+)
 
 private fun AuthTokenNetworkResult.toDomainModel() = LoginResult(
     accessToken = this.accessToken,
     refreshToken = this.refreshToken
 )
 
-private fun LoginParam.toNetworkModel() = AuthTokenNetworkParam(
-    phoneNumber = this.phoneNumber,
-    trackingCode = this.trackingCode,
-    otpValue = this.otpValue
-)
 
 private fun LoginOtpNetworkResult.toDomainModel(): LoginOTPResult {
     return LoginOTPResult(
@@ -54,8 +66,4 @@ private fun LoginOtpNetworkResult.toDomainModel(): LoginOTPResult {
     )
 }
 
-private fun LoginOtpParam.toNetworkModel(): LoginOtpNetworkParam {
-    return LoginOtpNetworkParam(
-        phoneNumber = this.phoneNumber
-    )
-}
+

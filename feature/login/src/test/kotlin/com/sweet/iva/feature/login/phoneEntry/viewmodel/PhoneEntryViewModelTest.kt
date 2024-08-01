@@ -50,7 +50,7 @@ class PhoneEntryViewModelTest {
             val viewModel = createViewModel(mockk())
             val phoneNumber = "09120425101"
 
-            viewModel.process(PhoneEntryAction.OnPhoneNumberChanged(phoneNumber))
+            viewModel.changePhoneNumber(phoneNumber)
 
             advanceUntilIdle()
 
@@ -71,7 +71,7 @@ class PhoneEntryViewModelTest {
             val viewModel = createViewModel(mockk())
             val phoneNumber = "02"
 
-            viewModel.process(PhoneEntryAction.OnPhoneNumberChanged(phoneNumber))
+            viewModel.changePhoneNumber(phoneNumber)
 
             advanceUntilIdle()
 
@@ -96,7 +96,7 @@ class PhoneEntryViewModelTest {
             val sendLoginOtpUseCase = mockk<SendLoginOtpUseCase>()
             val viewModel = createViewModel(sendLoginOtpUseCase)
 
-            viewModel.process(PhoneEntryAction.OnConfirmClicked)
+            viewModel.sendOtp()
 
             advanceUntilIdle()
 

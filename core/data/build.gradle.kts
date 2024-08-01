@@ -8,6 +8,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.gson)
     implementation(projects.core.network)
     implementation(projects.core.domain)
     implementation(projects.core.common)

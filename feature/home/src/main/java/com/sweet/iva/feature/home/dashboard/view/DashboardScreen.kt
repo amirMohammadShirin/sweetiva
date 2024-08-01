@@ -85,6 +85,7 @@ class DashboardScreen :
                     width = Dimension.fillToConstraints
                 },
                 onLeftIconClicked = {
+                    viewModel.logout()
                 },
                 onRightIconClicked = {
                 },

@@ -7,11 +7,11 @@ import com.sweet.arch.core.domain.usecase.BaseUseCase
 import javax.inject.Inject
 
 @StreamsData<User>
-class StreamCurrentUserUseCase @Inject constructor(
-    private val userRepository: UserRepository
-) : BaseUseCase<User?, Boolean>() {
-    override suspend fun onExecute(param: User?): Boolean {
-        userRepository.updateCurrentUserOnStream(param)
+class LogoutUseCase @Inject constructor(
+    private val userRepository: UserRepository,
+) : BaseUseCase<Unit?, Boolean>() {
+    override suspend fun onExecute(param: Unit?): Boolean {
+        userRepository.removeCurrentUser()
         return true
     }
 }

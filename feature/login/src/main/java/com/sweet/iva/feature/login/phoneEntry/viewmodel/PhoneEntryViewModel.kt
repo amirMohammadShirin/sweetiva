@@ -1,7 +1,7 @@
 package com.sweet.iva.feature.login.phoneEntry.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import com.sweet.arch.core.domain.model.auth.LoginOtpParam
+import com.sweet.arch.core.domain.usecase.auth.LoginUseCase
 import com.sweet.arch.core.domain.usecase.auth.SendLoginOtpUseCase
 import com.sweet.iva.core.common.model.DisplayException
 import com.sweet.iva.core.common.util.ValidationState
@@ -53,7 +53,9 @@ class PhoneEntryViewModel @Inject constructor(
             }
 
             val result =
-                sendLoginOtpUseCase.execute(LoginOtpParam(currentState.phoneNumberModel.value))
+                sendLoginOtpUseCase.execute(
+                    SendLoginOtpUseCase.Companion.Param(currentState.phoneNumberModel.value)
+                )
 
             updateState {
                 it.copy(
