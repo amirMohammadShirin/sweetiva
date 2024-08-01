@@ -48,13 +48,11 @@ class VerificationScreen :
         val viewModel = viewModel()
 
         LaunchedEffect(Unit) {
-//            viewModel.process(
-//                VerificationAction.StoreInitialData(
-//                    trackingCode = parameters[NavigationParam.TRACKING_CODE] ?: "",
-//                    phoneNumber = parameters[NavigationParam.PHONE_NUMBER] ?: "",
-//                    otpTime = parameters[NavigationParam.OTP_TIME] ?: ""
-//                )
-//            )
+            viewModel.start(
+                trackingCode = parameters[NavigationParam.TRACKING_CODE] ?: "",
+                phoneNumber = parameters[NavigationParam.PHONE_NUMBER] ?: "",
+                otpTime = parameters[NavigationParam.OTP_TIME] ?: ""
+            )
         }
 
         VerificationContent(
@@ -66,13 +64,13 @@ class VerificationScreen :
             verificationCode = state.verificationCode.value,
             loading = state.loading,
             onVerificationCodeChanged = {
-//                viewModel.process(VerificationAction.VerificationCodeChanged(it))
+                viewModel.changeVerificationCode(it)
             },
             onSubmitButtonClicked = {
-//                viewModel.process(VerificationAction.Confirm)
+                viewModel.confirm()
             },
             onResendVerificationCodeClicked = {
-//                viewModel.process(VerificationAction.ResendVerificationCode)
+                viewModel.navigateBack()
             }
         )
 

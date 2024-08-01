@@ -15,14 +15,12 @@ import javax.inject.Inject
  * Created by aShirin on 6/8/2024.
  */
 @HiltViewModel
-class IntroViewModel @Inject constructor(
-    private val dispatcherProvider: DispatcherProvider
-) :
+class IntroViewModel @Inject constructor() :
     BaseViewModel<IntroUiModel, IntroEvent>(
         initialState = IntroUiModel()
     ) {
 
-    private fun navigateToLogin() {
+    fun navigateToLogin() {
         navigateTo(
             NavigationCommand.ToScreen(ApplicationRoutes.loginGraphRoute)
         )

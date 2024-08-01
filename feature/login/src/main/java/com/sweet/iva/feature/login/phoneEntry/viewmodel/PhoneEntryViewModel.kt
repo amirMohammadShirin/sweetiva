@@ -28,7 +28,7 @@ class PhoneEntryViewModel @Inject constructor(
     initialState = PhoneEntryUiModel()
 ) {
 
-    private fun sendOtp() {
+    fun sendOtp() {
         viewModelScope.launch(
             CoroutineExceptionHandler { _, throwable ->
 
@@ -75,7 +75,7 @@ class PhoneEntryViewModel @Inject constructor(
         }
     }
 
-    private fun changePhoneNumber(phoneNumber: String) {
+    fun changePhoneNumber(phoneNumber: String) {
 
         val errorMessage =
             if (ValidationUtil.phoneNumber(phoneNumber) == ValidationState.INVALID) "شماره تلفن همراه معتبر نمی‌باشد" else null

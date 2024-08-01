@@ -22,7 +22,7 @@ class DashboardViewModel @Inject constructor(
         initialState = DashboardUiModel(),
     ) {
 
-    private fun getUserAccounts() {
+    fun getUserAccounts() {
         viewModelScope.launch {
             withContext(dispatcherProvider.io) {
                 delay(2000)

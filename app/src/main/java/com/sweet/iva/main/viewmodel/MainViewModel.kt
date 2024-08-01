@@ -12,48 +12,44 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 internal class MainViewModel
-    @Inject
-    constructor(
-        private val dispatcherProvider: DispatcherProvider,
-        private val listenToCurrentUserUseCase: ListenToCurrentUserUseCase,
-    ) : BaseViewModel<MainViewState, MainEvent>(initialState = MainViewState()) {
+@Inject
+constructor(
+    private val dispatcherProvider: DispatcherProvider,
+    private val listenToCurrentUserUseCase: ListenToCurrentUserUseCase,
+) : BaseViewModel<MainViewState, MainEvent>(initialState = MainViewState()) {
 
-        init {
-            collectCurrentUser()
-        }
+    init {
+        collectCurrentUser()
+    }
 
-        private fun start() {
-            viewModelScope.launch {
-                updateState {
-                    it.copy(loading = false)
-                }
-            }
-        }
-
-        private fun collectCurrentUser() {
-            viewModelScope.launch(dispatcherProvider.io) {
-                listenToCurrentUserUseCase
-                    .start(null)
-                    .collect { user ->
-                        navigate(user)
-                    }
-            }
-        }
-
-        fun getStartupData() {
-//            process(MainAction.FetchStartUpData)
-        }
-
-        private fun navigate(currentUser: User?) {
-            val destination =
-                if (currentUser?.identity != null) ApplicationRoutes.homeGraphRoute else ApplicationRoutes.introGraphRoute
-
+    fun start() {
+        viewModelScope.launch {
             updateState {
-                it.copy(
-                    startDestination = destination,
-                    user = currentUser,
-                    loading = false
-                )
+                it.copy(loading = false)
             }
         }
     }
+
+    private fun collectCurrentUser() {
+        viewModelScope.launch(dispatcherProvider.io) {
+            listenToCurrentUserUseCase
+                .start(null)
+                .collect { user ->
+                    navigate(user)
+                }
+        }
+    }
+
+    private fun navigate(currentUser: User?) {
+        val destination =
+            if (currentUser?.identity != null) ApplicationRoutes.homeGraphRoute else ApplicationRoutes.introGraphRoute
+
+        updateState {
+            it.copy(
+                startDestination = destination,
+                user = currentUser,
+                loading = false
+            )
+        }
+    }
+}

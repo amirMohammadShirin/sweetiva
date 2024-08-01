@@ -111,7 +111,7 @@ class IntroScreen : BaseScreen<IntroUiModel, IntroEvent>(
                         width = Dimension.fillToConstraints
                     },
                 onClick = {
-//                    viewModel.process(IntroAction.EntryButtonClicked)
+                    viewModel.navigateToLogin()
                 },
                 text = "ورود"
             )

@@ -27,18 +27,7 @@ constructor(
     private val timerInterval: Long = 1000
     private var timerValue: Long = 20000
 
-//    fun handleAction(action: VerificationAction) {
-//        when (action) {
-//            is VerificationAction.VerificationCodeChanged -> changeVerificationCode(action.verificationCode)
-//            is VerificationAction.Confirm -> confirm()
-//            is VerificationAction.ResendVerificationCode -> navigateBack()
-//            is VerificationAction.StoreInitialData -> {
-//                start(action)
-//            }
-//        }
-//    }
-
-    private fun start(
+    fun start(
         phoneNumber: String,
         trackingCode: String,
         otpTime: String
@@ -57,14 +46,14 @@ constructor(
         }
     }
 
-    private fun saveOtpTime(time: String) {
+    fun saveOtpTime(time: String) {
         try {
             timerValue = time.toLong()
         } catch (_: Exception) {
         }
     }
 
-    private fun confirm() {
+    fun confirm() {
         viewModelScope.launch(
             CoroutineExceptionHandler { _, throwable ->
                 updateState {
@@ -97,7 +86,7 @@ constructor(
         }
     }
 
-    private fun changeVerificationCode(verificationCode: String) {
+     fun changeVerificationCode(verificationCode: String) {
         updateState {
             it.copy(
                 verificationCode =

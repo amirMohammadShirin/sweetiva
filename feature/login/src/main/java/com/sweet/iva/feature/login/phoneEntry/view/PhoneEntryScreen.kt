@@ -53,10 +53,10 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryEvent>(
             onToolbarIconClicked = { viewModel.navigateBack() },
             phoneNumber = state.phoneNumberModel,
             onPhoneNumberChanged = {
-//                viewModel.process(PhoneEntryAction.OnPhoneNumberChanged(it))
+                viewModel.changePhoneNumber(it)
             },
             onConfirmClicked = {
-//                viewModel.process(PhoneEntryAction.OnConfirmClicked)
+                viewModel.sendOtp()
             }
         )
 

@@ -49,7 +49,7 @@ class DashboardScreen :
         val viewModel = viewModel()
 
         LaunchedEffect(Unit) {
-//            viewModel.process(DashboardAction.GetUserAccounts)
+            viewModel.getUserAccounts()
         }
 
         ConstraintLayout(
