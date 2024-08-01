@@ -49,7 +49,7 @@ internal class MainActivity : ComponentActivity() {
 
 
         splashScreen.setKeepOnScreenCondition { uiState.loading }
-        viewModel.getStartupData()
+        viewModel.start()
 
         setContent {
             MainActivityContent(uiState)

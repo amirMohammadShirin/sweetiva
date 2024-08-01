@@ -3,8 +3,6 @@ package com.sweet.iva.core.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sweet.iva.core.ui.entity.DisplayedError
-import com.sweet.iva.core.ui.model.IAction
-import com.sweet.iva.core.ui.model.IEvent
 import com.sweet.iva.core.ui.navigation.NavigationCommand
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,7 +17,7 @@ import kotlinx.coroutines.launch
  */
 
 
-abstract class BaseViewModel<State, Action : IAction, Event : IEvent>(
+abstract class BaseViewModel<State, Event : com.sweet.iva.core.ui.model.Event>(
     val initialState: State
 ) : ViewModel() {
 
@@ -30,10 +28,8 @@ abstract class BaseViewModel<State, Action : IAction, Event : IEvent>(
     val currentState: State
         get() = _uiStateFlow.value
 
-    private val _uiActionFlow = MutableSharedFlow<Action>()
-
-    private val _uiEventFlow = MutableSharedFlow<IEvent>()
-    val uiEventFlow: SharedFlow<IEvent>
+    private val _uiEventFlow = MutableSharedFlow<com.sweet.iva.core.ui.model.Event>()
+    val uiEventFlow: SharedFlow<com.sweet.iva.core.ui.model.Event>
         get() = _uiEventFlow
 
     private val _navigationFlow = MutableSharedFlow<NavigationCommand>()
@@ -43,20 +39,6 @@ abstract class BaseViewModel<State, Action : IAction, Event : IEvent>(
     val errorFlow: Flow<DisplayedError>
         get() = _errorFlow
 
-    abstract fun handleAction(action: Action)
-
-    init {
-        viewModelScope.launch {
-            _uiActionFlow.collect(this@BaseViewModel::handleAction)
-        }
-    }
-
-    fun process(action: Action) {
-        viewModelScope.launch {
-            _uiActionFlow.emit(action)
-        }
-    }
-
 
     fun updateState(mutation: (currentState: State) -> State) {
         _uiStateFlow.update {
@@ -64,7 +46,7 @@ abstract class BaseViewModel<State, Action : IAction, Event : IEvent>(
         }
     }
 
-    fun sendEvent(event: IEvent) {
+    fun sendEvent(event: com.sweet.iva.core.ui.model.Event) {
         viewModelScope.launch {
             _uiEventFlow.emit(event)
         }

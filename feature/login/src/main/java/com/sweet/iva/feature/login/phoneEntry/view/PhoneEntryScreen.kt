@@ -27,7 +27,6 @@ import com.sweet.iva.core.designsystem.theme.dimens
 import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 import com.sweet.iva.core.ui.view.BaseScreen
 import com.sweet.iva.feature.login.R
-import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryAction
 import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryEvent
 import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryUiModel
 import com.sweet.iva.feature.login.phoneEntry.model.PhoneNumberModel
@@ -36,7 +35,7 @@ import com.sweet.iva.feature.login.phoneEntry.viewmodel.PhoneEntryViewModel
 /**
  * Created by aShirin on 6/9/2024.
  */
-class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEntryEvent>(
+class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryEvent>(
     name = "ورود",
     route = ApplicationRoutes.phoneEntryScreenRoute
 ) {
@@ -53,8 +52,12 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
             loading = state.loading,
             onToolbarIconClicked = { viewModel.navigateBack() },
             phoneNumber = state.phoneNumberModel,
-            onPhoneNumberChanged = { viewModel.process(PhoneEntryAction.OnPhoneNumberChanged(it)) },
-            onConfirmClicked = { viewModel.process(PhoneEntryAction.OnConfirmClicked) }
+            onPhoneNumberChanged = {
+                viewModel.changePhoneNumber(it)
+            },
+            onConfirmClicked = {
+                viewModel.sendOtp()
+            }
         )
 
     }
@@ -84,7 +87,7 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
             AppToolbar(
                 modifier = Modifier
                     .constrainAs(toolbarRef) {
-                        top.linkTo(parent.top,MaterialTheme.dimens.defaultGap)
+                        top.linkTo(parent.top, MaterialTheme.dimens.defaultGap)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     }
@@ -144,7 +147,7 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryAction, PhoneEn
                     .constrainAs(btnEnterRef) {
                         start.linkTo(phoneNumberRef.start, MaterialTheme.dimens.defaultGap)
                         end.linkTo(phoneNumberRef.end, MaterialTheme.dimens.defaultGap)
-                        bottom.linkTo(parent.bottom,MaterialTheme.dimens.defaultGap)
+                        bottom.linkTo(parent.bottom, MaterialTheme.dimens.defaultGap)
                         width = Dimension.fillToConstraints
                     },
                 isLoading = loading,

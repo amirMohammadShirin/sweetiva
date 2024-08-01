@@ -32,13 +32,12 @@ import com.sweet.iva.core.designsystem.theme.dimens
 import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 import com.sweet.iva.core.ui.view.BaseScreen
 import com.sweet.iva.feature.home.R
-import com.sweet.iva.feature.home.dashboard.model.DashboardAction
 import com.sweet.iva.feature.home.dashboard.model.DashboardEvent
 import com.sweet.iva.feature.home.dashboard.model.DashboardUiModel
 import com.sweet.iva.feature.home.dashboard.viewmodel.DashboardViewModel
 
 class DashboardScreen :
-    BaseScreen<DashboardUiModel, DashboardAction, DashboardEvent>(
+    BaseScreen<DashboardUiModel, DashboardEvent>(
         route = ApplicationRoutes.dashboardScreenRoute,
         name = "خانه",
     ) {
@@ -50,13 +49,13 @@ class DashboardScreen :
         val viewModel = viewModel()
 
         LaunchedEffect(Unit) {
-            viewModel.process(DashboardAction.GetUserAccounts)
+            viewModel.getUserAccounts()
         }
 
         ConstraintLayout(
             modifier =
-                Modifier
-                    .fillMaxSize(),
+            Modifier
+                .fillMaxSize(),
         ) {
             val (
                 toolbarRef,
@@ -65,12 +64,12 @@ class DashboardScreen :
 
             DashboardToolbar(
                 modifier =
-                    Modifier.constrainAs(toolbarRef) {
-                        top.linkTo(parent.top, MaterialTheme.dimens.defaultGap)
-                        end.linkTo(parent.end)
-                        start.linkTo(parent.start)
-                        width = Dimension.fillToConstraints
-                    },
+                Modifier.constrainAs(toolbarRef) {
+                    top.linkTo(parent.top, MaterialTheme.dimens.defaultGap)
+                    end.linkTo(parent.end)
+                    start.linkTo(parent.start)
+                    width = Dimension.fillToConstraints
+                },
                 onLeftIconClicked = {
                 },
                 onRightIconClicked = {
@@ -79,28 +78,29 @@ class DashboardScreen :
 
             Column(
                 modifier =
-                    Modifier
-                        .constrainAs(contentRef) {
-                            top.linkTo(toolbarRef.bottom, MaterialTheme.dimens.smallGap)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                            bottom.linkTo(parent.bottom, MaterialTheme.dimens.smallGap)
-                            width = Dimension.fillToConstraints
-                            height = Dimension.fillToConstraints
-                        }.verticalScroll(rememberScrollState())
-                        .padding(
-                            horizontal = MaterialTheme.dimens.defaultGap,
-                            vertical = MaterialTheme.dimens.largePadding,
-                        ),
+                Modifier
+                    .constrainAs(contentRef) {
+                        top.linkTo(toolbarRef.bottom, MaterialTheme.dimens.smallGap)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom, MaterialTheme.dimens.smallGap)
+                        width = Dimension.fillToConstraints
+                        height = Dimension.fillToConstraints
+                    }
+                    .verticalScroll(rememberScrollState())
+                    .padding(
+                        horizontal = MaterialTheme.dimens.defaultGap,
+                        vertical = MaterialTheme.dimens.largePadding,
+                    ),
                 verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 if (state.userAccounts.isEmpty()) {
                     AppShimmer(
                         modifier =
-                            Modifier
-                                .fillMaxSize()
-                                .height(180.dp),
+                        Modifier
+                            .fillMaxSize()
+                            .height(180.dp),
                     )
                 } else {
                     HorizontalUserAccounts(

@@ -6,12 +6,11 @@ import com.sweet.arch.core.domain.usecase.auth.SendLoginOtpUseCase
 import com.sweet.iva.core.common.model.DisplayException
 import com.sweet.iva.core.common.util.ValidationState
 import com.sweet.iva.core.common.util.ValidationUtil
-import com.sweet.iva.core.ui.model.IEvent
+import com.sweet.iva.core.ui.model.Event
 import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 import com.sweet.iva.core.ui.navigation.NavigationCommand
 import com.sweet.iva.core.ui.navigation.NavigationParam
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
-import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryAction
 import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryEvent
 import com.sweet.iva.feature.login.phoneEntry.model.PhoneEntryUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,22 +24,11 @@ import javax.inject.Inject
 @HiltViewModel
 class PhoneEntryViewModel @Inject constructor(
     private val sendLoginOtpUseCase: SendLoginOtpUseCase
-) : BaseViewModel<PhoneEntryUiModel, PhoneEntryAction, PhoneEntryEvent>(
+) : BaseViewModel<PhoneEntryUiModel, PhoneEntryEvent>(
     initialState = PhoneEntryUiModel()
 ) {
-    override fun handleAction(action: PhoneEntryAction) {
-        when (action) {
-            is PhoneEntryAction.OnPhoneNumberChanged -> {
-                changePhoneNumber(action.phoneNumber)
-            }
 
-            PhoneEntryAction.OnConfirmClicked -> {
-                sendOtp()
-            }
-        }
-    }
-
-    private fun sendOtp() {
+    fun sendOtp() {
         viewModelScope.launch(
             CoroutineExceptionHandler { _, throwable ->
 
@@ -49,11 +37,11 @@ class PhoneEntryViewModel @Inject constructor(
                 }
 
                 if (throwable is DisplayException) {
-                    sendEvent(IEvent.ShowSnack(throwable.message ?: "خطا در دریافت اطلاعات"))
+                    sendEvent(Event.ShowSnack(throwable.message ?: "خطا در دریافت اطلاعات"))
                     return@CoroutineExceptionHandler
                 }
 
-                sendEvent(IEvent.ShowSnack("خطا در دریافت اطلاعات"))
+                sendEvent(Event.ShowSnack("خطا در دریافت اطلاعات"))
 
             }
         ) {
@@ -87,7 +75,7 @@ class PhoneEntryViewModel @Inject constructor(
         }
     }
 
-    private fun changePhoneNumber(phoneNumber: String) {
+    fun changePhoneNumber(phoneNumber: String) {
 
         val errorMessage =
             if (ValidationUtil.phoneNumber(phoneNumber) == ValidationState.INVALID) "شماره تلفن همراه معتبر نمی‌باشد" else null

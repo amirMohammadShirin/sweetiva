@@ -12,7 +12,7 @@ import com.sweet.iva.core.ui.view.BaseScreen
 
 
 fun NavGraphBuilder.registerDestination(
-    screen: BaseScreen<*, *, *>,
+    screen: BaseScreen<*, *>,
     enterTransition: (@JvmSuppressWildcards
     AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
     exitTransition: (@JvmSuppressWildcards

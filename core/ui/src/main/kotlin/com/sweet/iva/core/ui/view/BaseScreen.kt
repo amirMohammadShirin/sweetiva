@@ -18,12 +18,10 @@ import com.sweet.iva.core.ui.helper.LocalSnackBarState
 import com.sweet.iva.core.ui.helper.getComposableState
 import com.sweet.iva.core.ui.helper.showSnackbar
 import com.sweet.iva.core.ui.helper.showToast
-import com.sweet.iva.core.ui.model.IAction
-import com.sweet.iva.core.ui.model.IEvent
 import com.sweet.iva.core.ui.navigation.NavigationParam
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 
-abstract class BaseScreen<State, Action : IAction, Event : IEvent>(
+abstract class BaseScreen<State, Event : com.sweet.iva.core.ui.model.Event>(
     val route: String,
     val name: String
 ) {
@@ -31,7 +29,7 @@ abstract class BaseScreen<State, Action : IAction, Event : IEvent>(
     protected val parameters = linkedMapOf<NavigationParam, String>()
 
     @Composable
-    abstract fun viewModel(): BaseViewModel<State, Action, Event>
+    abstract fun viewModel(): BaseViewModel<State, Event>
 
     @Composable
     open fun Screen(navBackStackEntry: NavBackStackEntry?) {
@@ -67,7 +65,7 @@ abstract class BaseScreen<State, Action : IAction, Event : IEvent>(
 
     @Composable
     protected fun HandleEvent(
-        onEvent: (IEvent) -> Unit
+        onEvent: (com.sweet.iva.core.ui.model.Event) -> Unit
     ) {
         with(viewModel()) {
             LaunchedEffect(key1 = Unit) {
@@ -93,7 +91,7 @@ abstract class BaseScreen<State, Action : IAction, Event : IEvent>(
      */
     @Composable
     private fun BaseScreenBehavior(
-        viewModel: BaseViewModel<State, Action, Event>,
+        viewModel: BaseViewModel<State, Event>,
         snackbarHostState: SnackbarHostState = LocalSnackBarState.current,
         context: Context = LocalContext.current,
         feature: (@Composable () -> Unit)
@@ -121,7 +119,7 @@ abstract class BaseScreen<State, Action : IAction, Event : IEvent>(
 
     @Composable
     private fun NavigationHandler(
-        viewModel: BaseViewModel<State, Action, Event>,
+        viewModel: BaseViewModel<State, Event>,
         navController: NavController,
         content: (@Composable () -> Unit)
     ) {
@@ -136,7 +134,7 @@ abstract class BaseScreen<State, Action : IAction, Event : IEvent>(
 
     @Composable
     fun ErrorHandler(
-        viewModel: BaseViewModel<*, out IAction, *>,
+        viewModel: BaseViewModel<*, *>,
         snackbarHostState: SnackbarHostState,
         context: Context,
         content: (@Composable () -> Unit)
@@ -159,13 +157,13 @@ abstract class BaseScreen<State, Action : IAction, Event : IEvent>(
 
     @Composable
     fun SnackHandler(
-        viewModel: BaseViewModel<*, out IAction, *>,
+        viewModel: BaseViewModel<*, *>,
         snackbarHostState: SnackbarHostState,
         content: (@Composable () -> Unit)
     ) {
         LaunchedEffect(Unit) {
             viewModel.uiEventFlow.collect {
-                if (it is IEvent.ShowSnack) {
+                if (it is com.sweet.iva.core.ui.model.Event.ShowSnack) {
                     snackbarHostState.showSnackbar(it.message)
                 }
             }
@@ -175,13 +173,13 @@ abstract class BaseScreen<State, Action : IAction, Event : IEvent>(
 
     @Composable
     fun ToastHandler(
-        viewModel: BaseViewModel<*, out IAction, *>,
+        viewModel: BaseViewModel<*, *>,
         context: Context,
         content: (@Composable () -> Unit)
     ) {
         LaunchedEffect(Unit) {
             viewModel.uiEventFlow.collect {
-                if (it is IEvent.ShowToast) {
+                if (it is com.sweet.iva.core.ui.model.Event.ShowToast) {
                     Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
                 }
             }

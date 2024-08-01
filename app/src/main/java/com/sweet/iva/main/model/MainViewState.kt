@@ -3,7 +3,6 @@ package com.sweet.iva.main.model
 import com.sweet.arch.core.domain.model.user.User
 import com.sweet.iva.DarkThemeConfig
 import com.sweet.iva.ThemeBrand
-import com.sweet.iva.core.ui.model.IViewState
 import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 
 internal data class MainViewState(
@@ -13,4 +12,4 @@ internal data class MainViewState(
     val useDynamicColor: Boolean = false,
     val startDestination: String = ApplicationRoutes.introGraphRoute,
     val user : User? = null
-) : IViewState
+)

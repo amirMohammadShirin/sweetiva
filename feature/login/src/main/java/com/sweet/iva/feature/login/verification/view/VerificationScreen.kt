@@ -30,13 +30,12 @@ import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 import com.sweet.iva.core.ui.navigation.NavigationParam
 import com.sweet.iva.core.ui.view.BaseScreen
 import com.sweet.iva.feature.login.R
-import com.sweet.iva.feature.login.verification.model.VerificationAction
 import com.sweet.iva.feature.login.verification.model.VerificationEvent
 import com.sweet.iva.feature.login.verification.model.VerificationUiModel
 import com.sweet.iva.feature.login.verification.viewmodel.VerificationViewModel
 
 class VerificationScreen :
-    BaseScreen<VerificationUiModel, VerificationAction, VerificationEvent>(
+    BaseScreen<VerificationUiModel, VerificationEvent>(
         route = ApplicationRoutes.loginVerificationScreenRoute,
         name = "فعال سازی"
     ) {
@@ -49,12 +48,10 @@ class VerificationScreen :
         val viewModel = viewModel()
 
         LaunchedEffect(Unit) {
-            viewModel.process(
-                VerificationAction.StoreInitialData(
-                    trackingCode = parameters[NavigationParam.TRACKING_CODE] ?: "",
-                    phoneNumber = parameters[NavigationParam.PHONE_NUMBER] ?: "",
-                    otpTime = parameters[NavigationParam.OTP_TIME] ?: ""
-                )
+            viewModel.start(
+                trackingCode = parameters[NavigationParam.TRACKING_CODE] ?: "",
+                phoneNumber = parameters[NavigationParam.PHONE_NUMBER] ?: "",
+                otpTime = parameters[NavigationParam.OTP_TIME] ?: ""
             )
         }
 
@@ -67,13 +64,13 @@ class VerificationScreen :
             verificationCode = state.verificationCode.value,
             loading = state.loading,
             onVerificationCodeChanged = {
-                viewModel.process(VerificationAction.VerificationCodeChanged(it))
+                viewModel.changeVerificationCode(it)
             },
             onSubmitButtonClicked = {
-                viewModel.process(VerificationAction.Confirm)
+                viewModel.confirm()
             },
             onResendVerificationCodeClicked = {
-                viewModel.process(VerificationAction.ResendVerificationCode)
+                viewModel.navigateBack()
             }
         )
 

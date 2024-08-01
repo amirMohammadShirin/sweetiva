@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import com.sweet.iva.core.common.dispatcher.DispatcherProvider
 import com.sweet.iva.core.designsystem.component.model.UserCardUiModel
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
-import com.sweet.iva.feature.home.dashboard.model.DashboardAction
 import com.sweet.iva.feature.home.dashboard.model.DashboardEvent
 import com.sweet.iva.feature.home.dashboard.model.DashboardUiModel
 import com.sweet.iva.feature.home.dashboard.model.mockAccounts
@@ -19,28 +18,21 @@ import javax.inject.Inject
 class DashboardViewModel @Inject constructor(
     private val dispatcherProvider: DispatcherProvider
 ) :
-    BaseViewModel<DashboardUiModel, DashboardAction, DashboardEvent>(
-            initialState = DashboardUiModel(),
-        ) {
-        override fun handleAction(action: DashboardAction) {
-            when (action) {
-                DashboardAction.GetUserAccounts -> {
-                    getUserAccounts()
-                }
+    BaseViewModel<DashboardUiModel, DashboardEvent>(
+        initialState = DashboardUiModel(),
+    ) {
+
+    fun getUserAccounts() {
+        viewModelScope.launch {
+            withContext(dispatcherProvider.io) {
+                delay(2000)
+            }
+            updateState {
+                it.copy(
+                    userAccounts = mockAccounts,
+                )
             }
         }
-
-        private fun getUserAccounts() {
-            viewModelScope.launch {
-                withContext(dispatcherProvider.io) {
-                    delay(2000)
-                }
-                updateState {
-                    it.copy(
-                        userAccounts = mockAccounts,
-                    )
-                }
-            }
-        }
-
     }
+
+}
