@@ -24,9 +24,14 @@ abstract class BaseScreen<State, Event : com.sweet.iva.core.ui.model.Event>(
     @Composable
     open fun Screen(navBackStackEntry: NavBackStackEntry?) {
         with(viewModel()) {
+
             navBackStackEntry?.let {
                 initParameters(navBackStackEntry)
+
             }
+
+            AppendHandlers(this)
+
             val state = getComposableState()
             Column(
                 modifier = Modifier,
@@ -35,8 +40,12 @@ abstract class BaseScreen<State, Event : com.sweet.iva.core.ui.model.Event>(
             ) {
                 Content(state.value)
             }
+
         }
     }
+
+    @Composable
+    open fun AppendHandlers(viewModel: BaseViewModel<*, *>) {}
 
     private fun initParameters(navBackStackEntry: NavBackStackEntry) {
         navBackStackEntry.arguments?.let {
