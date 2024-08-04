@@ -22,7 +22,7 @@ abstract class BaseScreen<State, Event : com.sweet.iva.core.ui.model.Event>(
     abstract fun viewModel(): BaseViewModel<State, Event>
 
     @Composable
-    open fun Screen(navBackStackEntry: NavBackStackEntry?) {
+    fun Screen(navBackStackEntry: NavBackStackEntry?) {
         with(viewModel()) {
 
             navBackStackEntry?.let {
