@@ -31,6 +31,14 @@ import com.sweet.iva.core.designsystem.theme.BlueRoyal100
 import com.sweet.iva.core.designsystem.theme.dimens
 import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 import com.sweet.iva.core.ui.view.BaseScreen
+import com.sweet.iva.core.ui.view.ErrorHandler
+import com.sweet.iva.core.ui.view.ErrorHandlerImpl
+import com.sweet.iva.core.ui.view.NavigationHandler
+import com.sweet.iva.core.ui.view.NavigationHandlerImpl
+import com.sweet.iva.core.ui.view.SnackHandler
+import com.sweet.iva.core.ui.view.SnackHandlerImpl
+import com.sweet.iva.core.ui.view.ToastHandler
+import com.sweet.iva.core.ui.view.ToastHandlerImpl
 import com.sweet.iva.feature.home.R
 import com.sweet.iva.feature.home.dashboard.model.DashboardEvent
 import com.sweet.iva.feature.home.dashboard.model.DashboardUiModel
@@ -40,13 +48,19 @@ class DashboardScreen :
     BaseScreen<DashboardUiModel, DashboardEvent>(
         route = ApplicationRoutes.dashboardScreenRoute,
         name = "خانه",
-    ) {
+    ), NavigationHandler by NavigationHandlerImpl(), SnackHandler by SnackHandlerImpl(),
+    ToastHandler by ToastHandlerImpl(), ErrorHandler by ErrorHandlerImpl() {
     @Composable
     override fun viewModel(): DashboardViewModel = hiltViewModel()
 
     @Composable
     override fun Content(state: DashboardUiModel) {
         val viewModel = viewModel()
+
+        NavigationHandler(viewModel)
+        ErrorHandler(viewModel)
+        SnackHandler(viewModel)
+        ToastHandler(viewModel)
 
         LaunchedEffect(Unit) {
             viewModel.getUserAccounts()
@@ -71,6 +85,7 @@ class DashboardScreen :
                     width = Dimension.fillToConstraints
                 },
                 onLeftIconClicked = {
+                    viewModel.logout()
                 },
                 onRightIconClicked = {
                 },

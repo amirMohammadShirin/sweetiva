@@ -22,18 +22,11 @@ suspend fun SnackbarHostState.showSnackbar(
     )
     onResult?.invoke(result)
 }
-//
-//modifier: Modifier = Modifier,
-//action: (@Composable () -> Unit)? = null,
-//dismissAction: (@Composable () -> Unit)? = null,
-//actionOnNewLine: Boolean = false,
-//shape: Shape = SnackbarDefaults.shape,
-//content: @Composable () -> Unit
-//containerColor: Color = SnackbarDefaults.color,
-//contentColor: Color = SnackbarDefaults.contentColor,
-//actionContentColor: Color = SnackbarDefaults.actionContentColor,
-//dismissActionContentColor: Color = SnackbarDefaults.dismissActionContentColor,
 
 fun Context.showToast(displayedError: DisplayedError.ToastError) {
     Toast.makeText(this, displayedError.displayedMessage, Toast.LENGTH_SHORT).show()
+}
+
+fun Context.showToast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }

@@ -7,7 +7,7 @@ interface ReactiveCache<T> {
 
     val stream: Flow<T>
 
-    suspend fun save(data: T)
+    suspend fun save(data: T?)
 
     suspend fun clear()
 }

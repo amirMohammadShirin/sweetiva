@@ -2,7 +2,6 @@ package com.sweet.iva.feature.login.verification.viewmodel
 
 import android.os.CountDownTimer
 import androidx.lifecycle.viewModelScope
-import com.sweet.arch.core.domain.model.auth.LoginParam
 import com.sweet.arch.core.domain.usecase.auth.LoginUseCase
 import com.sweet.iva.core.common.util.TimeUtil
 import com.sweet.iva.core.ui.model.Event
@@ -71,7 +70,7 @@ constructor(
             }
 
             loginUseCase.execute(
-                LoginParam(
+                LoginUseCase.Companion.Param(
                     trackingCode = trackingCode,
                     phoneNumber = currentState.phoneNumber,
                     otpValue = currentState.verificationCode.value,
@@ -86,7 +85,7 @@ constructor(
         }
     }
 
-     fun changeVerificationCode(verificationCode: String) {
+    fun changeVerificationCode(verificationCode: String) {
         updateState {
             it.copy(
                 verificationCode =

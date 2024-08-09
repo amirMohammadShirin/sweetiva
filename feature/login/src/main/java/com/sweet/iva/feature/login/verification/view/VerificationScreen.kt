@@ -29,6 +29,14 @@ import com.sweet.iva.core.designsystem.theme.dimens
 import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 import com.sweet.iva.core.ui.navigation.NavigationParam
 import com.sweet.iva.core.ui.view.BaseScreen
+import com.sweet.iva.core.ui.view.ErrorHandler
+import com.sweet.iva.core.ui.view.ErrorHandlerImpl
+import com.sweet.iva.core.ui.view.NavigationHandler
+import com.sweet.iva.core.ui.view.NavigationHandlerImpl
+import com.sweet.iva.core.ui.view.SnackHandler
+import com.sweet.iva.core.ui.view.SnackHandlerImpl
+import com.sweet.iva.core.ui.view.ToastHandler
+import com.sweet.iva.core.ui.view.ToastHandlerImpl
 import com.sweet.iva.feature.login.R
 import com.sweet.iva.feature.login.verification.model.VerificationEvent
 import com.sweet.iva.feature.login.verification.model.VerificationUiModel
@@ -38,7 +46,8 @@ class VerificationScreen :
     BaseScreen<VerificationUiModel, VerificationEvent>(
         route = ApplicationRoutes.loginVerificationScreenRoute,
         name = "فعال سازی"
-    ) {
+    ), NavigationHandler by NavigationHandlerImpl(), SnackHandler by SnackHandlerImpl(),
+    ToastHandler by ToastHandlerImpl(), ErrorHandler by ErrorHandlerImpl() {
     @Composable
     override fun viewModel(): VerificationViewModel = hiltViewModel()
 
@@ -46,6 +55,11 @@ class VerificationScreen :
     override fun Content(state: VerificationUiModel) {
 
         val viewModel = viewModel()
+
+        NavigationHandler(viewModel)
+        ErrorHandler(viewModel)
+        SnackHandler(viewModel)
+        ToastHandler(viewModel)
 
         LaunchedEffect(Unit) {
             viewModel.start(

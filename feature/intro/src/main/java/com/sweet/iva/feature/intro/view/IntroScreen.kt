@@ -39,6 +39,15 @@ import com.sweet.iva.core.designsystem.theme.AppTheme
 import com.sweet.iva.core.designsystem.theme.dimens
 import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 import com.sweet.iva.core.ui.view.BaseScreen
+import com.sweet.iva.core.ui.view.ErrorHandler
+import com.sweet.iva.core.ui.view.ErrorHandlerImpl
+import com.sweet.iva.core.ui.view.NavigationHandler
+import com.sweet.iva.core.ui.view.NavigationHandlerImpl
+import com.sweet.iva.core.ui.view.SnackHandler
+import com.sweet.iva.core.ui.view.SnackHandlerImpl
+import com.sweet.iva.core.ui.view.ToastHandler
+import com.sweet.iva.core.ui.view.ToastHandlerImpl
+import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 import com.sweet.iva.feature.intro.R
 import com.sweet.iva.feature.intro.model.IntroEvent
 import com.sweet.iva.feature.intro.model.IntroItemModel
@@ -51,9 +60,14 @@ import com.sweet.iva.feature.intro.viewmodel.IntroViewModel
 class IntroScreen : BaseScreen<IntroUiModel, IntroEvent>(
     name = "intro",
     route = ApplicationRoutes.introScreenRoute
-) {
+), NavigationHandler by NavigationHandlerImpl() {
     @Composable
     override fun viewModel(): IntroViewModel = hiltViewModel()
+
+    @Composable
+    override fun AppendHandlers(viewModel: BaseViewModel<*, *>) {
+        NavigationHandler(viewModel)
+    }
 
     @OptIn(ExperimentalFoundationApi::class)
     @Composable

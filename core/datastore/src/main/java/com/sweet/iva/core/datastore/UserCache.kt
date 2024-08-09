@@ -25,7 +25,7 @@ class UserCache
                 gson.fromJson(it[stringPreferencesKey(key.name)], object : TypeToken<User>() {})
             }
 
-        override suspend fun save(data: User) {
+        override suspend fun save(data: User?) {
             appDataStore.datastore.edit {
                 it[stringPreferencesKey(key.name)] = gson.toJson(data)
             }

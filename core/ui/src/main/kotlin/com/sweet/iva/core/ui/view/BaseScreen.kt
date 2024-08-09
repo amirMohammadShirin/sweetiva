@@ -1,23 +1,13 @@
 package com.sweet.iva.core.ui.view
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavController
-import com.sweet.iva.core.ui.entity.DisplayedError
-import com.sweet.iva.core.ui.helper.LocalNavController
-import com.sweet.iva.core.ui.helper.LocalSnackBarState
 import com.sweet.iva.core.ui.helper.getComposableState
-import com.sweet.iva.core.ui.helper.showSnackbar
-import com.sweet.iva.core.ui.helper.showToast
 import com.sweet.iva.core.ui.navigation.NavigationParam
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 
@@ -37,21 +27,25 @@ abstract class BaseScreen<State, Event : com.sweet.iva.core.ui.model.Event>(
 
             navBackStackEntry?.let {
                 initParameters(navBackStackEntry)
+
             }
 
+            AppendHandlers(this)
+
             val state = getComposableState()
-            BaseScreenBehavior(this) {
-                Column(
-                    modifier = Modifier,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Content(state.value)
-                }
+            Column(
+                modifier = Modifier,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Content(state.value)
             }
 
         }
     }
+
+    @Composable
+    open fun AppendHandlers(viewModel: BaseViewModel<*, *>) {}
 
     private fun initParameters(navBackStackEntry: NavBackStackEntry) {
         navBackStackEntry.arguments?.let {
@@ -80,111 +74,5 @@ abstract class BaseScreen<State, Event : com.sweet.iva.core.ui.model.Event>(
     @Composable
     abstract fun Content(state: State)
 
-
-    /**
-     * this composable must be called
-     * in the chain normal application flow
-     * because it needs "LocalSnackBarState.current"
-     * @see com.example.mark2.helper.LocalSnackBarState
-     * @throws IllegalStateException when the snackbarHostState
-     * not provided in call site
-     */
-    @Composable
-    private fun BaseScreenBehavior(
-        viewModel: BaseViewModel<State, Event>,
-        snackbarHostState: SnackbarHostState = LocalSnackBarState.current,
-        context: Context = LocalContext.current,
-        feature: (@Composable () -> Unit)
-    ) {
-        NavigationHandler(
-            viewModel = viewModel,
-            navController = LocalNavController.current
-        ) {
-            ErrorHandler(
-                viewModel = viewModel,
-                snackbarHostState = snackbarHostState,
-                context = context
-            ) {
-                SnackHandler(viewModel = viewModel, snackbarHostState = snackbarHostState) {
-                    ToastHandler(
-                        viewModel = viewModel,
-                        context = context
-                    ) {
-                        feature.invoke()
-                    }
-                }
-            }
-        }
-    }
-
-    @Composable
-    private fun NavigationHandler(
-        viewModel: BaseViewModel<State, Event>,
-        navController: NavController,
-        content: (@Composable () -> Unit)
-    ) {
-        LaunchedEffect(Unit) {
-            viewModel.navigationFlow.collect {
-                it.navigate(navController)
-            }
-        }
-        content.invoke()
-    }
-
-
-    @Composable
-    fun ErrorHandler(
-        viewModel: BaseViewModel<*, *>,
-        snackbarHostState: SnackbarHostState,
-        context: Context,
-        content: (@Composable () -> Unit)
-    ) {
-        LaunchedEffect(Unit) {
-            viewModel.errorFlow.collect {
-                when (it) {
-                    is DisplayedError.SnackBarError -> {
-                        snackbarHostState.showSnackbar(displayedError = it)
-                    }
-
-                    is DisplayedError.ToastError -> {
-                        context.showToast(it)
-                    }
-                }
-            }
-        }
-        content.invoke()
-    }
-
-    @Composable
-    fun SnackHandler(
-        viewModel: BaseViewModel<*, *>,
-        snackbarHostState: SnackbarHostState,
-        content: (@Composable () -> Unit)
-    ) {
-        LaunchedEffect(Unit) {
-            viewModel.uiEventFlow.collect {
-                if (it is com.sweet.iva.core.ui.model.Event.ShowSnack) {
-                    snackbarHostState.showSnackbar(it.message)
-                }
-            }
-        }
-        content.invoke()
-    }
-
-    @Composable
-    fun ToastHandler(
-        viewModel: BaseViewModel<*, *>,
-        context: Context,
-        content: (@Composable () -> Unit)
-    ) {
-        LaunchedEffect(Unit) {
-            viewModel.uiEventFlow.collect {
-                if (it is com.sweet.iva.core.ui.model.Event.ShowToast) {
-                    Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
-                }
-            }
-        }
-        content.invoke()
-    }
 
 }

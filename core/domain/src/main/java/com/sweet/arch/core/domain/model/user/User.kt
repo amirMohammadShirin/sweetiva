@@ -2,7 +2,7 @@ package com.sweet.arch.core.domain.model.user
 
 import com.sweet.iva.core.domain.model.exception.BusinessException
 
-open class User private constructor(
+data class User internal constructor(
     val phoneNumber: PhoneNumber,
     val identity: Identity? = null,
     val firstName: String? = null,
@@ -10,14 +10,14 @@ open class User private constructor(
     val nationalCode: String? = null
 ) {
     fun logOut(): User {
-        return create(
-            Argument(
-                phoneNumber = this.phoneNumber.value,
-                nationalCode = this.nationalCode,
-                firstName = this.firstName,
-                lastName = this.lastName,
-                identity = null
-            )
+        return this.copy(
+            identity = null
+        )
+    }
+
+    fun login(identity: Identity.Companion.Argument): User {
+        return this.copy(
+            identity = Identity.create(identity)
         )
     }
 
@@ -29,7 +29,6 @@ open class User private constructor(
                 firstName = argument.firstName,
                 lastName = argument.lastName,
                 nationalCode = argument.nationalCode,
-                identity = if (argument.identity != null) Identity.create(argument.identity) else null
             )
 
         data class Argument(
@@ -37,7 +36,6 @@ open class User private constructor(
             val firstName: String? = null,
             val lastName: String? = null,
             val nationalCode: String? = null,
-            val identity: Identity.Companion.Argument? = null
         )
 
     }
