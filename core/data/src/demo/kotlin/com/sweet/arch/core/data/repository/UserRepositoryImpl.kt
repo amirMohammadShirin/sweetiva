@@ -29,19 +29,19 @@ class UserRepositoryImpl @Inject constructor(
 
     override fun currentUserStream(): Flow<User> = reactiveUserCache.stream
 
-    override fun upsertCurrentUser(user: User): User {
-        cache.saveObject(CacheKey.CURRENT_USER, user)
-        return user
-    }
+    override suspend fun upsertCurrentUser(user: User?): User? {
+        return withContext(dispatcherProvider.io) {
+            cache.saveObject(CacheKey.CURRENT_USER, user)
+            reactiveUserCache.save(user)
+            return@withContext user
+        }
 
-    override suspend fun updateCurrentUserOnStream(user: User?) {
-       withContext(dispatcherProvider.io){
-           reactiveUserCache.save(user)
-       }
     }
 
     override suspend fun removeCurrentUser() {
-        cache.saveObject(CacheKey.CURRENT_USER, "")
-        reactiveUserCache.clear()
+        withContext(dispatcherProvider.io) {
+            cache.saveObject(CacheKey.CURRENT_USER, "")
+            reactiveUserCache.clear()
+        }
     }
 }
