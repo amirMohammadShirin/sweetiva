@@ -5,8 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
     fun getCurrentUser(): User?
-    fun upsertCurrentUser(user: User): User?
-    fun currentUserStream():Flow<User>
-    suspend fun updateCurrentUserOnStream(user: User?)
+    suspend fun upsertCurrentUser(user: User?): User?
+    fun currentUserStream(): Flow<User>
     suspend fun removeCurrentUser()
 }

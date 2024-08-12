@@ -9,6 +9,7 @@ import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 import com.sweet.iva.main.model.MainEvent
 import com.sweet.iva.main.model.MainViewState
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,20 +24,16 @@ constructor(
     fun start() {
         viewModelScope.launch {
             val currentUser = getCurrentUserUseCase.execute(null)
-            currentUser?.let { safeUser ->
-                navigate(safeUser)
-            } ?: run {
-                collectCurrentUser()
-                navigate(null)
-            }
+            collectCurrentUser()
+            if (currentUser == null) navigate(null)
         }
     }
 
     private fun collectCurrentUser() {
-        viewModelScope.launch(dispatcherProvider.io) {
+        viewModelScope.launch {
             listenToCurrentUserUseCase
                 .start(null)
-                .collect { user ->
+                .collectLatest { user ->
                     navigate(user)
                 }
         }
