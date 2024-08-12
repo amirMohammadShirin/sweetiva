@@ -14,7 +14,7 @@ import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 abstract class BaseScreen<State, Event : com.sweet.iva.core.ui.model.Event>(
     val route: String,
     val name: String
-) {
+) : BaseScreenBehavior by BaseScreenBehaviorImpl() {
 
     protected val parameters = linkedMapOf<NavigationParam, String>()
 
@@ -22,7 +22,7 @@ abstract class BaseScreen<State, Event : com.sweet.iva.core.ui.model.Event>(
     abstract fun viewModel(): BaseViewModel<State, Event>
 
     @Composable
-    open fun Screen(navBackStackEntry: NavBackStackEntry?) {
+    fun Screen(navBackStackEntry: NavBackStackEntry?) {
         with(viewModel()) {
 
             navBackStackEntry?.let {
@@ -30,7 +30,7 @@ abstract class BaseScreen<State, Event : com.sweet.iva.core.ui.model.Event>(
 
             }
 
-            AppendHandlers(this)
+            ScreenBehavior(viewModel())
 
             val state = getComposableState()
             Column(
@@ -43,9 +43,6 @@ abstract class BaseScreen<State, Event : com.sweet.iva.core.ui.model.Event>(
 
         }
     }
-
-    @Composable
-    open fun AppendHandlers(viewModel: BaseViewModel<*, *>) {}
 
     private fun initParameters(navBackStackEntry: NavBackStackEntry) {
         navBackStackEntry.arguments?.let {

@@ -60,14 +60,9 @@ import com.sweet.iva.feature.intro.viewmodel.IntroViewModel
 class IntroScreen : BaseScreen<IntroUiModel, IntroEvent>(
     name = "intro",
     route = ApplicationRoutes.introScreenRoute
-), NavigationHandler by NavigationHandlerImpl() {
+) {
     @Composable
     override fun viewModel(): IntroViewModel = hiltViewModel()
-
-    @Composable
-    override fun AppendHandlers(viewModel: BaseViewModel<*, *>) {
-        NavigationHandler(viewModel)
-    }
 
     @OptIn(ExperimentalFoundationApi::class)
     @Composable

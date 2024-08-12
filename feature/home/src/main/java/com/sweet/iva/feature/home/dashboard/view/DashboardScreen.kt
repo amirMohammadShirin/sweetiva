@@ -48,19 +48,13 @@ class DashboardScreen :
     BaseScreen<DashboardUiModel, DashboardEvent>(
         route = ApplicationRoutes.dashboardScreenRoute,
         name = "خانه",
-    ), NavigationHandler by NavigationHandlerImpl(), SnackHandler by SnackHandlerImpl(),
-    ToastHandler by ToastHandlerImpl(), ErrorHandler by ErrorHandlerImpl() {
+    ){
     @Composable
     override fun viewModel(): DashboardViewModel = hiltViewModel()
 
     @Composable
     override fun Content(state: DashboardUiModel) {
         val viewModel = viewModel()
-
-        NavigationHandler(viewModel)
-        ErrorHandler(viewModel)
-        SnackHandler(viewModel)
-        ToastHandler(viewModel)
 
         LaunchedEffect(Unit) {
             viewModel.getUserAccounts()

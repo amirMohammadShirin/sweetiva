@@ -46,8 +46,7 @@ import com.sweet.iva.feature.login.phoneEntry.viewmodel.PhoneEntryViewModel
 class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryEvent>(
     name = "ورود",
     route = ApplicationRoutes.phoneEntryScreenRoute
-), NavigationHandler by NavigationHandlerImpl(), SnackHandler by SnackHandlerImpl(),
-    ToastHandler by ToastHandlerImpl(), ErrorHandler by ErrorHandlerImpl() {
+) {
     @Composable
     override fun viewModel(): PhoneEntryViewModel = hiltViewModel()
 
@@ -55,11 +54,6 @@ class PhoneEntryScreen : BaseScreen<PhoneEntryUiModel, PhoneEntryEvent>(
     override fun Content(state: PhoneEntryUiModel) {
 
         val viewModel = viewModel()
-
-        NavigationHandler(viewModel)
-        ErrorHandler(viewModel)
-        SnackHandler(viewModel)
-        ToastHandler(viewModel)
 
         PhoneNumberEntryContent(
             isLoginEnable = state.isLoginEnable(),

@@ -46,8 +46,7 @@ class VerificationScreen :
     BaseScreen<VerificationUiModel, VerificationEvent>(
         route = ApplicationRoutes.loginVerificationScreenRoute,
         name = "فعال سازی"
-    ), NavigationHandler by NavigationHandlerImpl(), SnackHandler by SnackHandlerImpl(),
-    ToastHandler by ToastHandlerImpl(), ErrorHandler by ErrorHandlerImpl() {
+    ) {
     @Composable
     override fun viewModel(): VerificationViewModel = hiltViewModel()
 
@@ -55,11 +54,6 @@ class VerificationScreen :
     override fun Content(state: VerificationUiModel) {
 
         val viewModel = viewModel()
-
-        NavigationHandler(viewModel)
-        ErrorHandler(viewModel)
-        SnackHandler(viewModel)
-        ToastHandler(viewModel)
 
         LaunchedEffect(Unit) {
             viewModel.start(
