@@ -4,25 +4,20 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sweet.iva.core.designsystem.component.AppBackground
-import com.sweet.iva.core.designsystem.component.AppShimmer
 import com.sweet.iva.core.designsystem.component.AppToolbar
 import com.sweet.iva.core.designsystem.component.HorizontalBannerList
 import com.sweet.iva.core.designsystem.component.HorizontalFeatureList
-import com.sweet.iva.core.designsystem.component.HorizontalUserAccounts
 import com.sweet.iva.core.designsystem.component.ThemePreviews
 import com.sweet.iva.core.designsystem.component.model.BannerUiModel
 import com.sweet.iva.core.designsystem.component.model.FeatureUiModel
@@ -31,34 +26,23 @@ import com.sweet.iva.core.designsystem.theme.BlueRoyal100
 import com.sweet.iva.core.designsystem.theme.dimens
 import com.sweet.iva.core.ui.navigation.ApplicationRoutes
 import com.sweet.iva.core.ui.view.BaseScreen
-import com.sweet.iva.core.ui.view.ErrorHandler
-import com.sweet.iva.core.ui.view.ErrorHandlerImpl
-import com.sweet.iva.core.ui.view.NavigationHandler
-import com.sweet.iva.core.ui.view.NavigationHandlerImpl
-import com.sweet.iva.core.ui.view.SnackHandler
-import com.sweet.iva.core.ui.view.SnackHandlerImpl
-import com.sweet.iva.core.ui.view.ToastHandler
-import com.sweet.iva.core.ui.view.ToastHandlerImpl
 import com.sweet.iva.feature.home.R
 import com.sweet.iva.feature.home.dashboard.model.DashboardEvent
 import com.sweet.iva.feature.home.dashboard.model.DashboardUiModel
 import com.sweet.iva.feature.home.dashboard.viewmodel.DashboardViewModel
+import com.sweet.iva.feature.home.useraccount.view.UserAccountView
 
 class DashboardScreen :
     BaseScreen<DashboardUiModel, DashboardEvent>(
         route = ApplicationRoutes.dashboardScreenRoute,
         name = "خانه",
-    ){
+    ) {
     @Composable
     override fun viewModel(): DashboardViewModel = hiltViewModel()
 
     @Composable
     override fun Content(state: DashboardUiModel) {
         val viewModel = viewModel()
-
-        LaunchedEffect(Unit) {
-            viewModel.getUserAccounts()
-        }
 
         ConstraintLayout(
             modifier =
@@ -104,23 +88,8 @@ class DashboardScreen :
                 verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                if (state.userAccounts.isEmpty()) {
-                    AppShimmer(
-                        modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .height(180.dp),
-                    )
-                } else {
-                    HorizontalUserAccounts(
-                        modifier = Modifier,
-                        accounts = state.userAccounts,
-                        onIbanIconClicked = {},
-                        onAccountNumberIconClicked = {},
-                        onBalanceIconClicked = {},
-                        onSettingIconClicked = {},
-                    )
-                }
+
+                UserAccountView().Compose(modifier = Modifier)
 
                 FrequentFeatures(
                     modifier = Modifier.fillMaxWidth(),

@@ -6,11 +6,8 @@ import com.sweet.iva.core.common.dispatcher.DispatcherProvider
 import com.sweet.iva.core.ui.viewmodel.BaseViewModel
 import com.sweet.iva.feature.home.dashboard.model.DashboardEvent
 import com.sweet.iva.feature.home.dashboard.model.DashboardUiModel
-import com.sweet.iva.feature.home.dashboard.model.mockAccounts
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,19 +18,6 @@ class DashboardViewModel @Inject constructor(
     BaseViewModel<DashboardUiModel, DashboardEvent>(
         initialState = DashboardUiModel(),
     ) {
-
-    fun getUserAccounts() {
-        viewModelScope.launch {
-            withContext(dispatcherProvider.io) {
-                delay(2000)
-            }
-            updateState {
-                it.copy(
-                    userAccounts = mockAccounts,
-                )
-            }
-        }
-    }
 
     fun logout() {
         viewModelScope.launch {
