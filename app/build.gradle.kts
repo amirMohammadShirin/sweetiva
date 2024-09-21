@@ -66,11 +66,6 @@ android {
 }
 
 dependencies {
-
-    implementation(projects.feature.intro)
-    implementation(projects.feature.login)
-    implementation(projects.feature.home)
-
     implementation(projects.core.datastore)
     implementation(projects.core.database)
     implementation(projects.core.network)
